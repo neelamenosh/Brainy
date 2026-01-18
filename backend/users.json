@@ -1,0 +1,36 @@
+[
+  {
+    "id": "1767787754766",
+    "email": "test@example.com",
+    "password": "$2b$12$DbvRRZQ/KX3nzy4qRdoS0em9rc55a5MlP3lNkvhPAGYeEMzdLkO2i",
+    "createdAt": "2026-01-07T12:09:14.766Z"
+  },
+  {
+    "id": "1767788186410",
+    "name": "Neelam Enosh",
+    "email": "neelamenosh@gmail.com",
+    "password": "$2b$12$iIr/H9f4t.fPhyIE7UUSPu1cYZtXwmC8x2kUXf/c5vXZ8PyfozOGm",
+    "createdAt": "2026-01-07T12:16:26.410Z"
+  },
+  {
+    "id": "1767788345889",
+    "name": "Neelam Winny",
+    "email": "neelamwinny@gmail.com",
+    "password": "$2b$12$.ySU5zok/Ea/0acPXHwLbOoorCHCW43dYwWvYKq0yu06xJT0q3G6O",
+    "createdAt": "2026-01-07T12:19:05.889Z"
+  },
+  {
+    "id": "1768545409749",
+    "name": "TestUser",
+    "email": "testuser@test.com",
+    "password": "$2b$12$hisWQOoUvKx9ccME7iJriupXu4N.w2oLzWKWWZJrHrEk7DGbriZAm",
+    "createdAt": "2026-01-16T06:36:49.749Z"
+  },
+  {
+    "id": "1768545779389",
+    "name": "Demo User",
+    "email": "demo@test.com",
+    "password": "$2b$12$fzyiJKBV8zZb5lYbvo2t9ezmsH84FOLORO0BE2aGxFDfS2EE1Wkji",
+    "createdAt": "2026-01-16T06:42:59.389Z"
+  }
+]
