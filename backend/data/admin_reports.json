@@ -1,1 +1,84 @@
-[]
+[
+  {
+    "id": "1768841670611",
+    "facultyId": "1768840379634",
+    "facultyName": "Faculty User",
+    "facultyEmail": "faculty@gmail.com",
+    "reportType": "progress_report",
+    "message": "Enosh is doing great sir\n",
+    "students": [
+      {
+        "id": "1768838146102",
+        "rollNumber": "TEST001",
+        "fullName": "Test User",
+        "email": "test@example.com",
+        "phone": "1234567890",
+        "password": "$2b$12$t.X9NijMgNAmQiVmHn2Q0.ZT9LP6Qx//ERH9kON/1XswEHaBAbM3S",
+        "department": "Computer Science Engineering",
+        "course": "",
+        "semester": 1,
+        "role": "Student",
+        "isVerified": true,
+        "createdAt": "2026-01-19T15:55:46.102Z",
+        "lastLogin": "2026-01-19T16:00:07.993Z",
+        "progress": {
+          "java": {
+            "completed": true,
+            "score": 4,
+            "totalQuestions": 5,
+            "completedAt": "2026-01-19T16:00:00.000Z"
+          },
+          "python": {
+            "completed": true,
+            "score": 3,
+            "totalQuestions": 5,
+            "completedAt": "2026-01-19T16:05:00.000Z"
+          }
+        }
+      },
+      {
+        "id": "1768838993058",
+        "rollNumber": "24na1a0582",
+        "fullName": "Neelam Enosh",
+        "email": "neelamenosh@gmail.com",
+        "phone": "8919248224",
+        "password": "$2b$12$b9t1g9Nj1ReLn9Cgb/aV2eKoIisrONnlZG3R3ciFiKpZ9fyJOQQ1K",
+        "department": "Computer Science Engineering",
+        "course": "B.Tech",
+        "semester": 2,
+        "role": "Student",
+        "isVerified": true,
+        "createdAt": "2026-01-19T16:09:53.058Z",
+        "lastLogin": "2026-01-19T16:30:41.165Z",
+        "progress": {
+          "java": {
+            "completed": true,
+            "score": 5,
+            "totalQuestions": 5,
+            "completedAt": "2026-01-19T16:15:00.000Z"
+          },
+          "python": {
+            "completed": true,
+            "score": 4,
+            "totalQuestions": 5,
+            "completedAt": "2026-01-19T16:20:00.000Z"
+          },
+          "html": {
+            "completed": true,
+            "score": 5,
+            "totalQuestions": 5,
+            "completedAt": "2026-01-19T16:25:00.000Z"
+          },
+          "javascript": {
+            "completed": true,
+            "score": 4,
+            "totalQuestions": 5,
+            "completedAt": "2026-01-19T16:30:00.000Z"
+          }
+        }
+      }
+    ],
+    "createdAt": "2026-01-19T16:54:30.611Z",
+    "status": "pending"
+  }
+]

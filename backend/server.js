@@ -59,6 +59,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'brainy-secret-key-2024';
 const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || 'brainy-refresh-secret-2024';
 
 const facultyRoutes = require('./routes/faculty');
+const adminRoutes = require('./routes/admin');
 
 const authMiddleware = (req, res, next) => {
   try {
@@ -352,6 +353,7 @@ app.put('/api/auth/profile', authMiddleware, async (req, res) => {
 });
 
 app.use('/api/faculty', facultyRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
   res.json({ 
