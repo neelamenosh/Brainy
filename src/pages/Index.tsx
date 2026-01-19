@@ -1001,192 +1001,307 @@ const AdminHome = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-20 pb-12 bg-[#050505] flex items-center justify-center">
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-[#030306]">
         <div className="relative">
-          <div className="w-20 h-20 border-2 border-violet-500/20 border-t-violet-500 rounded-full animate-spin" />
-          <Shield className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-violet-500 animate-pulse" />
+          <div className="w-24 h-24 border-2 border-transparent border-t-amber-500 border-r-rose-500 rounded-full animate-spin" />
+          <div className="absolute inset-3 border-2 border-transparent border-b-violet-500 border-l-fuchsia-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }} />
+          <div className="absolute inset-6 border-2 border-transparent border-t-cyan-400 rounded-full animate-spin" style={{ animationDuration: '2s' }} />
+          <Shield className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-amber-400" />
         </div>
       </div>
     );
   }
 
+  const statCards = [
+    { icon: Users, label: "Total Students", value: stats?.totalStudents, gradient: "from-violet-500 via-purple-500 to-fuchsia-500", glow: "violet" },
+    { icon: GraduationCap, label: "Total Faculty", value: stats?.totalFaculty, gradient: "from-cyan-500 via-teal-500 to-emerald-500", glow: "cyan" },
+    { icon: Zap, label: "Quizzes Taken", value: stats?.totalQuizzesTaken, gradient: "from-amber-500 via-orange-500 to-rose-500", glow: "amber" },
+    { icon: AlertTriangle, label: "Pending Reports", value: stats?.pendingReports, gradient: "from-rose-500 via-pink-500 to-fuchsia-500", glow: "rose" },
+    { icon: CheckCircle, label: "Published Results", value: stats?.publishedReports, gradient: "from-emerald-500 via-green-500 to-teal-500", glow: "emerald" },
+  ];
+
+  const quickActions = [
+    { icon: Database, label: "Backups", sub: "Cloud Synced", status: "OK", gradient: "from-violet-500 to-purple-600" },
+    { icon: Server, label: "Services", sub: "Global Core", status: "ACTIVE", gradient: "from-cyan-500 to-teal-600" },
+    { icon: RefreshCcw, label: "Updates", sub: "V2.4.0 Stable", status: "LATEST", gradient: "from-amber-500 to-orange-600" },
+    { icon: Settings, label: "Security", sub: "AES-256 Enabled", status: "SECURE", gradient: "from-emerald-500 to-green-600" },
+  ];
+
   return (
-    <div className="min-h-screen pt-20 pb-12 bg-[#050505] noise-overlay overflow-hidden">
+    <div className="min-h-screen pt-20 pb-12 bg-[#030306] noise-overlay overflow-hidden">
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-600/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,rgba(251,191,36,0.08),transparent_50%)]" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,rgba(236,72,153,0.08),transparent_50%)]" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.05),transparent_60%)]" />
+        <div className="absolute top-[5%] right-[10%] w-[600px] h-[600px] bg-gradient-to-br from-amber-500/10 via-rose-500/5 to-transparent rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute bottom-[10%] left-[5%] w-[500px] h-[500px] bg-gradient-to-tr from-violet-600/10 via-fuchsia-500/5 to-transparent rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
+        <div className="absolute top-[40%] left-[40%] w-[400px] h-[400px] bg-gradient-to-br from-cyan-500/5 to-transparent rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-12 slide-up">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12 slide-up">
           <div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-bold tracking-widest uppercase mb-4 shadow-[0_0_20px_rgba(139,92,246,0.1)]">
-              <Shield className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-violet-500/10 border border-amber-400/20 text-amber-300 text-[10px] font-black tracking-[0.2em] uppercase mb-6 shadow-[0_0_40px_rgba(251,191,36,0.15)]">
+              <div className="relative">
+                <Shield className="w-4 h-4" />
+                <div className="absolute inset-0 bg-amber-400 blur-md opacity-50" />
+              </div>
               System Administrator
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-3 tracking-tight">
-              Control <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 animate-gradient-x">Central</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 tracking-tight leading-tight">
+              Command <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-rose-400 to-violet-400 animate-gradient">Center</span>
             </h1>
-            <p className="text-gray-500 font-medium max-w-2xl">
-              Welcome, Administrator. High-level overview of system metrics and academic progress.
+            <p className="text-gray-400 font-medium text-lg max-w-2xl">
+              Welcome back, <span className="text-amber-300 font-bold">{user?.fullName?.split(" ")[0]}</span>. Monitor system health, academic metrics, and institutional analytics.
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <Link to="/services">
-              <Button className="h-14 px-8 rounded-2xl bg-white text-black hover:bg-gray-200 font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                Manage Services
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 via-rose-500 to-violet-500 rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+                <Button className="relative h-14 px-8 rounded-2xl bg-gradient-to-r from-amber-500 via-rose-500 to-violet-500 text-white font-black transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_8px_32px_rgba(251,191,36,0.3)]">
+                  <FileText className="w-5 h-5 mr-2" />
+                  Manage Reports
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </div>
             </Link>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
-          {[
-            { icon: Users, label: "Total Students", value: stats?.totalStudents, color: "violet" },
-            { icon: GraduationCap, label: "Total Faculty", value: stats?.totalFaculty, color: "blue" },
-            { icon: Zap, label: "Quizzes Taken", value: stats?.totalQuizzesTaken, color: "fuchsia" },
-            { icon: AlertTriangle, label: "Pending Reports", value: stats?.pendingReports, color: "amber" },
-            { icon: CheckCircle, label: "Published Results", value: stats?.publishedReports, color: "emerald" },
-          ].map((stat, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-10">
+          {statCards.map((stat, i) => (
             <div key={stat.label} className="group relative slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-white/10 to-white/5 rounded-3xl blur opacity-0 group-hover:opacity-100 transition duration-500" />
-              <div className="relative liquid-glass-strong rounded-3xl p-6 border border-white/5 group-hover:border-white/20 transition-all duration-500 overflow-hidden">
-                <div className={`absolute -right-4 -top-4 w-20 h-20 bg-${stat.color}-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`} />
-                <div className={`w-12 h-12 rounded-2xl bg-${stat.color}-500/10 border border-${stat.color}-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500`}>
-                  <stat.icon className={`w-6 h-6 text-${stat.color}-400`} />
+              <div className={`absolute -inset-0.5 bg-gradient-to-r ${stat.gradient} rounded-[1.75rem] blur-xl opacity-0 group-hover:opacity-40 transition-all duration-700`} />
+              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.04] to-transparent backdrop-blur-xl rounded-[1.5rem] p-6 border border-white/10 group-hover:border-white/20 transition-all duration-500 overflow-hidden">
+                <div className={`absolute -right-8 -top-8 w-24 h-24 bg-gradient-to-br ${stat.gradient} rounded-full blur-3xl opacity-20 group-hover:opacity-40 group-hover:scale-150 transition-all duration-700`} />
+                <div className="relative">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
+                    <stat.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <div className="text-4xl font-black text-white mb-1 tracking-tight">{stat.value ?? 0}</div>
+                  <div className="text-[10px] font-black text-gray-500 uppercase tracking-[0.15em]">{stat.label}</div>
                 </div>
-                <div className="text-3xl font-black text-white mb-1 tracking-tight">{stat.value}</div>
-                <div className="text-xs font-bold text-gray-500 uppercase tracking-wider">{stat.label}</div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid lg:grid-cols-3 gap-8 mb-10">
           <div className="lg:col-span-2 slide-up" style={{ animationDelay: "0.5s" }}>
-            <div className="liquid-glass-strong rounded-[2.5rem] p-8 border border-white/5 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-8 opacity-5">
-                <Activity className="w-32 h-32 text-white" />
-              </div>
-              <div className="flex items-center justify-between mb-10">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-violet-500/20">
-                    <BarChart3 className="w-7 h-7 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white tracking-tight">System Analytics</h3>
-                    <p className="text-gray-500 text-sm font-medium">Real-time infrastructure & academic monitoring</p>
-                  </div>
+            <div className="relative group">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-violet-500/20 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
+              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.04] to-transparent backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/10 group-hover:border-white/20 transition-all duration-500 overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-[0.03]">
+                  <Activity className="w-40 h-40 text-white" />
                 </div>
-                <Button variant="ghost" className="rounded-xl text-gray-400 hover:text-white hover:bg-white/5 px-4 font-bold">
-                  Detailed Reports
-                </Button>
-              </div>
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
+                
+                <div className="flex items-center justify-between mb-10">
+                  <div className="flex items-center gap-5">
+                    <div className="relative">
+                      <div className="absolute -inset-1 bg-gradient-to-br from-amber-500 via-rose-500 to-violet-500 rounded-2xl blur opacity-40" />
+                      <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 via-rose-500 to-violet-600 flex items-center justify-center shadow-2xl">
+                        <BarChart3 className="w-8 h-8 text-white" />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black text-white tracking-tight">System Analytics</h3>
+                      <p className="text-gray-400 text-sm font-medium">Real-time infrastructure & academic monitoring</p>
+                    </div>
+                  </div>
+                  <Button variant="ghost" className="rounded-xl text-amber-300/80 hover:text-amber-300 hover:bg-amber-500/10 px-5 font-bold border border-amber-400/20">
+                    Detailed Reports
+                  </Button>
+                </div>
 
-              <div className="grid sm:grid-cols-2 gap-8">
-                <div className="space-y-6">
-                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/5 group-hover:border-white/10 transition-all duration-500">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-gray-400 font-bold text-xs uppercase tracking-widest">Database Health</span>
-                      <span className="text-emerald-400 font-black text-xs">99.9% ONLINE</span>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-5">
+                    <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/5 border border-emerald-400/20 group-hover:border-emerald-400/30 transition-all duration-500">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
+                          <span className="text-gray-300 font-bold text-xs uppercase tracking-[0.1em]">Database Health</span>
+                        </div>
+                        <span className="text-emerald-300 font-black text-xs px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/20">99.9% ONLINE</span>
+                      </div>
+                      <div className="h-2.5 bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-full w-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full shadow-[0_0_20px_rgba(52,211,153,0.5)]" />
+                      </div>
                     </div>
-                    <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                      <div className="h-full w-full bg-gradient-to-r from-emerald-500 to-teal-400 animate-pulse" />
+                    <div className="p-5 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-400/20 group-hover:border-amber-400/30 transition-all duration-500">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_10px_rgba(251,191,36,0.8)]" />
+                          <span className="text-gray-300 font-bold text-xs uppercase tracking-[0.1em]">Server Load</span>
+                        </div>
+                        <span className="text-amber-300 font-black text-xs px-3 py-1 rounded-lg bg-amber-500/20 border border-amber-400/20">MODERATE 24%</span>
+                      </div>
+                      <div className="h-2.5 bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-full w-[24%] bg-gradient-to-r from-amber-500 to-orange-400 rounded-full shadow-[0_0_20px_rgba(251,191,36,0.5)]" />
+                      </div>
+                    </div>
+                    <div className="p-5 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-500/5 border border-cyan-400/20 group-hover:border-cyan-400/30 transition-all duration-500">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
+                          <span className="text-gray-300 font-bold text-xs uppercase tracking-[0.1em]">Memory Usage</span>
+                        </div>
+                        <span className="text-cyan-300 font-black text-xs px-3 py-1 rounded-lg bg-cyan-500/20 border border-cyan-400/20">OPTIMAL 58%</span>
+                      </div>
+                      <div className="h-2.5 bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-full w-[58%] bg-gradient-to-r from-cyan-500 to-blue-400 rounded-full shadow-[0_0_20px_rgba(34,211,238,0.5)]" />
+                      </div>
                     </div>
                   </div>
-                  <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/5 group-hover:border-white/10 transition-all duration-500">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-gray-400 font-bold text-xs uppercase tracking-widest">Server Load</span>
-                      <span className="text-amber-400 font-black text-xs">MODERATE (24%)</span>
+                  <div className="p-6 rounded-2xl bg-gradient-to-br from-violet-500/10 via-fuchsia-500/5 to-rose-500/10 border border-violet-400/20 flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-violet-500/20 to-transparent rounded-full blur-2xl" />
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center mb-4 shadow-lg">
+                        <TrendingUp className="w-6 h-6 text-white" />
+                      </div>
+                      <h4 className="text-xl font-black text-white mb-2">Growth Index</h4>
+                      <p className="text-sm text-gray-400 font-medium">System usage increased significantly this week</p>
                     </div>
-                    <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                      <div className="h-full w-[24%] bg-gradient-to-r from-amber-500 to-orange-400" />
+                    <div className="relative mt-6">
+                      <div className="text-5xl font-black bg-gradient-to-r from-emerald-300 to-teal-400 bg-clip-text text-transparent">+12.4%</div>
+                      <div className="flex items-center gap-2 mt-2">
+                        <div className="w-6 h-6 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                          <TrendingUp className="w-3 h-3 text-emerald-400" />
+                        </div>
+                        <span className="text-xs text-emerald-400 font-bold">vs last week</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="p-6 rounded-3xl bg-violet-500/5 border border-violet-500/10 flex flex-col justify-between">
-                  <div>
-                    <div className="w-10 h-10 rounded-xl bg-violet-500/20 flex items-center justify-center mb-4">
-                      <TrendingUp className="w-5 h-5 text-violet-400" />
-                    </div>
-                    <h4 className="text-lg font-bold text-white mb-1">Growth Index</h4>
-                    <p className="text-xs text-gray-500 font-medium">System usage increased by 12% this week</p>
-                  </div>
-                  <div className="text-4xl font-black text-white mt-4">+12.4%</div>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="slide-up" style={{ animationDelay: "0.6s" }}>
-            <div className="liquid-glass-strong rounded-[2.5rem] p-8 border border-white/5 h-full flex flex-col">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
-                  <Bell className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-white">System Feed</h3>
-              </div>
-
-              <div className="space-y-6 flex-1">
-                {stats?.systemUpdates.map((update, i) => (
-                  <div key={update.id} className="flex gap-4 group">
-                    <div className="relative">
-                      <div className={`w-3 h-3 rounded-full mt-1.5 ${i === 0 ? 'bg-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.5)]' : 'bg-white/10'}`} />
-                      {i !== (stats.systemUpdates.length - 1) && (
-                        <div className="absolute top-4.5 bottom-[-24px] left-1.5 w-[1px] bg-white/5" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-white mb-1 group-hover:text-violet-400 transition-colors">{update.message}</p>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">{update.type}</span>
-                        <span className="text-[10px] text-gray-500">• {update.time}</span>
-                      </div>
+            <div className="relative group h-full">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-rose-500/20 via-pink-500/20 to-fuchsia-500/20 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
+              <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.04] to-transparent backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/10 group-hover:border-white/20 transition-all duration-500 h-full flex flex-col overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rose-400/30 to-transparent" />
+                
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="relative">
+                    <div className="absolute -inset-1 bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl blur opacity-40" />
+                    <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center shadow-lg">
+                      <Bell className="w-7 h-7 text-white" />
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div>
+                    <h3 className="text-xl font-black text-white">Activity Feed</h3>
+                    <p className="text-xs text-gray-500 font-medium">Recent system events</p>
+                  </div>
+                </div>
 
-              <Button variant="outline" className="w-full mt-8 rounded-2xl border-white/5 bg-white/[0.02] hover:bg-white/5 text-gray-400 font-bold h-12">
-                Clear All Logs
-              </Button>
+                <div className="space-y-5 flex-1">
+                  {stats?.systemUpdates.map((update, i) => (
+                    <div key={update.id} className="flex gap-4 group/item">
+                      <div className="relative">
+                        <div className={`w-3 h-3 rounded-full mt-1.5 transition-all duration-300 ${i === 0 ? 'bg-gradient-to-r from-amber-400 to-rose-500 shadow-[0_0_15px_rgba(251,191,36,0.6)]' : 'bg-white/20 group-hover/item:bg-white/40'}`} />
+                        {i !== (stats.systemUpdates.length - 1) && (
+                          <div className="absolute top-4.5 bottom-[-24px] left-1.5 w-[1px] bg-gradient-to-b from-white/10 to-transparent" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-white mb-1 group-hover/item:text-amber-300 transition-colors">{update.message}</p>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${
+                            update.type === 'info' ? 'bg-cyan-500/20 text-cyan-400' :
+                            update.type === 'success' ? 'bg-emerald-500/20 text-emerald-400' :
+                            update.type === 'warning' ? 'bg-amber-500/20 text-amber-400' :
+                            'bg-violet-500/20 text-violet-400'
+                          }`}>{update.type}</span>
+                          <span className="text-[10px] text-gray-500 font-medium">{update.time}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <Button variant="outline" className="w-full mt-6 rounded-xl border-white/10 bg-white/[0.03] hover:bg-white/10 text-gray-400 hover:text-white font-bold h-12 transition-all duration-300">
+                  View All Activity
+                </Button>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 slide-up" style={{ animationDelay: "0.7s" }}>
-          {[
-            { icon: Database, label: "Backups", sub: "Cloud Synced", val: "OK" },
-            { icon: Server, label: "Services", sub: "Global Core", val: "ACTIVE" },
-            { icon: RefreshCcw, label: "Updates", sub: "V2.4.0 Stable", val: "LATEST" },
-            { icon: Settings, label: "Security", sub: "AES-256 Enabled", val: "SECURE" },
-          ].map((item) => (
-            <div key={item.label} className="p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 flex items-center gap-5 hover:bg-white/5 transition-colors cursor-pointer group">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-violet-500 transition-all duration-500">
-                <item.icon className="w-6 h-6 text-gray-400 group-hover:text-white" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-sm font-bold text-white">{item.label}</span>
-                  <span className="text-[10px] font-black text-violet-500 uppercase tracking-widest">{item.val}</span>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10 slide-up" style={{ animationDelay: "0.7s" }}>
+          {quickActions.map((item, i) => (
+            <div key={item.label} className="group relative cursor-pointer">
+              <div className={`absolute -inset-0.5 bg-gradient-to-r ${item.gradient} rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-all duration-500`} />
+              <div className="relative p-5 rounded-2xl bg-gradient-to-br from-white/[0.06] to-transparent border border-white/10 group-hover:border-white/20 flex items-center gap-4 transition-all duration-500 overflow-hidden">
+                <div className={`absolute -right-4 -top-4 w-20 h-20 bg-gradient-to-br ${item.gradient} rounded-full blur-2xl opacity-10 group-hover:opacity-30 transition-opacity duration-500`} />
+                <div className={`relative w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
+                  <item.icon className="w-6 h-6 text-white" />
                 </div>
-                <p className="text-xs text-gray-500 font-medium">{item.sub}</p>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-sm font-bold text-white group-hover:text-amber-200 transition-colors">{item.label}</span>
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md bg-gradient-to-r ${item.gradient} text-white shadow-sm`}>{item.status}</span>
+                  </div>
+                  <p className="text-xs text-gray-500 font-medium">{item.sub}</p>
+                </div>
               </div>
             </div>
           ))}
         </div>
+
+        <div className="slide-up" style={{ animationDelay: "0.8s" }}>
+          <div className="relative group">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-violet-500/20 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
+            <div className="relative bg-gradient-to-br from-white/[0.06] via-white/[0.03] to-transparent backdrop-blur-xl rounded-[2rem] p-10 border border-white/10 text-center overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-transparent to-violet-500/5" />
+              
+              <div className="relative">
+                <div className="flex justify-center mb-6">
+                  <div className="relative">
+                    <div className="absolute -inset-3 bg-gradient-to-r from-amber-500 via-rose-500 to-violet-500 rounded-3xl blur-xl opacity-40 animate-pulse" />
+                    <div className="relative p-5 rounded-2xl bg-gradient-to-br from-amber-500 via-rose-500 to-violet-600 shadow-2xl">
+                      <Sparkles className="w-10 h-10 text-white" />
+                    </div>
+                  </div>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-black text-white mb-4">
+                  Everything Running <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-teal-400">Smoothly</span>
+                </h2>
+                <p className="text-gray-400 max-w-xl mx-auto mb-8 font-medium">
+                  All systems operational. No critical issues detected. Continue monitoring from the services dashboard.
+                </p>
+                <div className="flex flex-wrap justify-center gap-4">
+                  <Link to="/services">
+                    <Button size="lg" className="h-14 px-10 rounded-2xl bg-gradient-to-r from-amber-500 via-rose-500 to-violet-500 text-white font-black shadow-[0_8px_32px_rgba(251,191,36,0.3)] hover:shadow-[0_12px_40px_rgba(251,191,36,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                      <FileText className="w-5 h-5 mr-2" />
+                      Review Reports
+                    </Button>
+                  </Link>
+                  <Link to="/about">
+                    <Button size="lg" variant="outline" className="h-14 px-10 rounded-2xl border-white/20 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white font-bold transition-all duration-300">
+                      <BookOpen className="w-5 h-5 mr-2" />
+                      Documentation
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <style>{`
-        .animate-gradient-x {
-          background-size: 200% 200%;
-          animation: gradient-x 15s ease infinite;
-        }
-        @keyframes gradient-x {
-          0% { background-position: 0% 50%; }
+        @keyframes gradient-shift {
+          0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+        }
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient-shift 3s ease infinite;
         }
       `}</style>
     </div>
