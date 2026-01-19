@@ -1,23 +1,37 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const http = require('http');
-const socketIO = require('socket.io');
-
-dotenv.config();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIO(server, {
-  cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    credentials: true
-  }
-});
 
-// Middleware
+const USERS_FILE = path.join(__dirname, 'data', 'users.json');
+const DATA_DIR = path.join(__dirname, 'data');
+
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
+
+if (!fs.existsSync(USERS_FILE)) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify([], null, 2));
+}
+
+const readUsers = () => {
+  try {
+    const data = fs.readFileSync(USERS_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    return [];
+  }
+};
+
+const writeUsers = (users) => {
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+};
+
 app.use(cors({
   origin: [
     'http://localhost:3000',
@@ -26,7 +40,8 @@ app.use(cors({
     'http://localhost:8081',
     'http://localhost:8082',
     'http://localhost:9000',
-    'http://192.168.0.4:3000'
+    'http://192.168.0.4:3000',
+    'http://192.168.0.5:8080'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
@@ -35,73 +50,115 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 
-// Request logging middleware
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
   next();
 });
 
-// MongoDB Connection
-const mongoURL = process.env.MONGODB_URI || 'mongodb://localhost:27017/brainy';
-mongoose.connect(mongoURL)
-// Routes
-// Register
+const JWT_SECRET = process.env.JWT_SECRET || 'stats-mastermind-secret-key-2024';
+const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || 'stats-mastermind-refresh-secret-2024';
+
+const authMiddleware = (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) {
+      return res.status(401).json({ message: 'No token provided' });
+    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token expired. Please login again.' });
+    }
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+};
+
 app.post('/api/auth/register', async (req, res) => {
   console.log('Register request received:', req.body);
   try {
-    const { name, email, password } = req.body;
+    const { rollNumber, fullName, email, phone, password, department, course, semester } = req.body;
 
-    // Validation
-    if (!name || name.trim().length < 2) {
-      return res.status(400).json({ message: 'Name must be at least 2 characters' });
+    if (!rollNumber || !rollNumber.trim()) {
+      return res.status(400).json({ message: 'Roll number is required' });
+    }
+
+    if (!fullName || fullName.trim().length < 2) {
+      return res.status(400).json({ message: 'Full name must be at least 2 characters' });
     }
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ message: 'Please provide a valid email address' });
     }
 
+    if (!phone || phone.length < 10) {
+      return res.status(400).json({ message: 'Phone must be at least 10 digits' });
+    }
+
     if (!password || password.length < 6) {
       return res.status(400).json({ message: 'Password must be at least 6 characters' });
     }
 
-    const users = readUsers();
-
-    // Check if user exists
-    const existingUser = users.find(user => user.email === email.toLowerCase());
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+    if (!department) {
+      return res.status(400).json({ message: 'Department is required' });
     }
 
-    // Hash password
+    const users = readUsers();
+
+    const existingUser = users.find(user => 
+      user.email.toLowerCase() === email.toLowerCase() || 
+      user.rollNumber === rollNumber
+    );
+    if (existingUser) {
+      return res.status(400).json({ message: 'User with this email or roll number already exists' });
+    }
+
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create user
     const user = {
       id: Date.now().toString(),
-      name: name.trim(),
+      rollNumber: rollNumber.trim(),
+      fullName: fullName.trim(),
       email: email.toLowerCase(),
+      phone,
       password: hashedPassword,
-      createdAt: new Date().toISOString()
+      department,
+      course: course || '',
+      semester: semester || 1,
+      role: 'Student',
+      isVerified: true,
+      createdAt: new Date().toISOString(),
+      lastLogin: new Date().toISOString()
     };
 
     users.push(user);
     writeUsers(users);
 
-    // Generate JWT
     const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET || 'your-secret-key',
+      { userId: user.id, email: user.email, rollNumber: user.rollNumber, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    const refreshToken = jwt.sign(
+      { userId: user.id },
+      REFRESH_SECRET,
       { expiresIn: '7d' }
     );
 
     res.status(201).json({
-      message: 'User created successfully',
+      message: 'Registration successful',
       token,
+      refreshToken,
       user: {
         id: user.id,
-        name: user.name,
-        email: user.email
+        rollNumber: user.rollNumber,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+        department: user.department
       }
     });
   } catch (error) {
@@ -110,13 +167,11 @@ app.post('/api/auth/register', async (req, res) => {
   }
 });
 
-// Login
 app.post('/api/auth/login', async (req, res) => {
   console.log('Login request received:', req.body);
   try {
     const { email, password } = req.body;
 
-    // Validation
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ message: 'Please provide a valid email address' });
     }
@@ -126,33 +181,43 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     const users = readUsers();
-
-    // Find user
-    const user = users.find(u => u.email === email.toLowerCase());
+    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    
     if (!user) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    // Generate JWT
+    user.lastLogin = new Date().toISOString();
+    writeUsers(users);
+
     const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET || 'your-secret-key',
+      { userId: user.id, email: user.email, rollNumber: user.rollNumber, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    const refreshToken = jwt.sign(
+      { userId: user.id },
+      REFRESH_SECRET,
       { expiresIn: '7d' }
     );
 
     res.json({
       message: 'Login successful',
       token,
+      refreshToken,
       user: {
         id: user.id,
-        name: user.name,
-        email: user.email
+        rollNumber: user.rollNumber,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+        department: user.department
       }
     });
   } catch (error) {
@@ -161,17 +226,10 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// Verify token
-app.get('/api/auth/verify', (req, res) => {
+app.get('/api/auth/verify', authMiddleware, (req, res) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) {
-      return res.status(401).json({ message: 'No token provided' });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
     const users = readUsers();
-    const user = users.find(u => u.id === decoded.userId);
+    const user = users.find(u => u.id === req.user.userId);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -180,57 +238,154 @@ app.get('/api/auth/verify', (req, res) => {
     res.json({
       user: {
         id: user.id,
-        name: user.name,
-        email: user.email
+        rollNumber: user.rollNumber,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+        department: user.department
       }
     });
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ message: 'Token expired. Please login again.' });
-    }
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({ message: 'Invalid token' });
-    }
-    res.status(401).json({ message: 'Authentication failed' });
+    console.error('Verify error:', error);
+    res.status(500).json({ message: 'Verification failed' });
   }
 });
 
-// Logout
+app.post('/api/auth/refresh-token', (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'Refresh token required' });
+    }
+
+    const decoded = jwt.verify(refreshToken, REFRESH_SECRET);
+    const users = readUsers();
+    const user = users.find(u => u.id === decoded.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const newToken = jwt.sign(
+      { userId: user.id, email: user.email, rollNumber: user.rollNumber, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    res.json({ token: newToken });
+  } catch (error) {
+    console.error('Refresh token error:', error);
+    res.status(401).json({ message: 'Invalid refresh token' });
+  }
+});
+
 app.post('/api/auth/logout', (req, res) => {
   res.json({ message: 'Logged out successfully' });
 });
 
-// Global error handlers to prevent crashes
+app.get('/api/auth/me', authMiddleware, (req, res) => {
+  try {
+    const users = readUsers();
+    const user = users.find(u => u.id === req.user.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      user: {
+        id: user.id,
+        rollNumber: user.rollNumber,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        department: user.department,
+        course: user.course,
+        semester: user.semester,
+        createdAt: user.createdAt,
+        lastLogin: user.lastLogin
+      }
+    });
+  } catch (error) {
+    console.error('Get me error:', error);
+    res.status(500).json({ message: 'Failed to get user data' });
+  }
+});
+
+app.put('/api/auth/profile', authMiddleware, async (req, res) => {
+  try {
+    const { fullName, phone, department, course, semester } = req.body;
+    const users = readUsers();
+    const userIndex = users.findIndex(u => u.id === req.user.userId);
+
+    if (userIndex === -1) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (fullName) users[userIndex].fullName = fullName.trim();
+    if (phone) users[userIndex].phone = phone;
+    if (department) users[userIndex].department = department;
+    if (course) users[userIndex].course = course;
+    if (semester) users[userIndex].semester = semester;
+
+    writeUsers(users);
+
+    res.json({
+      message: 'Profile updated successfully',
+      user: {
+        id: users[userIndex].id,
+        rollNumber: users[userIndex].rollNumber,
+        fullName: users[userIndex].fullName,
+        email: users[userIndex].email,
+        role: users[userIndex].role,
+        department: users[userIndex].department
+      }
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ message: 'Failed to update profile' });
+  }
+});
+
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Stats Mastermind API Server',
+    version: '1.0.0',
+    status: 'running',
+    endpoints: {
+      register: 'POST /api/auth/register',
+      login: 'POST /api/auth/login',
+      verify: 'GET /api/auth/verify',
+      logout: 'POST /api/auth/logout',
+      refreshToken: 'POST /api/auth/refresh-token',
+      me: 'GET /api/auth/me',
+      updateProfile: 'PUT /api/auth/profile'
+    }
+  });
+});
+
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error);
-  console.error('Stack:', error.stack);
-  // Server will continue running after logging the error
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  // Server will continue running after logging the error
 });
 
 const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`✅ Backend Server running on http://localhost:${PORT}`);
   console.log(`📝 API endpoints ready at http://localhost:${PORT}/api/auth`);
 });
 
-// Graceful shutdown handler
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    console.log('Server closed');
-    process.exit(0);
-  });
+  process.exit(0);
 });
 
 process.on('SIGINT', () => {
   console.log('SIGINT received, shutting down gracefully');
-  server.close(() => {
-    console.log('Server closed');
-    process.exit(0);
-  });
+  process.exit(0);
 });

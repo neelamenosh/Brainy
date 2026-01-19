@@ -1,15 +1,4 @@
-// API utility for authentication
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-
-interface SendOTPPayload {
-  rollNumber: string;
-  phone: string;
-}
-
-interface VerifyOTPPayload {
-  rollNumber: string;
-  otp: string;
-}
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api/auth';
 
 interface RegisterPayload {
   rollNumber: string;
@@ -22,11 +11,15 @@ interface RegisterPayload {
   semester?: number;
 }
 
+interface LoginPayload {
+  email: string;
+  password: string;
+}
+
 interface AuthResponse {
   message: string;
   token: string;
   refreshToken?: string;
-  status?: string;
   user: {
     id: string;
     rollNumber: string;
@@ -48,13 +41,6 @@ interface VerifyResponse {
   };
 }
 
-interface OTPResponse {
-  message: string;
-  rollNumber: string;
-  status?: string;
-  demo_otp?: string;
-}
-
 class AuthApiError extends Error {
   constructor(
     message: string,
@@ -66,25 +52,6 @@ class AuthApiError extends Error {
   }
 }
 
-// Helper function to validate input
-const validateRollNumber = (rollNumber: string): boolean => {
-  return rollNumber && rollNumber.trim().length > 0;
-};
-
-const validatePhone = (phone: string): boolean => {
-  return phone && phone.length >= 10;
-};
-
-const validateEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-const validatePassword = (password: string): boolean => {
-  return password && password.length >= 6;
-};
-
-// Helper function for API calls with error handling
 const apiCall = async <T>(
   endpoint: string,
   method: string = 'GET',
@@ -102,7 +69,6 @@ const apiCall = async <T>(
       options.body = JSON.stringify(body);
     }
 
-    // Add token if available
     const token = localStorage.getItem('token');
     if (token) {
       options.headers = {
@@ -113,7 +79,6 @@ const apiCall = async <T>(
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
 
-    // Handle network errors
     if (!response.ok) {
       let errorMessage = 'An error occurred';
       
@@ -150,37 +115,8 @@ const apiCall = async <T>(
 };
 
 export const authApi = {
-  // Send OTP to roll number
-  sendOTP: async (rollNumber: string, phone: string): Promise<OTPResponse> => {
-    if (!validateRollNumber(rollNumber)) {
-      throw new AuthApiError('Please enter a valid roll number');
-    }
-
-    if (!validatePhone(phone)) {
-      throw new AuthApiError('Please enter a valid phone number');
-    }
-
-    const payload: SendOTPPayload = { rollNumber: rollNumber.trim(), phone };
-    return apiCall<OTPResponse>('/auth/send-otp', 'POST', payload);
-  },
-
-  // Verify OTP
-  verifyOTP: async (rollNumber: string, otp: string): Promise<AuthResponse | OTPResponse> => {
-    if (!validateRollNumber(rollNumber)) {
-      throw new AuthApiError('Please enter a valid roll number');
-    }
-
-    if (!otp || otp.length !== 6) {
-      throw new AuthApiError('Please enter a valid 6-digit OTP');
-    }
-
-    const payload: VerifyOTPPayload = { rollNumber: rollNumber.trim(), otp };
-    return apiCall<AuthResponse | OTPResponse>('/auth/verify-otp', 'POST', payload);
-  },
-
-  // Register new user (after OTP verification)
   register: async (payload: RegisterPayload): Promise<AuthResponse> => {
-    if (!validateRollNumber(payload.rollNumber)) {
+    if (!payload.rollNumber?.trim()) {
       throw new AuthApiError('Please enter a valid roll number');
     }
 
@@ -188,15 +124,16 @@ export const authApi = {
       throw new AuthApiError('Please enter a valid full name (at least 2 characters)');
     }
 
-    if (!validateEmail(payload.email)) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(payload.email)) {
       throw new AuthApiError('Please enter a valid email address');
     }
 
-    if (!validatePhone(payload.phone)) {
+    if (!payload.phone || payload.phone.length < 10) {
       throw new AuthApiError('Please enter a valid phone number');
     }
 
-    if (!validatePassword(payload.password)) {
+    if (!payload.password || payload.password.length < 6) {
       throw new AuthApiError('Password must be at least 6 characters');
     }
 
@@ -204,23 +141,42 @@ export const authApi = {
       throw new AuthApiError('Please select a department');
     }
 
-    return apiCall<AuthResponse>('/auth/register', 'POST', payload);
+    return apiCall<AuthResponse>('/register', 'POST', payload);
   },
 
-  // Refresh token
-  refreshToken: async (refreshToken: string): Promise<{ token: string }> => {
-    return apiCall('/auth/refresh-token', 'POST', { refreshToken });
+  login: async (payload: LoginPayload): Promise<AuthResponse> => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(payload.email)) {
+      throw new AuthApiError('Please enter a valid email address');
+    }
+
+    if (!payload.password || payload.password.length < 6) {
+      throw new AuthApiError('Password must be at least 6 characters');
+    }
+
+    return apiCall<AuthResponse>('/login', 'POST', payload);
   },
 
-  // Verify token validity
   verify: async (): Promise<VerifyResponse> => {
-    return apiCall<VerifyResponse>('/auth/verify', 'GET');
+    return apiCall<VerifyResponse>('/verify', 'GET');
   },
 
-  // Logout
+  refreshToken: async (refreshToken: string): Promise<{ token: string }> => {
+    return apiCall('/refresh-token', 'POST', { refreshToken });
+  },
+
   logout: async (): Promise<{ message: string }> => {
-    return apiCall('/auth/logout', 'POST');
+    return apiCall('/logout', 'POST');
+  },
+
+  getProfile: async (): Promise<{ user: AuthResponse['user'] }> => {
+    return apiCall('/me', 'GET');
+  },
+
+  updateProfile: async (payload: Partial<RegisterPayload>): Promise<AuthResponse> => {
+    return apiCall('/profile', 'PUT', payload);
   },
 };
 
-export type { AuthResponse, VerifyResponse, OTPResponse, AuthApiError };
+export type { AuthResponse, VerifyResponse, RegisterPayload, LoginPayload };
+export { AuthApiError };

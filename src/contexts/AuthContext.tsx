@@ -10,13 +10,28 @@ interface User {
   department: string;
 }
 
+interface RegisterPayload {
+  rollNumber: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  password: string;
+  department: string;
+  course?: string;
+  semester?: number;
+}
+
+interface LoginPayload {
+  email: string;
+  password: string;
+}
+
 interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
-  sendOTP: (rollNumber: string, phone: string) => Promise<void>;
-  verifyOTP: (rollNumber: string, otp: string) => Promise<{ status: string }>;
-  register: (payload: any) => Promise<void>;
+  login: (payload: LoginPayload) => Promise<void>;
+  register: (payload: RegisterPayload) => Promise<void>;
   logout: () => void;
 }
 
@@ -28,17 +43,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in on app start
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       setToken(storedToken);
-      verifyToken(storedToken);
+      verifyToken();
     } else {
       setLoading(false);
     }
   }, []);
 
-  const verifyToken = async (tokenToVerify: string) => {
+  const verifyToken = async () => {
     try {
       const data = await authApi.verify();
       setUser(data.user);
@@ -53,30 +67,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const sendOTP = async (rollNumber: string, phone: string) => {
-    await authApi.sendOTP(rollNumber, phone);
-  };
-
-  const verifyOTP = async (rollNumber: string, otp: string) => {
-    const data = await authApi.verifyOTP(rollNumber, otp);
-
-    if ('token' in data) {
-      // Existing user - login successful
-      const authData = data as any;
-      localStorage.setItem('token', authData.token);
-      if (authData.refreshToken) {
-        localStorage.setItem('refreshToken', authData.refreshToken);
-      }
-      setToken(authData.token);
-      setUser(authData.user);
-      return { status: 'existing_user' };
-    } else {
-      // New user - registration needed
-      return { status: 'new_user' };
+  const login = async (payload: LoginPayload) => {
+    const data = await authApi.login(payload);
+    localStorage.setItem('token', data.token);
+    if (data.refreshToken) {
+      localStorage.setItem('refreshToken', data.refreshToken);
     }
+    setToken(data.token);
+    setUser(data.user);
   };
 
-  const register = async (payload: any) => {
+  const register = async (payload: RegisterPayload) => {
     const data = await authApi.register(payload);
     localStorage.setItem('token', data.token);
     if (data.refreshToken) {
@@ -103,8 +104,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     user,
     token,
     loading,
-    sendOTP,
-    verifyOTP,
+    login,
     register,
     logout,
   };

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "1768838146102",
+    "rollNumber": "TEST001",
+    "fullName": "Test User",
+    "email": "test@example.com",
+    "phone": "1234567890",
+    "password": "$2b$12$t.X9NijMgNAmQiVmHn2Q0.ZT9LP6Qx//ERH9kON/1XswEHaBAbM3S",
+    "department": "Computer Science Engineering",
+    "course": "",
+    "semester": 1,
+    "role": "Student",
+    "isVerified": true,
+    "createdAt": "2026-01-19T15:55:46.102Z",
+    "lastLogin": "2026-01-19T15:55:54.706Z"
+  }
+]
