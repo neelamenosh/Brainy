@@ -246,7 +246,7 @@ const Index = () => {
       <footer className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 border-t border-white/10">
         <div className="text-center text-gray-500 text-sm">
           <p>Built with passion for learning. Start a quiz and challenge yourself today!</p>
-          <p className="mt-2 gradient-text-static">© {new Date().getFullYear()} Stats Mastermind. All rights reserved.</p>
+          <p className="mt-2 gradient-text-static">© {new Date().getFullYear()} Brainy. All rights reserved.</p>
         </div>
       </footer>
     </div>

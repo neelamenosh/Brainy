@@ -136,7 +136,7 @@ const Register = () => {
           </div>
           <h2 className="text-2xl font-bold text-green-400 mb-2">Account Created!</h2>
           <p className="text-gray-400">
-            Welcome to Stats Mastermind, {formData.fullName.split(" ")[0]}! Redirecting to your dashboard...
+            Welcome to Brainy, {formData.fullName.split(" ")[0]}! Redirecting to your dashboard...
           </p>
         </div>
       ) : (
@@ -155,7 +155,7 @@ const Register = () => {
                 Create Your Account
               </h1>
               <p className="text-gray-400">
-                Join Stats Mastermind and start mastering statistics
+                Join Brainy and start mastering statistics
               </p>
             </div>
 

@@ -55,8 +55,8 @@ app.use((req, res, next) => {
   next();
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || 'stats-mastermind-secret-key-2024';
-const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || 'stats-mastermind-refresh-secret-2024';
+const JWT_SECRET = process.env.JWT_SECRET || 'brainy-secret-key-2024';
+const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || 'brainy-refresh-secret-2024';
 
 const authMiddleware = (req, res, next) => {
   try {
@@ -351,7 +351,7 @@ app.put('/api/auth/profile', authMiddleware, async (req, res) => {
 
 app.get('/', (req, res) => {
   res.json({ 
-    message: 'Stats Mastermind API Server',
+    message: 'Brainy API Server',
     version: '1.0.0',
     status: 'running',
     endpoints: {

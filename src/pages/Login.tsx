@@ -69,7 +69,7 @@ const Login = () => {
                 </div>
               </div>
               <h1 className="text-3xl font-bold gradient-text-aurora mb-2">
-                Stats Mastermind
+                Brainy
               </h1>
               <p className="text-gray-400">
                 Sign in to continue your learning journey
@@ -158,7 +158,7 @@ const Login = () => {
                   <div className="w-full border-t border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-[hsl(230,25%,10%)] text-gray-500">New to Stats Mastermind?</span>
+                  <span className="px-4 bg-[hsl(230,25%,10%)] text-gray-500">New to Brainy?</span>
                 </div>
               </div>
 

@@ -70,7 +70,7 @@ const Landing = () => {
     {
       name: "Priya Sharma",
       role: "Computer Science, 3rd Year",
-      content: "Stats Mastermind helped me ace my semester exams. The quizzes are perfectly aligned with my syllabus!",
+      content: "Brainy helped me ace my semester exams. The quizzes are perfectly aligned with my syllabus!",
       rating: 5
     },
     {
@@ -116,7 +116,7 @@ const Landing = () => {
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight slide-up" style={{ opacity: 0, animationDelay: "0.2s" }}>
               <span className="text-white">Learn Smarter with</span>
               <br />
-              <span className="gradient-text-aurora text-glow">Stats Mastermind</span>
+              <span className="gradient-text-aurora text-glow">Brainy</span>
             </h1>
 
             <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 slide-up" style={{ opacity: 0, animationDelay: "0.3s" }}>
@@ -252,7 +252,7 @@ const Landing = () => {
               <span className="gradient-text-static">Students</span>
             </h2>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up" style={{ opacity: 0, animationDelay: "0.2s" }}>
-              See what engineering students are saying about Stats Mastermind.
+              See what engineering students are saying about Brainy.
             </p>
           </div>
 
@@ -296,7 +296,7 @@ const Landing = () => {
               Ready to Master Your Subjects?
             </h2>
             <p className="text-xl text-gray-400 mb-10">
-              Join thousands of engineering students who are already improving their knowledge with Stats Mastermind.
+              Join thousands of engineering students who are already improving their knowledge with Brainy.
             </p>
             <Link to="/register">
               <Button size="lg" className="h-14 px-10 rounded-2xl btn-liquid gradient-sunset text-white font-semibold text-lg shadow-xl glow-pink">
@@ -319,7 +319,7 @@ const Landing = () => {
               <div className="p-2.5 rounded-xl gradient-aurora shadow-lg">
                 <Brain className="w-6 h-6 text-white" />
               </div>
-              <span className="font-bold text-xl gradient-text-aurora">Stats Mastermind</span>
+              <span className="font-bold text-xl gradient-text-aurora">Brainy</span>
             </div>
             <div className="flex gap-8">
               <Link to="/about" className="text-gray-400 hover:text-white transition-colors">About</Link>
@@ -328,7 +328,7 @@ const Landing = () => {
               <a href="#" className="text-gray-400 hover:text-white transition-colors">Terms</a>
             </div>
             <p className="text-sm text-gray-500">
-              © {new Date().getFullYear()} <span className="gradient-text-static">Stats Mastermind</span>. All rights reserved.
+              © {new Date().getFullYear()} <span className="gradient-text-static">Brainy</span>. All rights reserved.
             </p>
           </div>
         </div>

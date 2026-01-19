@@ -49,7 +49,7 @@ const Navbar = () => {
               </div>
             </div>
             <span className="font-bold text-xl gradient-text-aurora">
-              Stats Mastermind
+              Brainy
             </span>
           </Link>
 
