@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Brain, Menu, X, LogOut, User, GraduationCap } from "lucide-react";
+import { Brain, Menu, X, LogOut, User, GraduationCap, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -38,14 +38,17 @@ const Navbar = () => {
       ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 liquid-glass-navbar">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to={user ? "/home" : "/"} className="flex items-center gap-3 group">
-            <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-all duration-300">
-              <Brain className="w-6 h-6 text-white" />
+            <div className="relative">
+              <div className="absolute inset-0 gradient-aurora rounded-xl blur-md opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative p-2.5 rounded-xl gradient-aurora shadow-lg">
+                <Brain className="w-6 h-6 text-white" />
+              </div>
             </div>
-            <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="font-bold text-xl gradient-text-aurora">
               Stats Mastermind
             </span>
           </Link>
@@ -55,56 +58,63 @@ const Navbar = () => {
               <Link
                 key={tab.to}
                 to={tab.to}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                   location.pathname === tab.to
-                    ? "bg-blue-100 text-blue-700"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                    ? "text-white"
+                    : "text-gray-400 hover:text-white"
                 }`}
               >
-                {tab.name}
+                {location.pathname === tab.to && (
+                  <span className="absolute inset-0 rounded-xl liquid-glass glow-violet opacity-50" />
+                )}
+                <span className="relative">{tab.name}</span>
               </Link>
             ))}
 
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="ml-4 gap-2 hover:bg-blue-50">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
-                      {user.fullName?.charAt(0).toUpperCase() || "U"}
+                  <Button variant="ghost" className="ml-4 gap-2 hover:bg-white/5 rounded-xl transition-all duration-300">
+                    <div className="relative">
+                      <div className="absolute inset-0 gradient-aurora rounded-full blur-sm opacity-60" />
+                      <div className="relative w-8 h-8 rounded-full gradient-aurora flex items-center justify-center text-white font-semibold text-sm">
+                        {user.fullName?.charAt(0).toUpperCase() || "U"}
+                      </div>
                     </div>
-                    <span className="hidden lg:inline text-gray-700">{user.fullName?.split(" ")[0]}</span>
+                    <span className="hidden lg:inline text-gray-300">{user.fullName?.split(" ")[0]}</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <div className="px-3 py-2 border-b">
-                    <p className="font-semibold text-gray-900">{user.fullName}</p>
-                    <p className="text-sm text-gray-500">{user.email}</p>
-                    <p className="text-xs text-blue-600 mt-1">{user.department}</p>
+                <DropdownMenuContent align="end" className="w-56 liquid-glass-strong border-white/10 rounded-2xl p-2">
+                  <div className="px-3 py-3 border-b border-white/10 mb-2">
+                    <p className="font-semibold text-white">{user.fullName}</p>
+                    <p className="text-sm text-gray-400">{user.email}</p>
+                    <p className="text-xs gradient-text-static mt-1 font-medium">{user.department}</p>
                   </div>
-                  <DropdownMenuItem className="gap-2 cursor-pointer">
-                    <User className="w-4 h-4" />
-                    Profile
+                  <DropdownMenuItem className="gap-2 cursor-pointer rounded-xl hover:bg-white/5 transition-colors">
+                    <User className="w-4 h-4 text-violet-400" />
+                    <span className="text-gray-300">Profile</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2 cursor-pointer">
-                    <GraduationCap className="w-4 h-4" />
-                    My Progress
+                  <DropdownMenuItem className="gap-2 cursor-pointer rounded-xl hover:bg-white/5 transition-colors">
+                    <GraduationCap className="w-4 h-4 text-pink-400" />
+                    <span className="text-gray-300">My Progress</span>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="gap-2 cursor-pointer text-red-600 focus:text-red-600">
-                    <LogOut className="w-4 h-4" />
-                    Sign Out
+                  <DropdownMenuSeparator className="bg-white/10 my-2" />
+                  <DropdownMenuItem onClick={handleLogout} className="gap-2 cursor-pointer rounded-xl hover:bg-red-500/10 transition-colors">
+                    <LogOut className="w-4 h-4 text-red-400" />
+                    <span className="text-red-400">Sign Out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center gap-2 ml-4">
+              <div className="flex items-center gap-3 ml-4">
                 <Link to="/login">
-                  <Button variant="ghost" className="text-gray-700 hover:text-gray-900">
+                  <Button variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300">
                     Sign In
                   </Button>
                 </Link>
                 <Link to="/register">
-                  <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/30">
+                  <Button className="relative overflow-hidden rounded-xl btn-liquid gradient-aurora text-white font-semibold px-6 shadow-lg glow-violet">
+                    <Sparkles className="w-4 h-4 mr-2" />
                     Get Started
                   </Button>
                 </Link>
@@ -114,7 +124,7 @@ const Navbar = () => {
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="md:hidden p-2 rounded-xl hover:bg-white/5 transition-all duration-300 text-white"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -122,53 +132,54 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
+        <div className="md:hidden liquid-glass-strong border-t border-white/10 fade-in">
           <div className="px-4 py-4 space-y-2">
-            {navItems.map((tab) => (
+            {navItems.map((tab, index) => (
               <Link
                 key={tab.to}
                 to={tab.to}
                 onClick={() => setIsOpen(false)}
-                className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 slide-up stagger-${index + 1} ${
                   location.pathname === tab.to
-                    ? "bg-blue-100 text-blue-700"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    ? "liquid-glass text-white glow-violet"
+                    : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
+                style={{ opacity: 0 }}
               >
                 {tab.name}
               </Link>
             ))}
 
             {user ? (
-              <div className="border-t border-gray-100 pt-4 mt-4">
+              <div className="border-t border-white/10 pt-4 mt-4">
                 <div className="px-4 py-2 mb-2">
-                  <p className="font-semibold text-gray-900">{user.fullName}</p>
-                  <p className="text-sm text-gray-500">{user.email}</p>
+                  <p className="font-semibold text-white">{user.fullName}</p>
+                  <p className="text-sm text-gray-400">{user.email}</p>
                 </div>
                 <button
                   onClick={() => {
                     handleLogout();
                     setIsOpen(false);
                   }}
-                  className="w-full flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-all"
+                  className="w-full flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all duration-300"
                 >
                   <LogOut className="w-4 h-4" />
                   Sign Out
                 </button>
               </div>
             ) : (
-              <div className="border-t border-gray-100 pt-4 mt-4 space-y-2">
+              <div className="border-t border-white/10 pt-4 mt-4 space-y-2">
                 <Link
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="block px-4 py-3 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setIsOpen(false)}
-                  className="block px-4 py-3 rounded-lg text-sm font-medium bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center"
+                  className="block px-4 py-3 rounded-xl text-sm font-medium gradient-aurora text-white text-center glow-violet"
                 >
                   Get Started
                 </Link>

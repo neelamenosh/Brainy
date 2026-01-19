@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { 
   Brain, 
   Sparkles, 
@@ -13,7 +12,10 @@ import {
   Award,
   BarChart3,
   GraduationCap,
-  Star
+  Star,
+  Flame,
+  Trophy,
+  Rocket
 } from "lucide-react";
 import { courses } from "@/data/quizData";
 
@@ -22,32 +24,38 @@ const Landing = () => {
     {
       icon: Brain,
       title: "Adaptive Learning",
-      description: "AI-powered quizzes that adapt to your knowledge level and learning pace."
+      description: "AI-powered quizzes that adapt to your knowledge level and learning pace.",
+      gradient: "from-violet-500 to-purple-600"
     },
     {
       icon: Target,
       title: "Targeted Practice",
-      description: "Focus on weak areas with personalized question recommendations."
+      description: "Focus on weak areas with personalized question recommendations.",
+      gradient: "from-pink-500 to-rose-600"
     },
     {
       icon: BarChart3,
       title: "Progress Tracking",
-      description: "Detailed analytics and insights to monitor your improvement over time."
+      description: "Detailed analytics and insights to monitor your improvement over time.",
+      gradient: "from-orange-500 to-amber-600"
     },
     {
       icon: Award,
       title: "Achievements",
-      description: "Earn badges and certificates as you master different subjects."
+      description: "Earn badges and certificates as you master different subjects.",
+      gradient: "from-cyan-500 to-teal-600"
     },
     {
       icon: BookOpen,
       title: "Comprehensive Content",
-      description: "Extensive question bank covering all major engineering disciplines."
+      description: "Extensive question bank covering all major engineering disciplines.",
+      gradient: "from-fuchsia-500 to-pink-600"
     },
     {
       icon: Users,
       title: "Community Learning",
-      description: "Connect with peers, share insights, and learn together."
+      description: "Connect with peers, share insights, and learn together.",
+      gradient: "from-indigo-500 to-violet-600"
     }
   ];
 
@@ -79,55 +87,65 @@ const Landing = () => {
     }
   ];
 
-  return (
-    <div className="min-h-screen bg-white">
-      <section className="relative pt-24 pb-20 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/5 rounded-full blur-3xl" />
-        </div>
+  const gradients = [
+    "from-violet-500 to-purple-600",
+    "from-pink-500 to-rose-600",
+    "from-orange-500 to-amber-600",
+    "from-cyan-500 to-teal-600",
+    "from-fuchsia-500 to-pink-600",
+    "from-indigo-500 to-violet-600",
+  ];
 
+  return (
+    <div className="min-h-screen bg-mesh noise-overlay">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-20 -left-32 w-[500px] h-[500px] bg-violet-500/20 rounded-full blur-[150px] morph-blob float-slow" />
+        <div className="absolute top-40 -right-32 w-[600px] h-[600px] bg-pink-500/15 rounded-full blur-[180px] morph-blob float-medium" style={{ animationDelay: "-2s" }} />
+        <div className="absolute bottom-40 left-1/4 w-[400px] h-[400px] bg-orange-500/10 rounded-full blur-[120px] morph-blob float-fast" style={{ animationDelay: "-4s" }} />
+        <div className="absolute -bottom-32 right-1/4 w-[500px] h-[500px] bg-fuchsia-500/15 rounded-full blur-[150px] morph-blob float-slow" style={{ animationDelay: "-3s" }} />
+      </div>
+
+      <section className="relative pt-28 pb-20 overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-700 text-sm font-medium mb-8">
-              <Sparkles className="w-4 h-4" />
-              Master Statistics & Engineering Concepts
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full liquid-glass text-sm font-medium mb-8 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+              <Sparkles className="w-4 h-4 text-violet-400" />
+              <span className="gradient-text-static">Master Statistics & Engineering Concepts</span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
-              Learn Smarter with{" "}
-              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Stats Mastermind
-              </span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight slide-up" style={{ opacity: 0, animationDelay: "0.2s" }}>
+              <span className="text-white">Learn Smarter with</span>
+              <br />
+              <span className="gradient-text-aurora text-glow">Stats Mastermind</span>
             </h1>
 
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 slide-up" style={{ opacity: 0, animationDelay: "0.3s" }}>
               Interactive quizzes, adaptive learning, and comprehensive coverage of engineering subjects. 
               Your path to academic excellence starts here.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 slide-up" style={{ opacity: 0, animationDelay: "0.4s" }}>
               <Link to="/register">
-                <Button size="lg" className="h-14 px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-lg shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300">
+                <Button size="lg" className="h-14 px-8 rounded-2xl btn-liquid gradient-aurora text-white font-semibold text-lg shadow-xl glow-violet">
+                  <Rocket className="w-5 h-5 mr-2" />
                   Get Started Free
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
               <Link to="/login">
-                <Button size="lg" variant="outline" className="h-14 px-8 border-2 font-semibold text-lg">
+                <Button size="lg" variant="outline" className="h-14 px-8 rounded-2xl border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold text-lg transition-all duration-300">
                   Sign In
                 </Button>
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 slide-up" style={{ opacity: 0, animationDelay: "0.5s" }}>
               {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                <div key={index} className="liquid-glass-card rounded-2xl p-5 hover-lift">
+                  <div className="text-3xl sm:text-4xl font-bold gradient-text-static mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-gray-600 mt-1">{stat.label}</div>
+                  <div className="text-gray-400 text-sm">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -135,83 +153,89 @@ const Landing = () => {
         </div>
       </section>
 
-      <section id="features" className="py-20 bg-gray-50">
+      <section id="features" className="relative py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Everything You Need to{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Excel</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+              <span className="text-white">Everything You Need to </span>
+              <span className="gradient-text-static">Excel</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up" style={{ opacity: 0, animationDelay: "0.2s" }}>
               Powerful features designed to enhance your learning experience and help you achieve your academic goals.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white">
-                <CardContent className="p-8">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30">
-                    <feature.icon className="w-7 h-7 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
-                </CardContent>
-              </Card>
+              <div 
+                key={index} 
+                className="liquid-glass-card rounded-3xl p-8 card-3d hover-glow slide-up"
+                style={{ opacity: 0, animationDelay: `${0.3 + index * 0.1}s` }}
+              >
+                <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg`}>
+                  <feature.icon className="w-7 h-7 text-white" />
+                  <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} blur-xl opacity-50`} />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
+                <p className="text-gray-400">{feature.description}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="relative py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Explore{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Courses</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+              <span className="text-white">Explore </span>
+              <span className="gradient-text-static">Courses</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up" style={{ opacity: 0, animationDelay: "0.2s" }}>
               Comprehensive coverage across all major engineering disciplines.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {courses.slice(0, 6).map((course, index) => (
-              <Card key={`${course.id}-${index}`} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
-                <CardContent className="p-0">
-                  <div className={`h-2 bg-gradient-to-r ${course.color}`} />
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${course.color} flex items-center justify-center`}>
-                        <GraduationCap className="w-6 h-6 text-white" />
-                      </div>
-                      <span className="px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-sm font-medium">
-                        {course.subjects.length} Subjects
-                      </span>
+              <div 
+                key={`${course.id}-${index}`} 
+                className="liquid-glass-card rounded-3xl overflow-hidden card-3d hover-glow slide-up"
+                style={{ opacity: 0, animationDelay: `${0.3 + index * 0.1}s` }}
+              >
+                <div className={`h-1.5 bg-gradient-to-r ${gradients[index % gradients.length]}`} />
+                <div className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`relative w-12 h-12 rounded-xl bg-gradient-to-br ${gradients[index % gradients.length]} flex items-center justify-center shadow-lg`}>
+                      <GraduationCap className="w-6 h-6 text-white" />
+                      <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${gradients[index % gradients.length]} blur-lg opacity-50`} />
                     </div>
-                    <h3 className="text-lg font-bold mb-2">{course.name}</h3>
-                    <p className="text-gray-600 text-sm mb-4">{course.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {course.subjects.slice(0, 3).map((subject) => (
-                        <span key={subject.id} className="px-2 py-1 rounded bg-gray-100 text-gray-700 text-xs">
-                          {subject.name}
-                        </span>
-                      ))}
-                      {course.subjects.length > 3 && (
-                        <span className="px-2 py-1 rounded bg-blue-100 text-blue-700 text-xs">
-                          +{course.subjects.length - 3} more
-                        </span>
-                      )}
-                    </div>
+                    <span className="px-3 py-1.5 rounded-full liquid-glass text-gray-300 text-sm font-medium">
+                      {course.subjects.length} Subjects
+                    </span>
                   </div>
-                </CardContent>
-              </Card>
+                  <h3 className="text-lg font-bold text-white mb-2">{course.name}</h3>
+                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">{course.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {course.subjects.slice(0, 3).map((subject) => (
+                      <span key={subject.id} className="px-2.5 py-1 rounded-lg liquid-glass text-gray-300 text-xs font-medium">
+                        {subject.name}
+                      </span>
+                    ))}
+                    {course.subjects.length > 3 && (
+                      <span className="px-2.5 py-1 rounded-lg bg-violet-500/20 text-violet-300 text-xs font-medium">
+                        +{course.subjects.length - 3} more
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-12 slide-up" style={{ opacity: 0, animationDelay: "0.9s" }}>
             <Link to="/register">
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+              <Button size="lg" className="h-14 px-8 rounded-2xl btn-liquid gradient-aurora text-white font-semibold shadow-xl glow-violet">
                 Start Learning Now
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
@@ -220,83 +244,91 @@ const Landing = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
+      <section className="relative py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Loved by{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Students</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+              <span className="text-white">Loved by </span>
+              <span className="gradient-text-static">Students</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up" style={{ opacity: 0, animationDelay: "0.2s" }}>
               See what engineering students are saying about Stats Mastermind.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border-0 shadow-lg bg-white">
-                <CardContent className="p-8">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                    ))}
+              <div 
+                key={index} 
+                className="liquid-glass-strong rounded-3xl p-8 card-3d hover-glow slide-up"
+                style={{ opacity: 0, animationDelay: `${0.3 + index * 0.1}s` }}
+              >
+                <div className="flex gap-1 mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-gray-300 mb-6 italic leading-relaxed">"{testimonial.content}"</p>
+                <div className="flex items-center gap-3">
+                  <div className={`w-11 h-11 rounded-full bg-gradient-to-br ${gradients[index % gradients.length]} flex items-center justify-center text-white font-semibold`}>
+                    {testimonial.name.charAt(0)}
                   </div>
-                  <p className="text-gray-600 mb-6 italic">"{testimonial.content}"</p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold">
-                      {testimonial.name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="font-semibold">{testimonial.name}</p>
-                      <p className="text-sm text-gray-500">{testimonial.role}</p>
-                    </div>
+                  <div>
+                    <p className="font-semibold text-white">{testimonial.name}</p>
+                    <p className="text-sm text-gray-400">{testimonial.role}</p>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Ready to Master Your Subjects?
-          </h2>
-          <p className="text-xl text-blue-100 mb-10">
-            Join thousands of engineering students who are already improving their knowledge with Stats Mastermind.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      <section className="relative py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="liquid-glass-strong rounded-3xl p-10 md:p-16 text-center glow-mixed slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+            <div className="flex justify-center mb-6">
+              <div className="p-4 rounded-2xl gradient-aurora pulse-glow">
+                <Trophy className="w-10 h-10 text-white" />
+              </div>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+              Ready to Master Your Subjects?
+            </h2>
+            <p className="text-xl text-gray-400 mb-10">
+              Join thousands of engineering students who are already improving their knowledge with Stats Mastermind.
+            </p>
             <Link to="/register">
-              <Button size="lg" className="h-14 px-8 bg-white text-blue-600 hover:bg-gray-100 font-semibold text-lg shadow-xl">
+              <Button size="lg" className="h-14 px-10 rounded-2xl btn-liquid gradient-sunset text-white font-semibold text-lg shadow-xl glow-pink">
+                <Flame className="w-5 h-5 mr-2" />
                 Create Free Account
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
+            <p className="text-gray-500 mt-6 text-sm">
+              No credit card required. Start learning instantly.
+            </p>
           </div>
-          <p className="text-blue-200 mt-6 text-sm">
-            No credit card required. Start learning instantly.
-          </p>
         </div>
       </section>
 
-      <footer className="py-12 bg-gray-900 text-gray-400">
+      <footer className="relative py-12 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600">
+              <div className="p-2.5 rounded-xl gradient-aurora shadow-lg">
                 <Brain className="w-6 h-6 text-white" />
               </div>
-              <span className="font-bold text-xl text-white">Stats Mastermind</span>
+              <span className="font-bold text-xl gradient-text-aurora">Stats Mastermind</span>
             </div>
             <div className="flex gap-8">
-              <Link to="/about" className="hover:text-white transition-colors">About</Link>
-              <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
+              <Link to="/about" className="text-gray-400 hover:text-white transition-colors">About</Link>
+              <Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy</a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">Terms</a>
             </div>
-            <p className="text-sm">
-              © {new Date().getFullYear()} Stats Mastermind. All rights reserved.
+            <p className="text-sm text-gray-500">
+              © {new Date().getFullYear()} <span className="gradient-text-static">Stats Mastermind</span>. All rights reserved.
             </p>
           </div>
         </div>

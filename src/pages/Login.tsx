@@ -3,8 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, CheckCircle, AlertCircle, Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { Brain, CheckCircle, AlertCircle, Eye, EyeOff, Mail, Lock, Sparkles, ArrowRight } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
@@ -38,58 +37,59 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 pt-20 pb-12 flex items-center justify-center">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-3xl" />
+    <div className="min-h-screen bg-mesh noise-overlay pt-20 pb-12 flex items-center justify-center">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-20 -left-32 w-[500px] h-[500px] bg-violet-500/20 rounded-full blur-[150px] morph-blob float-slow" />
+        <div className="absolute top-40 -right-32 w-[600px] h-[600px] bg-pink-500/15 rounded-full blur-[180px] morph-blob float-medium" style={{ animationDelay: "-2s" }} />
+        <div className="absolute bottom-40 left-1/4 w-[400px] h-[400px] bg-orange-500/10 rounded-full blur-[120px] morph-blob float-fast" style={{ animationDelay: "-4s" }} />
       </div>
 
       {showSuccess ? (
-        <Card className="w-full max-w-md mx-4 border-0 shadow-xl relative z-10 bg-white/80 backdrop-blur-sm">
-          <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="p-4 rounded-full bg-green-500/20 animate-bounce">
-                <CheckCircle className="w-12 h-12 text-green-500" />
-              </div>
+        <div className="w-full max-w-md mx-4 liquid-glass-strong rounded-3xl p-8 text-center scale-in glow-mixed">
+          <div className="flex justify-center mb-6">
+            <div className="p-4 rounded-full bg-green-500/20 pulse-glow">
+              <CheckCircle className="w-12 h-12 text-green-400" />
             </div>
-            <CardTitle className="text-2xl text-green-600">Welcome Back!</CardTitle>
-            <CardDescription className="text-base">
-              Login successful! Redirecting to your dashboard...
-            </CardDescription>
-          </CardHeader>
-        </Card>
+          </div>
+          <h2 className="text-2xl font-bold text-green-400 mb-2">Welcome Back!</h2>
+          <p className="text-gray-400">
+            Login successful! Redirecting to your dashboard...
+          </p>
+        </div>
       ) : (
-        <Card className="w-full max-w-md mx-4 border-0 shadow-xl relative z-10 bg-white/80 backdrop-blur-sm">
-          <CardHeader className="text-center pb-6">
-            <div className="flex justify-center mb-4">
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg">
-                <Brain className="w-8 h-8 text-white" />
+        <div className="w-full max-w-md mx-4 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+          <div className="liquid-glass-strong rounded-3xl p-8 glow-mixed">
+            <div className="text-center mb-8">
+              <div className="flex justify-center mb-4">
+                <div className="relative">
+                  <div className="absolute inset-0 gradient-aurora rounded-2xl blur-lg opacity-60" />
+                  <div className="relative p-4 rounded-2xl gradient-aurora shadow-lg">
+                    <Brain className="w-8 h-8 text-white" />
+                  </div>
+                </div>
               </div>
+              <h1 className="text-3xl font-bold gradient-text-aurora mb-2">
+                Stats Mastermind
+              </h1>
+              <p className="text-gray-400">
+                Sign in to continue your learning journey
+              </p>
             </div>
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Stats Mastermind
-            </CardTitle>
-            <CardDescription className="text-base mt-2">
-              Sign in to continue your learning journey
-            </CardDescription>
-          </CardHeader>
-          
-          <CardContent>
+
             {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-600 font-medium">{error}</p>
+              <div className="mb-6 p-4 rounded-2xl liquid-glass border border-red-500/30 flex items-start gap-3 fade-in">
+                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-400 font-medium">{error}</p>
               </div>
             )}
 
             <form onSubmit={handleLogin} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+                <Label htmlFor="email" className="text-sm font-semibold text-gray-300">
                   Email Address
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                   <Input
                     id="email"
                     type="email"
@@ -101,17 +101,17 @@ const Login = () => {
                     }}
                     required
                     disabled={loading}
-                    className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-12 h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-violet-500 focus:ring-violet-500/20 transition-all duration-300"
                   />
                 </div>
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-semibold text-gray-700">
+                <Label htmlFor="password" className="text-sm font-semibold text-gray-300">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -123,11 +123,11 @@ const Login = () => {
                     }}
                     required
                     disabled={loading}
-                    className="pl-10 pr-12 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-12 pr-12 h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-violet-500 focus:ring-violet-500/20 transition-all duration-300"
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -138,7 +138,7 @@ const Login = () => {
               <Button
                 type="submit"
                 disabled={loading || !email || !password}
-                className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-base shadow-lg shadow-blue-500/30 transition-all duration-200 hover:shadow-xl hover:shadow-blue-500/40"
+                className="w-full h-12 rounded-xl btn-liquid gradient-aurora text-white font-semibold shadow-lg glow-violet disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -146,16 +146,19 @@ const Login = () => {
                     Signing in...
                   </span>
                 ) : (
-                  "Sign In"
+                  <span className="flex items-center gap-2">
+                    Sign In
+                    <ArrowRight className="w-5 h-5" />
+                  </span>
                 )}
               </Button>
 
-              <div className="relative my-6">
+              <div className="relative my-8">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200" />
+                  <div className="w-full border-t border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-gray-500">New to Stats Mastermind?</span>
+                  <span className="px-4 bg-[hsl(230,25%,10%)] text-gray-500">New to Stats Mastermind?</span>
                 </div>
               </div>
 
@@ -163,14 +166,15 @@ const Login = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full h-12 border-2 border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 font-semibold"
+                  className="w-full h-12 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white font-semibold transition-all duration-300"
                 >
+                  <Sparkles className="w-5 h-5 mr-2 text-violet-400" />
                   Create an Account
                 </Button>
               </Link>
             </form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
     </div>
   );
