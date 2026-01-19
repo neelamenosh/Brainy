@@ -28,14 +28,26 @@ import {
 } from "lucide-react";
 import { quizCategories } from "@/data/quizData";
 
-interface SubjectScore {
+interface ProgressItem {
+  completed: boolean;
   score: number;
   totalQuestions: number;
-  percentage: number;
   completedAt: string;
 }
 
-interface Student {
+interface RawStudent {
+  id: string;
+  rollNumber: string;
+  fullName: string;
+  email: string;
+  department: string;
+  course: string;
+  semester: number;
+  progress?: Record<string, ProgressItem>;
+  lastLogin?: string;
+}
+
+interface ProcessedStudent {
   id: string;
   rollNumber: string;
   fullName: string;
@@ -47,7 +59,7 @@ interface Student {
   totalScore: number;
   totalQuestions: number;
   overallPercentage: number;
-  subjectScores: Record<string, SubjectScore>;
+  subjectScores: Record<string, { score: number; totalQuestions: number; percentage: number; completedAt: string }>;
   lastActive: string;
 }
 
@@ -58,11 +70,50 @@ interface AdminReport {
   facultyEmail: string;
   reportType: string;
   message: string;
-  students: Student[];
+  students: RawStudent[];
   createdAt: string;
   status: 'pending' | 'published';
   publishedAt?: string;
 }
+
+const processStudent = (student: RawStudent): ProcessedStudent => {
+  const progress = student.progress || {};
+  const subjects = Object.keys(progress);
+  
+  let totalScore = 0;
+  let totalQuestions = 0;
+  const subjectScores: Record<string, { score: number; totalQuestions: number; percentage: number; completedAt: string }> = {};
+  
+  subjects.forEach(subjectId => {
+    const subjectData = progress[subjectId];
+    if (subjectData) {
+      totalScore += subjectData.score;
+      totalQuestions += subjectData.totalQuestions;
+      subjectScores[subjectId] = {
+        score: subjectData.score,
+        totalQuestions: subjectData.totalQuestions,
+        percentage: subjectData.totalQuestions > 0 ? Math.round((subjectData.score / subjectData.totalQuestions) * 100) : 0,
+        completedAt: subjectData.completedAt
+      };
+    }
+  });
+  
+  return {
+    id: student.id,
+    rollNumber: student.rollNumber,
+    fullName: student.fullName,
+    email: student.email,
+    department: student.department,
+    course: student.course,
+    semester: student.semester,
+    totalQuizzes: subjects.length,
+    totalScore,
+    totalQuestions,
+    overallPercentage: totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0,
+    subjectScores,
+    lastActive: student.lastLogin || new Date().toISOString()
+  };
+};
 
 const AdminServices = () => {
   const { user, token } = useAuth();
@@ -302,67 +353,70 @@ const AdminServices = () => {
             </div>
             <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
               <div className="space-y-4 mb-8">
-                {selectedReport.students.map(student => (
-                  <div key={student.id} className="rounded-3xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] transition-colors overflow-hidden">
-                    <div 
-                      className="p-6 cursor-pointer"
-                      onClick={() => setExpandedStudent(expandedStudent === student.id ? null : student.id)}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white font-black text-lg">{student.fullName.charAt(0)}</div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-bold text-white truncate">{student.fullName}</h4>
-                          <p className="text-xs text-gray-500">{student.rollNumber}</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="text-right">
-                            <p className="text-[10px] text-gray-500 uppercase tracking-widest">Score</p>
-                            <p className="text-sm font-bold text-white">{student.totalScore}/{student.totalQuestions}</p>
+                {selectedReport.students.map(rawStudent => {
+                  const student = processStudent(rawStudent);
+                  return (
+                    <div key={student.id} className="rounded-3xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] transition-colors overflow-hidden">
+                      <div 
+                        className="p-6 cursor-pointer"
+                        onClick={() => setExpandedStudent(expandedStudent === student.id ? null : student.id)}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white font-black text-lg">{student.fullName.charAt(0)}</div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-white truncate">{student.fullName}</h4>
+                            <p className="text-xs text-gray-500">{student.rollNumber}</p>
                           </div>
-                          <div className={`px-4 py-2 rounded-xl border ${getGradeBg(student.overallPercentage)}`}>
-                            <p className={`text-lg font-black ${getGradeColor(student.overallPercentage)}`}>{student.overallPercentage}%</p>
-                          </div>
-                          <div className="p-2 rounded-lg hover:bg-white/10 transition-colors">
-                            {expandedStudent === student.id ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-4 h-1.5 bg-white/5 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-violet-500 to-cyan-500 transition-all duration-1000" style={{ width: `${student.overallPercentage}%` }} />
-                      </div>
-                    </div>
-                    
-                    {expandedStudent === student.id && (
-                      <div className="px-6 pb-6 border-t border-white/5 pt-4">
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                          <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Department</p><p className="text-sm font-medium text-white truncate">{student.department}</p></div>
-                          <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Course</p><p className="text-sm font-medium text-white truncate">{student.course || 'N/A'}</p></div>
-                          <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Semester</p><p className="text-sm font-medium text-white">{student.semester}</p></div>
-                          <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Total Quizzes</p><p className="text-sm font-medium text-white">{student.totalQuizzes}</p></div>
-                        </div>
-                        
-                        <h5 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2"><Sparkles className="w-3 h-3" />Subject Scores</h5>
-                        <div className="grid sm:grid-cols-2 gap-3">
-                          {Object.entries(student.subjectScores).map(([subjectId, score]) => (
-                            <div key={subjectId} className={`rounded-xl p-4 border ${getGradeBg(score.percentage)}`}>
-                              <div className="flex items-center justify-between mb-2">
-                                <h6 className="font-medium text-white text-sm truncate">{getSubjectName(subjectId)}</h6>
-                                <span className={`font-black ${getGradeColor(score.percentage)}`}>{score.percentage}%</span>
-                              </div>
-                              <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
-                                <span>{score.score}/{score.totalQuestions} correct</span>
-                                <span>{new Date(score.completedAt).toLocaleDateString()}</span>
-                              </div>
-                              <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                                <div className="h-full bg-white/40" style={{ width: `${score.percentage}%` }} />
-                              </div>
+                          <div className="flex items-center gap-3">
+                            <div className="text-right">
+                              <p className="text-[10px] text-gray-500 uppercase tracking-widest">Score</p>
+                              <p className="text-sm font-bold text-white">{student.totalScore}/{student.totalQuestions}</p>
                             </div>
-                          ))}
+                            <div className={`px-4 py-2 rounded-xl border ${getGradeBg(student.overallPercentage)}`}>
+                              <p className={`text-lg font-black ${getGradeColor(student.overallPercentage)}`}>{student.overallPercentage}%</p>
+                            </div>
+                            <div className="p-2 rounded-lg hover:bg-white/10 transition-colors">
+                              {expandedStudent === student.id ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-4 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-violet-500 to-cyan-500 transition-all duration-1000" style={{ width: `${student.overallPercentage}%` }} />
                         </div>
                       </div>
-                    )}
-                  </div>
-                ))}
+                      
+                      {expandedStudent === student.id && (
+                        <div className="px-6 pb-6 border-t border-white/5 pt-4">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                            <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Department</p><p className="text-sm font-medium text-white truncate">{student.department}</p></div>
+                            <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Course</p><p className="text-sm font-medium text-white truncate">{student.course || 'N/A'}</p></div>
+                            <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Semester</p><p className="text-sm font-medium text-white">{student.semester}</p></div>
+                            <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Total Quizzes</p><p className="text-sm font-medium text-white">{student.totalQuizzes}</p></div>
+                          </div>
+                          
+                          <h5 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2"><Sparkles className="w-3 h-3" />Subject Scores</h5>
+                          <div className="grid sm:grid-cols-2 gap-3">
+                            {Object.entries(student.subjectScores).map(([subjectId, score]) => (
+                              <div key={subjectId} className={`rounded-xl p-4 border ${getGradeBg(score.percentage)}`}>
+                                <div className="flex items-center justify-between mb-2">
+                                  <h6 className="font-medium text-white text-sm truncate">{getSubjectName(subjectId)}</h6>
+                                  <span className={`font-black ${getGradeColor(score.percentage)}`}>{score.percentage}%</span>
+                                </div>
+                                <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
+                                  <span>{score.score}/{score.totalQuestions} correct</span>
+                                  <span>{new Date(score.completedAt).toLocaleDateString()}</span>
+                                </div>
+                                <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                                  <div className="h-full bg-white/40" style={{ width: `${score.percentage}%` }} />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div className="p-8 border-t border-white/10 bg-white/[0.02] flex justify-end gap-4">
