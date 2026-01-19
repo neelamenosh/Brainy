@@ -27,6 +27,21 @@
     "role": "Student",
     "isVerified": true,
     "createdAt": "2026-01-19T16:09:53.058Z",
-    "lastLogin": "2026-01-19T16:25:20.134Z"
+    "lastLogin": "2026-01-19T16:30:41.165Z"
+  },
+  {
+    "id": "1768840379634",
+    "rollNumber": "FAC001",
+    "fullName": "Faculty User",
+    "email": "faculty@gmail.com",
+    "phone": "0000000000",
+    "password": "$2b$12$Sanj79VZ.qP/80qwvuOEVubXFv4QSlw1BgZWFjUF1CjHbj7r/fra2",
+    "department": "Computer Science Engineering",
+    "course": "Academic",
+    "semester": 1,
+    "role": "Faculty",
+    "isVerified": true,
+    "createdAt": "2026-01-19T16:32:59.634Z",
+    "lastLogin": "2026-01-19T16:32:59.636Z"
   }
 ]
