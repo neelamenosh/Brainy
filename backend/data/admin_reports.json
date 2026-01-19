@@ -79,6 +79,7 @@
       }
     ],
     "createdAt": "2026-01-19T16:54:30.611Z",
-    "status": "pending"
+    "status": "published",
+    "publishedAt": "2026-01-19T17:18:50.544Z"
   }
 ]

@@ -130,19 +130,27 @@ const AdminServices = () => {
   };
 
   const getGradeColor = (percentage: number) => {
-    if (percentage >= 90) return 'text-emerald-400';
-    if (percentage >= 75) return 'text-green-400';
-    if (percentage >= 60) return 'text-yellow-400';
-    if (percentage >= 40) return 'text-orange-400';
-    return 'text-red-400';
+    if (percentage >= 90) return 'text-emerald-300';
+    if (percentage >= 75) return 'text-teal-300';
+    if (percentage >= 60) return 'text-amber-300';
+    if (percentage >= 40) return 'text-orange-300';
+    return 'text-rose-300';
   };
 
   const getGradeBg = (percentage: number) => {
-    if (percentage >= 90) return 'bg-emerald-500/20 border-emerald-500/30';
-    if (percentage >= 75) return 'bg-green-500/20 border-green-500/30';
-    if (percentage >= 60) return 'bg-yellow-500/20 border-yellow-500/30';
-    if (percentage >= 40) return 'bg-orange-500/20 border-orange-500/30';
-    return 'bg-red-500/20 border-red-500/30';
+    if (percentage >= 90) return 'bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border-emerald-400/30';
+    if (percentage >= 75) return 'bg-gradient-to-br from-teal-500/20 to-cyan-500/10 border-teal-400/30';
+    if (percentage >= 60) return 'bg-gradient-to-br from-amber-500/20 to-yellow-500/10 border-amber-400/30';
+    if (percentage >= 40) return 'bg-gradient-to-br from-orange-500/20 to-red-500/10 border-orange-400/30';
+    return 'bg-gradient-to-br from-rose-500/20 to-pink-500/10 border-rose-400/30';
+  };
+
+  const getGradeIcon = (percentage: number) => {
+    if (percentage >= 90) return '🏆';
+    if (percentage >= 75) return '⭐';
+    if (percentage >= 60) return '📊';
+    if (percentage >= 40) return '📈';
+    return '📉';
   };
 
   useEffect(() => {
@@ -193,137 +201,156 @@ const AdminServices = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center bg-[#050505]">
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-[#030306]">
         <div className="relative">
-          <div className="w-16 h-16 border-2 border-violet-500/20 border-t-violet-500 rounded-full animate-spin" />
-          <Shield className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-violet-500" />
+          <div className="w-20 h-20 border-2 border-transparent border-t-rose-500 border-r-amber-500 rounded-full animate-spin" />
+          <div className="absolute inset-2 border-2 border-transparent border-b-violet-500 border-l-cyan-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }} />
+          <Shield className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-amber-400" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-20 pb-12 bg-[#050505] noise-overlay">
+    <div className="min-h-screen pt-20 pb-12 bg-[#030306] noise-overlay overflow-hidden">
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-violet-600/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[20%] left-[-10%] w-[40%] h-[40%] bg-blue-600/5 rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(251,191,36,0.08),transparent_50%)]" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,rgba(236,72,153,0.08),transparent_50%)]" />
+        <div className="absolute top-[10%] right-[10%] w-[500px] h-[500px] bg-gradient-to-br from-amber-500/10 via-rose-500/5 to-transparent rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '4s' }} />
+        <div className="absolute bottom-[10%] left-[5%] w-[400px] h-[400px] bg-gradient-to-tr from-violet-600/10 via-fuchsia-500/5 to-transparent rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
+        <div className="absolute top-[50%] left-[50%] w-[300px] h-[300px] bg-gradient-to-br from-cyan-500/5 to-transparent rounded-full blur-[80px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {notification && (
           <div className={`fixed top-24 right-4 z-50 px-6 py-4 rounded-2xl shadow-2xl border backdrop-blur-xl flex items-center gap-3 animate-in slide-in-from-right ${
-            notification.type === 'success' ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400' : 'bg-red-500/20 border-red-500/30 text-red-400'
+            notification.type === 'success' ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-emerald-400/30 text-emerald-300' : 'bg-gradient-to-r from-rose-500/20 to-red-500/20 border-rose-400/30 text-rose-300'
           }`}>
             <CheckCircle className="w-5 h-5" />
             <span className="font-bold">{notification.message}</span>
-            <button onClick={() => setNotification(null)} className="ml-2 p-1 hover:bg-white/10 rounded-lg"><X className="w-4 h-4" /></button>
+            <button onClick={() => setNotification(null)} className="ml-2 p-1.5 hover:bg-white/10 rounded-xl transition-colors"><X className="w-4 h-4" /></button>
           </div>
         )}
 
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-12 slide-up">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12 slide-up">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[10px] font-black tracking-widest uppercase mb-4 shadow-[0_0_15px_rgba(139,92,246,0.1)]">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-violet-500/10 border border-amber-400/20 text-amber-300 text-[10px] font-black tracking-[0.2em] uppercase mb-5 shadow-[0_0_30px_rgba(251,191,36,0.15)]">
               <Shield className="w-3 h-3" />
               Administrative Authority
             </div>
-            <h1 className="text-4xl font-black text-white mb-2 tracking-tight">Academic <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400">Oversight</span></h1>
-            <p className="text-gray-500 font-medium">Review and publish academic progress reports from the faculty department.</p>
+            <h1 className="text-4xl sm:text-5xl font-black text-white mb-3 tracking-tight">
+              Academic <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-rose-400 to-violet-400 animate-gradient">Oversight</span>
+            </h1>
+            <p className="text-gray-400 font-medium text-lg">Review and publish academic progress reports from the faculty department.</p>
           </div>
           <div className="flex gap-4">
-            <div className="liquid-glass-strong px-6 py-3 rounded-2xl border border-white/5 flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Pending</p>
-                <p className="text-xl font-black text-white">{reports.filter(r => r.status === 'pending').length}</p>
-              </div>
-              <div className="w-[1px] h-8 bg-white/10" />
-              <div className="text-right">
-                <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Published</p>
-                <p className="text-xl font-black text-white">{reports.filter(r => r.status === 'published').length}</p>
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-violet-500/20 rounded-3xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-xl px-8 py-5 rounded-2xl border border-white/10 flex items-center gap-6">
+                <div className="text-center">
+                  <p className="text-[10px] font-black text-amber-400/80 uppercase tracking-[0.15em] mb-1">Pending</p>
+                  <p className="text-3xl font-black bg-gradient-to-b from-amber-300 to-amber-500 bg-clip-text text-transparent">{reports.filter(r => r.status === 'pending').length}</p>
+                </div>
+                <div className="w-px h-12 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+                <div className="text-center">
+                  <p className="text-[10px] font-black text-emerald-400/80 uppercase tracking-[0.15em] mb-1">Published</p>
+                  <p className="text-3xl font-black bg-gradient-to-b from-emerald-300 to-emerald-500 bg-clip-text text-transparent">{reports.filter(r => r.status === 'published').length}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-8">
           {reports.length === 0 ? (
-            <div className="liquid-glass-strong rounded-[2.5rem] p-20 text-center border border-white/5">
-              <div className="w-20 h-20 rounded-3xl bg-white/5 flex items-center justify-center mx-auto mb-6">
-                <FileText className="w-10 h-10 text-gray-600" />
+            <div className="relative group">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-violet-500/20 rounded-[2.5rem] blur opacity-50" />
+              <div className="relative bg-gradient-to-br from-white/[0.06] to-transparent backdrop-blur-xl rounded-[2.5rem] p-20 text-center border border-white/10">
+                <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-amber-500/20 via-rose-500/20 to-violet-500/20 flex items-center justify-center mx-auto mb-8 border border-white/10">
+                  <FileText className="w-12 h-12 text-amber-300" />
+                </div>
+                <h3 className="text-2xl font-black text-white mb-3">No Reports Yet</h3>
+                <p className="text-gray-400 max-w-md mx-auto text-lg">Reports from faculty will appear here once they are submitted for review.</p>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">No reports found</h3>
-              <p className="text-gray-500 max-w-md mx-auto">Reports from faculty will appear here once they are submitted for review.</p>
             </div>
           ) : (
             reports.map((report, i) => (
               <div key={report.id} className="group relative slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-500/20 to-cyan-500/20 rounded-[2.5rem] blur opacity-0 group-hover:opacity-100 transition duration-500" />
-                <div className="relative liquid-glass-strong rounded-[2.5rem] p-8 border border-white/5 group-hover:border-white/10 transition-all duration-500">
-                  <div className="flex flex-col lg:flex-row gap-8">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500/30 via-rose-500/30 to-violet-500/30 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700" />
+                <div className="absolute -inset-px bg-gradient-to-r from-amber-400/20 via-rose-400/20 to-violet-400/20 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                <div className="relative bg-gradient-to-br from-white/[0.08] via-white/[0.04] to-transparent backdrop-blur-xl rounded-[2rem] p-8 border border-white/10 group-hover:border-white/20 transition-all duration-500 overflow-hidden">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-amber-500/5 via-rose-500/5 to-transparent rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  
+                  <div className="relative flex flex-col lg:flex-row gap-8">
                     <div className="flex-1">
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-4">
-                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-violet-500/20 group-hover:scale-110 transition-transform duration-500">
-                            <GraduationCap className="w-7 h-7 text-white" />
+                      <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-5">
+                          <div className="relative">
+                            <div className="absolute -inset-1 bg-gradient-to-br from-amber-500 via-rose-500 to-violet-500 rounded-2xl blur opacity-40 group-hover:opacity-60 transition-opacity" />
+                            <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 via-rose-500 to-violet-600 flex items-center justify-center shadow-2xl">
+                              <GraduationCap className="w-8 h-8 text-white" />
+                            </div>
                           </div>
                           <div>
-                            <h3 className="text-xl font-bold text-white group-hover:text-violet-400 transition-colors">{report.facultyName}</h3>
-                            <p className="text-sm text-gray-500">{report.facultyEmail}</p>
+                            <h3 className="text-2xl font-black text-white group-hover:text-amber-200 transition-colors">{report.facultyName}</h3>
+                            <p className="text-sm text-gray-400 font-medium">{report.facultyEmail}</p>
                           </div>
                         </div>
-                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                          report.status === 'published' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-amber-500/10 border border-amber-500/20 text-amber-400'
+                        <div className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] backdrop-blur-xl ${
+                          report.status === 'published' 
+                            ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-400/30 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.2)]' 
+                            : 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/30 text-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.2)]'
                         }`}>
-                          {report.status}
+                          {report.status === 'published' ? '✓ Published' : '⏳ Pending'}
                         </div>
                       </div>
 
-                      <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/5 mb-6 group-hover:bg-white/[0.04] transition-colors">
-                        <div className="flex items-center gap-2 mb-3">
-                          <Mail className="w-4 h-4 text-violet-400" />
-                          <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Faculty Message</span>
+                      <div className="relative p-6 rounded-2xl bg-gradient-to-br from-white/[0.06] to-transparent border border-white/10 mb-8 group-hover:border-white/20 transition-colors">
+                        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-amber-400 via-rose-400 to-violet-400 rounded-l-full" />
+                        <div className="flex items-center gap-2 mb-3 pl-2">
+                          <Mail className="w-4 h-4 text-rose-400" />
+                          <span className="text-xs font-black text-rose-300/80 uppercase tracking-[0.15em]">Faculty Message</span>
                         </div>
-                        <p className="text-gray-300 font-medium italic">"{report.message || 'No message provided'}"</p>
+                        <p className="text-gray-300 font-medium italic text-lg pl-2">"{report.message || 'No message provided'}"</p>
                       </div>
 
                       <div className="flex flex-wrap gap-4">
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5">
-                          <Users className="w-4 h-4 text-gray-500" />
-                          <span className="text-xs font-bold text-white">{report.students.length} Students Included</span>
+                        <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-400/20 group-hover:border-violet-400/30 transition-colors">
+                          <Users className="w-5 h-5 text-violet-400" />
+                          <span className="text-sm font-bold text-white">{report.students.length} Students</span>
                         </div>
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5">
-                          <Clock className="w-4 h-4 text-gray-500" />
-                          <span className="text-xs font-bold text-white">{new Date(report.createdAt).toLocaleString()}</span>
+                        <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500/10 to-teal-500/10 border border-cyan-400/20 group-hover:border-cyan-400/30 transition-colors">
+                          <Clock className="w-5 h-5 text-cyan-400" />
+                          <span className="text-sm font-bold text-white">{new Date(report.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="lg:w-72 flex flex-col justify-between gap-6">
-                      <div className="space-y-3">
-                        <Button 
-                          onClick={() => setSelectedReport(report)}
-                          className="w-full h-14 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold transition-all group-hover:border-white/20"
-                        >
-                          <Eye className="w-5 h-5 mr-2" />
-                          Inspect Data
-                        </Button>
-                        <Button 
-                          onClick={() => handlePublish(report.id)}
-                          disabled={report.status === 'published' || publishing === report.id}
-                          className={`w-full h-14 rounded-2xl font-black transition-all ${
-                            report.status === 'published' 
-                              ? 'bg-emerald-500/10 text-emerald-500 cursor-not-allowed border border-emerald-500/20' 
-                              : 'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-xl shadow-violet-600/20 hover:scale-[1.02] active:scale-[0.98]'
-                          }`}
-                        >
-                          {publishing === report.id ? (
-                            <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          ) : report.status === 'published' ? (
-                            <div className="flex items-center gap-2"><CheckCircle className="w-5 h-5" /> PUBLISHED</div>
-                          ) : (
-                            <div className="flex items-center gap-2"><ArrowUpRight className="w-5 h-5" /> PUBLISH RESULTS</div>
-                          )}
-                        </Button>
-                      </div>
+                    <div className="lg:w-72 flex flex-col justify-center gap-4">
+                      <Button 
+                        onClick={() => setSelectedReport(report)}
+                        className="w-full h-14 rounded-xl bg-gradient-to-r from-white/10 to-white/5 border border-white/20 hover:border-white/40 hover:bg-white/15 text-white font-bold transition-all duration-300 group/btn"
+                      >
+                        <Eye className="w-5 h-5 mr-2 group-hover/btn:scale-110 transition-transform" />
+                        Inspect Report
+                      </Button>
+                      <Button 
+                        onClick={() => handlePublish(report.id)}
+                        disabled={report.status === 'published' || publishing === report.id}
+                        className={`w-full h-14 rounded-xl font-black transition-all duration-300 ${
+                          report.status === 'published' 
+                            ? 'bg-gradient-to-r from-emerald-500/10 to-teal-500/10 text-emerald-400 cursor-not-allowed border border-emerald-500/20' 
+                            : 'bg-gradient-to-r from-amber-500 via-rose-500 to-violet-500 text-white shadow-[0_8px_32px_rgba(251,191,36,0.3)] hover:shadow-[0_12px_40px_rgba(251,191,36,0.4)] hover:scale-[1.02] active:scale-[0.98]'
+                        }`}
+                      >
+                        {publishing === report.id ? (
+                          <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : report.status === 'published' ? (
+                          <div className="flex items-center gap-2"><CheckCircle className="w-5 h-5" /> Published</div>
+                        ) : (
+                          <div className="flex items-center gap-2"><ArrowUpRight className="w-5 h-5" /> Publish Results</div>
+                        )}
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -335,93 +362,147 @@ const AdminServices = () => {
 
       {selectedReport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={() => setSelectedReport(null)} />
-          <div className="relative w-full max-w-4xl max-h-[85vh] overflow-hidden liquid-glass-strong rounded-[2.5rem] border border-white/20 flex flex-col animate-in fade-in zoom-in duration-300">
-            <div className="p-8 border-b border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-violet-500/20 flex items-center justify-center">
-                  <FileCheck className="w-6 h-6 text-violet-400" />
+          <div className="absolute inset-0 bg-black/95 backdrop-blur-2xl" onClick={() => setSelectedReport(null)} />
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-[20%] right-[20%] w-96 h-96 bg-gradient-to-br from-amber-500/10 to-transparent rounded-full blur-[100px]" />
+            <div className="absolute bottom-[20%] left-[20%] w-96 h-96 bg-gradient-to-tr from-violet-500/10 to-transparent rounded-full blur-[100px]" />
+          </div>
+          
+          <div className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-[2rem] border border-white/20 flex flex-col animate-in fade-in zoom-in duration-300 bg-gradient-to-br from-[#0a0a0f] via-[#080810] to-[#0a0a0f]">
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
+            
+            <div className="p-8 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-white/[0.03] to-transparent">
+              <div className="flex items-center gap-5">
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-gradient-to-br from-amber-500 via-rose-500 to-violet-500 rounded-2xl blur opacity-40" />
+                  <div className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500 via-rose-500 to-violet-600 flex items-center justify-center">
+                    <FileCheck className="w-7 h-7 text-white" />
+                  </div>
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-white">Detailed Report Inspection</h2>
-                  <p className="text-sm text-gray-500">Reviewing students from {selectedReport.facultyName}</p>
+                  <h2 className="text-2xl font-black text-white">Report Inspection</h2>
+                  <p className="text-sm text-gray-400">Reviewing <span className="text-amber-300 font-semibold">{selectedReport.students.length} students</span> from {selectedReport.facultyName}</p>
                 </div>
               </div>
-              <button onClick={() => setSelectedReport(null)} className="p-3 rounded-2xl bg-white/5 hover:bg-white/10 text-gray-400 transition-all hover:rotate-90">
+              <button onClick={() => setSelectedReport(null)} className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-gray-400 hover:text-white transition-all hover:rotate-90 duration-300">
                 <X className="w-6 h-6" />
               </button>
             </div>
+            
             <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-              <div className="space-y-4 mb-8">
-                {selectedReport.students.map(rawStudent => {
+              <div className="space-y-5">
+                {selectedReport.students.map((rawStudent, index) => {
                   const student = processStudent(rawStudent);
                   return (
-                    <div key={student.id} className="rounded-3xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] transition-colors overflow-hidden">
-                      <div 
-                        className="p-6 cursor-pointer"
-                        onClick={() => setExpandedStudent(expandedStudent === student.id ? null : student.id)}
-                      >
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white font-black text-lg">{student.fullName.charAt(0)}</div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-bold text-white truncate">{student.fullName}</h4>
-                            <p className="text-xs text-gray-500">{student.rollNumber}</p>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="text-right">
-                              <p className="text-[10px] text-gray-500 uppercase tracking-widest">Score</p>
-                              <p className="text-sm font-bold text-white">{student.totalScore}/{student.totalQuestions}</p>
+                    <div key={student.id} className="group relative">
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-violet-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                      <div className="relative rounded-2xl bg-gradient-to-br from-white/[0.06] via-white/[0.03] to-transparent border border-white/10 group-hover:border-white/20 transition-all duration-300 overflow-hidden">
+                        <div 
+                          className="p-6 cursor-pointer"
+                          onClick={() => setExpandedStudent(expandedStudent === student.id ? null : student.id)}
+                        >
+                          <div className="flex items-center gap-5">
+                            <div className="relative">
+                              <div className="absolute -inset-0.5 bg-gradient-to-br from-amber-500 via-rose-500 to-violet-500 rounded-xl blur opacity-30" />
+                              <div className="relative w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500 via-rose-500 to-violet-600 flex items-center justify-center text-white font-black text-xl shadow-lg">
+                                {student.fullName.charAt(0)}
+                              </div>
                             </div>
-                            <div className={`px-4 py-2 rounded-xl border ${getGradeBg(student.overallPercentage)}`}>
-                              <p className={`text-lg font-black ${getGradeColor(student.overallPercentage)}`}>{student.overallPercentage}%</p>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-bold text-white text-lg truncate group-hover:text-amber-200 transition-colors">{student.fullName}</h4>
+                              <p className="text-sm text-gray-500 font-medium">{student.rollNumber} • {student.department}</p>
                             </div>
-                            <div className="p-2 rounded-lg hover:bg-white/10 transition-colors">
-                              {expandedStudent === student.id ? <ChevronUp className="w-5 h-5 text-gray-400" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="mt-4 h-1.5 bg-white/5 rounded-full overflow-hidden">
-                          <div className="h-full bg-gradient-to-r from-violet-500 to-cyan-500 transition-all duration-1000" style={{ width: `${student.overallPercentage}%` }} />
-                        </div>
-                      </div>
-                      
-                      {expandedStudent === student.id && (
-                        <div className="px-6 pb-6 border-t border-white/5 pt-4">
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                            <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Department</p><p className="text-sm font-medium text-white truncate">{student.department}</p></div>
-                            <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Course</p><p className="text-sm font-medium text-white truncate">{student.course || 'N/A'}</p></div>
-                            <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Semester</p><p className="text-sm font-medium text-white">{student.semester}</p></div>
-                            <div className="p-3 rounded-xl bg-white/5"><p className="text-[10px] text-gray-500 uppercase mb-1">Total Quizzes</p><p className="text-sm font-medium text-white">{student.totalQuizzes}</p></div>
-                          </div>
-                          
-                          <h5 className="text-xs font-black text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2"><Sparkles className="w-3 h-3" />Subject Scores</h5>
-                          <div className="grid sm:grid-cols-2 gap-3">
-                            {Object.entries(student.subjectScores).map(([subjectId, score]) => (
-                              <div key={subjectId} className={`rounded-xl p-4 border ${getGradeBg(score.percentage)}`}>
-                                <div className="flex items-center justify-between mb-2">
-                                  <h6 className="font-medium text-white text-sm truncate">{getSubjectName(subjectId)}</h6>
-                                  <span className={`font-black ${getGradeColor(score.percentage)}`}>{score.percentage}%</span>
-                                </div>
-                                <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
-                                  <span>{score.score}/{score.totalQuestions} correct</span>
-                                  <span>{new Date(score.completedAt).toLocaleDateString()}</span>
-                                </div>
-                                <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                                  <div className="h-full bg-white/40" style={{ width: `${score.percentage}%` }} />
+                            <div className="flex items-center gap-4">
+                              <div className="text-right hidden sm:block">
+                                <p className="text-[10px] text-gray-500 uppercase tracking-[0.1em] font-bold mb-1">Total Score</p>
+                                <p className="text-lg font-black text-white">{student.totalScore}<span className="text-gray-500">/{student.totalQuestions}</span></p>
+                              </div>
+                              <div className={`relative px-5 py-3 rounded-xl border ${getGradeBg(student.overallPercentage)} overflow-hidden`}>
+                                <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent" />
+                                <div className="relative flex items-center gap-2">
+                                  <span className="text-lg">{getGradeIcon(student.overallPercentage)}</span>
+                                  <p className={`text-xl font-black ${getGradeColor(student.overallPercentage)}`}>{student.overallPercentage}%</p>
                                 </div>
                               </div>
-                            ))}
+                              <div className={`p-2.5 rounded-xl transition-all duration-300 ${expandedStudent === student.id ? 'bg-amber-500/20 text-amber-300 rotate-180' : 'bg-white/5 text-gray-400 hover:bg-white/10'}`}>
+                                <ChevronDown className="w-5 h-5" />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mt-5 h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-amber-500 via-rose-500 to-violet-500 transition-all duration-1000 rounded-full shadow-[0_0_20px_rgba(251,191,36,0.5)]" 
+                              style={{ width: `${student.overallPercentage}%` }} 
+                            />
                           </div>
                         </div>
-                      )}
+                        
+                        {expandedStudent === student.id && (
+                          <div className="px-6 pb-6 border-t border-white/10 pt-5 bg-gradient-to-b from-white/[0.02] to-transparent animate-in slide-in-from-top-2 duration-300">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                              {[
+                                { label: 'Department', value: student.department, color: 'from-violet-500/20 to-purple-500/10' },
+                                { label: 'Course', value: student.course || 'N/A', color: 'from-rose-500/20 to-pink-500/10' },
+                                { label: 'Semester', value: student.semester, color: 'from-cyan-500/20 to-teal-500/10' },
+                                { label: 'Total Quizzes', value: student.totalQuizzes, color: 'from-amber-500/20 to-orange-500/10' },
+                              ].map((item) => (
+                                <div key={item.label} className={`p-4 rounded-xl bg-gradient-to-br ${item.color} border border-white/10`}>
+                                  <p className="text-[10px] text-gray-400 uppercase tracking-[0.1em] font-bold mb-1">{item.label}</p>
+                                  <p className="text-sm font-bold text-white truncate">{item.value}</p>
+                                </div>
+                              ))}
+                            </div>
+                            
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-rose-500 flex items-center justify-center">
+                                <Sparkles className="w-4 h-4 text-white" />
+                              </div>
+                              <h5 className="text-sm font-black text-white uppercase tracking-[0.1em]">Subject Performance</h5>
+                            </div>
+                            <div className="grid sm:grid-cols-2 gap-4">
+                              {Object.entries(student.subjectScores).map(([subjectId, score]) => (
+                                <div key={subjectId} className={`relative rounded-xl p-5 border ${getGradeBg(score.percentage)} overflow-hidden group/subject`}>
+                                  <div className="absolute top-0 right-0 w-20 h-20 bg-white/5 rounded-full blur-2xl opacity-0 group-hover/subject:opacity-100 transition-opacity" />
+                                  <div className="relative">
+                                    <div className="flex items-center justify-between mb-3">
+                                      <h6 className="font-bold text-white text-sm truncate">{getSubjectName(subjectId)}</h6>
+                                      <span className={`text-lg font-black ${getGradeColor(score.percentage)}`}>{score.percentage}%</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-xs text-gray-400 mb-3">
+                                      <span className="font-medium">{score.score}/{score.totalQuestions} correct</span>
+                                      <span>{new Date(score.completedAt).toLocaleDateString()}</span>
+                                    </div>
+                                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                      <div className="h-full bg-gradient-to-r from-white/60 to-white/40 rounded-full" style={{ width: `${score.percentage}%` }} />
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
               </div>
             </div>
-            <div className="p-8 border-t border-white/10 bg-white/[0.02] flex justify-end gap-4">
-              <Button variant="ghost" onClick={() => setSelectedReport(null)} className="h-12 px-8 rounded-xl text-gray-400 hover:text-white font-bold">Close Inspector</Button>
-              <Button onClick={() => { handlePublish(selectedReport.id); setSelectedReport(null); }} disabled={selectedReport.status === 'published'} className="h-12 px-8 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-black">Publish This Report</Button>
+            
+            <div className="p-6 border-t border-white/10 bg-gradient-to-r from-white/[0.03] to-transparent flex justify-end gap-4">
+              <Button variant="ghost" onClick={() => setSelectedReport(null)} className="h-12 px-8 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 font-bold border border-white/10">
+                Close
+              </Button>
+              <Button 
+                onClick={() => { handlePublish(selectedReport.id); setSelectedReport(null); }} 
+                disabled={selectedReport.status === 'published'} 
+                className={`h-12 px-8 rounded-xl font-black ${
+                  selectedReport.status === 'published' 
+                    ? 'bg-emerald-500/20 text-emerald-400 cursor-not-allowed border border-emerald-500/20' 
+                    : 'bg-gradient-to-r from-amber-500 via-rose-500 to-violet-500 text-white shadow-[0_8px_32px_rgba(251,191,36,0.3)] hover:shadow-[0_12px_40px_rgba(251,191,36,0.4)]'
+                }`}
+              >
+                {selectedReport.status === 'published' ? 'Already Published' : 'Publish Report'}
+              </Button>
             </div>
           </div>
         </div>
