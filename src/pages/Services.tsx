@@ -82,7 +82,11 @@ const AdminServices = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
-      if (response.ok) setReports(data);
+      if (response.ok) {
+        setReports(data);
+      } else {
+        console.error('Failed to fetch reports:', data.message);
+      }
     } catch (error) {
       console.error('Failed to fetch reports:', error);
     } finally {

@@ -355,6 +355,8 @@ app.put('/api/auth/profile', authMiddleware, async (req, res) => {
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/admin', adminRoutes);
 
+console.log('Registered /api/faculty and /api/admin routes');
+
 app.get('/', (req, res) => {
   res.json({ 
     message: 'Brainy API Server',

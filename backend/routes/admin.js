@@ -35,6 +35,10 @@ const writeData = (file, data) => {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
 };
 
+router.get('/test', (req, res) => {
+  res.json({ message: 'Admin routes are working' });
+});
+
 router.get('/reports', adminMiddleware, (req, res) => {
   const reports = readData(ADMIN_REPORTS_FILE);
   res.json(reports);

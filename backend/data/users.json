@@ -29,34 +29,34 @@
     "createdAt": "2026-01-19T16:09:53.058Z",
     "lastLogin": "2026-01-19T16:30:41.165Z"
   },
-    {
-      "id": "1768840379634",
-      "rollNumber": "FAC001",
-      "fullName": "Faculty User",
-      "email": "faculty@gmail.com",
-      "phone": "0000000000",
-      "password": "$2b$12$Sanj79VZ.qP/80qwvuOEVubXFv4QSlw1BgZWFjUF1CjHbj7r/fra2",
-      "department": "Computer Science Engineering",
-      "course": "Academic",
-      "semester": 1,
-      "role": "Faculty",
-      "isVerified": true,
-      "createdAt": "2026-01-19T16:32:59.634Z",
-      "lastLogin": "2026-01-19T16:53:54.266Z"
-    },
-    {
-      "id": "1768842000000",
-      "rollNumber": "ADM001",
-      "fullName": "System Admin",
-      "email": "admin@lingayas.com",
-      "phone": "9999999999",
-      "password": "$2b$12$hkDsH0Tk6ZZDNbWzsKDJwe8.ZNJKxaZd8poyXkQoIeD7GdLm9TE4K",
-      "department": "Administration",
-      "course": "Management",
-      "semester": 1,
-      "role": "Admin",
-      "isVerified": true,
-      "createdAt": "2026-01-19T17:00:00.000Z",
-      "lastLogin": "2026-01-19T17:00:00.000Z"
-    }
-  ]
+  {
+    "id": "1768840379634",
+    "rollNumber": "FAC001",
+    "fullName": "Faculty User",
+    "email": "faculty@gmail.com",
+    "phone": "0000000000",
+    "password": "$2b$12$Sanj79VZ.qP/80qwvuOEVubXFv4QSlw1BgZWFjUF1CjHbj7r/fra2",
+    "department": "Computer Science Engineering",
+    "course": "Academic",
+    "semester": 1,
+    "role": "Faculty",
+    "isVerified": true,
+    "createdAt": "2026-01-19T16:32:59.634Z",
+    "lastLogin": "2026-01-19T16:53:54.266Z"
+  },
+  {
+    "id": "1768842000000",
+    "rollNumber": "ADM001",
+    "fullName": "System Admin",
+    "email": "admin@lingayas.com",
+    "phone": "9999999999",
+    "password": "$2b$12$hkDsH0Tk6ZZDNbWzsKDJwe8.ZNJKxaZd8poyXkQoIeD7GdLm9TE4K",
+    "department": "Administration",
+    "course": "Management",
+    "semester": 1,
+    "role": "Admin",
+    "isVerified": true,
+    "createdAt": "2026-01-19T17:00:00.000Z",
+    "lastLogin": "2026-01-19T17:02:35.963Z"
+  }
+]
