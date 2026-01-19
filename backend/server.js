@@ -58,6 +58,8 @@ app.use((req, res, next) => {
 const JWT_SECRET = process.env.JWT_SECRET || 'brainy-secret-key-2024';
 const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || 'brainy-refresh-secret-2024';
 
+const facultyRoutes = require('./routes/faculty');
+
 const authMiddleware = (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -349,6 +351,8 @@ app.put('/api/auth/profile', authMiddleware, async (req, res) => {
   }
 });
 
+app.use('/api/faculty', facultyRoutes);
+
 app.get('/', (req, res) => {
   res.json({ 
     message: 'Brainy API Server',
@@ -361,7 +365,9 @@ app.get('/', (req, res) => {
       logout: 'POST /api/auth/logout',
       refreshToken: 'POST /api/auth/refresh-token',
       me: 'GET /api/auth/me',
-      updateProfile: 'PUT /api/auth/profile'
+      updateProfile: 'PUT /api/auth/profile',
+      facultyStudents: 'GET /api/faculty/students',
+      facultySendToAdmin: 'POST /api/faculty/send-to-admin'
     }
   });
 });
