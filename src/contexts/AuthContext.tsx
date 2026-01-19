@@ -24,6 +24,7 @@ interface RegisterPayload {
 interface LoginPayload {
   email: string;
   password: string;
+  role?: string;
 }
 
 interface AuthContextType {

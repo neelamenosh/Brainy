@@ -3,14 +3,17 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Brain, CheckCircle, AlertCircle, Eye, EyeOff, Mail, Lock, Sparkles, ArrowRight } from "lucide-react";
+import { Brain, CheckCircle, AlertCircle, Eye, EyeOff, Mail, Lock, Sparkles, ArrowRight, GraduationCap, Shield, Users } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+
+type LoginRole = "student" | "faculty" | "admin";
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
   
+  const [activeTab, setActiveTab] = useState<LoginRole>("student");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,21 +21,54 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  const tabs = [
+    { id: "student" as LoginRole, label: "Student", icon: GraduationCap, gradient: "from-violet-500 to-purple-600" },
+    { id: "faculty" as LoginRole, label: "Faculty", icon: Users, gradient: "from-cyan-500 to-teal-600" },
+    { id: "admin" as LoginRole, label: "Admin", icon: Shield, gradient: "from-pink-500 to-rose-600" },
+  ];
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      await login({ email, password });
+      await login({ email, password, role: activeTab });
       setShowSuccess(true);
       toast.success("Login successful!");
-      setTimeout(() => navigate("/home"), 1000);
+      
+      const redirectPath = activeTab === "admin" ? "/admin" : activeTab === "faculty" ? "/faculty" : "/home";
+      setTimeout(() => navigate(redirectPath), 1000);
     } catch (err: any) {
       setError(err.message || "Login failed. Please try again.");
       toast.error(err.message || "Login failed");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleTabChange = (tab: LoginRole) => {
+    setActiveTab(tab);
+    setError("");
+  };
+
+  const getActiveGradient = () => {
+    return tabs.find(t => t.id === activeTab)?.gradient || "from-violet-500 to-purple-600";
+  };
+
+  const getPlaceholderText = () => {
+    switch (activeTab) {
+      case "admin": return { email: "admin@brainy.com", password: "Admin password" };
+      case "faculty": return { email: "faculty@brainy.com", password: "Faculty password" };
+      default: return { email: "student@example.com", password: "Your password" };
+    }
+  };
+
+  const getSuccessMessage = () => {
+    switch (activeTab) {
+      case "admin": return "Redirecting to Admin Dashboard...";
+      case "faculty": return "Redirecting to Faculty Portal...";
+      default: return "Redirecting to your dashboard...";
     }
   };
 
@@ -52,18 +88,16 @@ const Login = () => {
             </div>
           </div>
           <h2 className="text-2xl font-bold text-green-400 mb-2">Welcome Back!</h2>
-          <p className="text-gray-400">
-            Login successful! Redirecting to your dashboard...
-          </p>
+          <p className="text-gray-400">{getSuccessMessage()}</p>
         </div>
       ) : (
         <div className="w-full max-w-md mx-4 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
           <div className="liquid-glass-strong rounded-3xl p-8 glow-mixed">
-            <div className="text-center mb-8">
+            <div className="text-center mb-6">
               <div className="flex justify-center mb-4">
                 <div className="relative">
-                  <div className="absolute inset-0 gradient-aurora rounded-2xl blur-lg opacity-60" />
-                  <div className="relative p-4 rounded-2xl gradient-aurora shadow-lg">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${getActiveGradient()} rounded-2xl blur-lg opacity-60 transition-all duration-500`} />
+                  <div className={`relative p-4 rounded-2xl bg-gradient-to-br ${getActiveGradient()} shadow-lg transition-all duration-500`}>
                     <Brain className="w-8 h-8 text-white" />
                   </div>
                 </div>
@@ -72,7 +106,38 @@ const Login = () => {
                 Brainy
               </h1>
               <p className="text-gray-400">
-                Sign in to continue your learning journey
+                Sign in to continue
+              </p>
+            </div>
+
+            <div className="flex gap-2 p-1.5 rounded-2xl liquid-glass mb-6">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabChange(tab.id)}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                    activeTab === tab.id
+                      ? `bg-gradient-to-br ${tab.gradient} text-white shadow-lg`
+                      : "text-gray-400 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className={`mb-6 p-3 rounded-xl liquid-glass border transition-all duration-300 ${
+              activeTab === "admin" ? "border-pink-500/30" : 
+              activeTab === "faculty" ? "border-cyan-500/30" : "border-violet-500/30"
+            }`}>
+              <p className={`text-xs font-medium text-center ${
+                activeTab === "admin" ? "text-pink-400" : 
+                activeTab === "faculty" ? "text-cyan-400" : "text-violet-400"
+              }`}>
+                {activeTab === "admin" && "Administrator access - System management & controls"}
+                {activeTab === "faculty" && "Faculty access - Course management & student progress"}
+                {activeTab === "student" && "Student access - Quizzes, courses & learning materials"}
               </p>
             </div>
 
@@ -86,14 +151,14 @@ const Login = () => {
             <form onSubmit={handleLogin} className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-semibold text-gray-300">
-                  Email Address
+                  {activeTab === "student" ? "Email Address" : `${tabs.find(t => t.id === activeTab)?.label} Email`}
                 </Label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={getPlaceholderText().email}
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
@@ -115,7 +180,7 @@ const Login = () => {
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder={getPlaceholderText().password}
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);
@@ -138,7 +203,7 @@ const Login = () => {
               <Button
                 type="submit"
                 disabled={loading || !email || !password}
-                className="w-full h-12 rounded-xl btn-liquid gradient-aurora text-white font-semibold shadow-lg glow-violet disabled:opacity-50 disabled:cursor-not-allowed"
+                className={`w-full h-12 rounded-xl btn-liquid bg-gradient-to-r ${getActiveGradient()} text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-500`}
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -147,31 +212,49 @@ const Login = () => {
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
-                    Sign In
+                    Sign In as {tabs.find(t => t.id === activeTab)?.label}
                     <ArrowRight className="w-5 h-5" />
                   </span>
                 )}
               </Button>
 
-              <div className="relative my-8">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/10" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-[hsl(230,25%,10%)] text-gray-500">New to Brainy?</span>
-                </div>
-              </div>
+              {activeTab === "student" && (
+                <>
+                  <div className="relative my-8">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-white/10" />
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-4 bg-[hsl(230,25%,10%)] text-gray-500">New to Brainy?</span>
+                    </div>
+                  </div>
 
-              <Link to="/register" className="block">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full h-12 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white font-semibold transition-all duration-300"
-                >
-                  <Sparkles className="w-5 h-5 mr-2 text-violet-400" />
-                  Create an Account
-                </Button>
-              </Link>
+                  <Link to="/register" className="block">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full h-12 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white font-semibold transition-all duration-300"
+                    >
+                      <Sparkles className="w-5 h-5 mr-2 text-violet-400" />
+                      Create Student Account
+                    </Button>
+                  </Link>
+                </>
+              )}
+
+              {(activeTab === "admin" || activeTab === "faculty") && (
+                <p className="text-center text-sm text-gray-500 mt-6">
+                  {activeTab === "admin" ? "Admin" : "Faculty"} accounts are created by system administrators.
+                  <br />
+                  <button 
+                    type="button"
+                    onClick={() => setActiveTab("student")}
+                    className="text-violet-400 hover:text-violet-300 mt-1 transition-colors"
+                  >
+                    Switch to Student login
+                  </button>
+                </p>
+              )}
             </form>
           </div>
         </div>

@@ -13,5 +13,20 @@
     "isVerified": true,
     "createdAt": "2026-01-19T15:55:46.102Z",
     "lastLogin": "2026-01-19T16:00:07.993Z"
+  },
+  {
+    "id": "1768838993058",
+    "rollNumber": "24na1a0582",
+    "fullName": "Neelam Enosh",
+    "email": "neelamenosh@gmail.com",
+    "phone": "8919248224",
+    "password": "$2b$12$b9t1g9Nj1ReLn9Cgb/aV2eKoIisrONnlZG3R3ciFiKpZ9fyJOQQ1K",
+    "department": "Computer Science Engineering",
+    "course": "B.Tech",
+    "semester": 2,
+    "role": "Student",
+    "isVerified": true,
+    "createdAt": "2026-01-19T16:09:53.058Z",
+    "lastLogin": "2026-01-19T16:10:09.654Z"
   }
 ]
