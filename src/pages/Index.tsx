@@ -1,11 +1,13 @@
-import { Brain, Sparkles, Zap, BookOpen, Target, ArrowRight, Trophy, Flame, Star } from "lucide-react";
+import { useState } from "react";
+import { Brain, Sparkles, Zap, BookOpen, Target, ArrowRight, Trophy, Flame, Star, X, Play, Clock, Users, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { courses, quizCategories } from "@/data/quizData";
+import { courses, quizCategories, Course } from "@/data/quizData";
 
 const Index = () => {
   const { user } = useAuth();
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   
   const totalQuestions = quizCategories.reduce((acc, cat) => acc + cat.questions.length, 0);
 
@@ -17,6 +19,16 @@ const Index = () => {
     "from-fuchsia-500 to-pink-600",
     "from-indigo-500 to-violet-600",
   ];
+
+  const openCourseModal = (course: Course) => {
+    setSelectedCourse(course);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeCourseModal = () => {
+    setSelectedCourse(null);
+    document.body.style.overflow = 'auto';
+  };
 
   return (
     <div className="min-h-screen pt-20 pb-12 bg-mesh noise-overlay">
@@ -163,12 +175,15 @@ const Index = () => {
                       </div>
                     )}
                   </div>
-                  <Link to="/services">
-                    <Button variant="ghost" size="sm" className="text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 rounded-lg transition-all duration-300">
-                      Explore
-                      <ArrowRight className="w-4 h-4 ml-1" />
-                    </Button>
-                  </Link>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 rounded-lg transition-all duration-300"
+                    onClick={() => openCourseModal(course)}
+                  >
+                    Explore
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
                 </div>
               </div>
             </div>
@@ -249,6 +264,260 @@ const Index = () => {
           <p className="mt-2 gradient-text-static">© {new Date().getFullYear()} Brainy. All rights reserved.</p>
         </div>
       </footer>
+
+      {selectedCourse && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          onClick={closeCourseModal}
+        >
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-md"
+            style={{ animation: "fadeIn 0.3s ease-out forwards" }}
+          />
+          
+          <div 
+            className="absolute inset-0 pointer-events-none overflow-hidden"
+          >
+            <div className={`absolute top-1/4 -left-20 w-80 h-80 bg-gradient-to-br ${gradients[courses.indexOf(selectedCourse) % gradients.length]} rounded-full blur-[150px] opacity-30`} 
+              style={{ animation: "pulse 3s ease-in-out infinite" }} 
+            />
+            <div className={`absolute bottom-1/4 -right-20 w-96 h-96 bg-gradient-to-br ${gradients[(courses.indexOf(selectedCourse) + 2) % gradients.length]} rounded-full blur-[180px] opacity-20`} 
+              style={{ animation: "pulse 4s ease-in-out infinite", animationDelay: "1s" }} 
+            />
+          </div>
+
+          <div 
+            className="relative w-full max-w-3xl max-h-[85vh] overflow-hidden rounded-3xl"
+            onClick={(e) => e.stopPropagation()}
+            style={{ animation: "modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-2xl border border-white/20 rounded-3xl" />
+            
+            <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${gradients[courses.indexOf(selectedCourse) % gradients.length]}`} />
+            
+            <div className="relative">
+              <div className="p-6 sm:p-8 border-b border-white/10">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div 
+                      className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${gradients[courses.indexOf(selectedCourse) % gradients.length]} flex items-center justify-center shadow-2xl`}
+                      style={{ animation: "scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards", animationDelay: "0.1s", opacity: 0 }}
+                    >
+                      <Brain className="w-8 h-8 text-white" />
+                      <div className={`absolute -inset-2 bg-gradient-to-br ${gradients[courses.indexOf(selectedCourse) % gradients.length]} rounded-2xl blur-xl opacity-50`} />
+                    </div>
+                    <div style={{ animation: "slideRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards", animationDelay: "0.15s", opacity: 0 }}>
+                      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1">
+                        {selectedCourse.name}
+                      </h2>
+                      <p className="text-gray-400 text-sm sm:text-base">{selectedCourse.description}</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={closeCourseModal}
+                    className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white transition-all duration-300 hover:rotate-90 hover:scale-110"
+                    style={{ animation: "scaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards", animationDelay: "0.2s", opacity: 0 }}
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                <div 
+                  className="flex flex-wrap gap-4 mt-6"
+                  style={{ animation: "slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards", animationDelay: "0.25s", opacity: 0 }}
+                >
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
+                    <BookOpen className="w-4 h-4 text-violet-400" />
+                    <span className="text-sm text-gray-300"><span className="font-semibold text-white">{selectedCourse.subjects.length}</span> Subjects</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
+                    <Zap className="w-4 h-4 text-amber-400" />
+                    <span className="text-sm text-gray-300"><span className="font-semibold text-white">{selectedCourse.subjects.reduce((acc, s) => acc + s.questions.length, 0)}</span> Questions</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
+                    <Clock className="w-4 h-4 text-cyan-400" />
+                    <span className="text-sm text-gray-300"><span className="font-semibold text-white">~{Math.ceil(selectedCourse.subjects.reduce((acc, s) => acc + s.questions.length, 0) * 1.5)}</span> min</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
+                    <Users className="w-4 h-4 text-pink-400" />
+                    <span className="text-sm text-gray-300"><span className="font-semibold text-white">{(Math.random() * 5 + 2).toFixed(1)}k</span> Learners</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-6 sm:p-8 max-h-[50vh] overflow-y-auto custom-scrollbar">
+                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4"
+                  style={{ animation: "slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards", animationDelay: "0.3s", opacity: 0 }}
+                >
+                  Available Subjects
+                </h3>
+                <div className="grid gap-3">
+                  {selectedCourse.subjects.map((subject, index) => (
+                    <Link 
+                      key={subject.id}
+                      to={`/quiz/${subject.id}`}
+                      onClick={closeCourseModal}
+                      className="group relative overflow-hidden rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-500"
+                      style={{ 
+                        animation: "subjectSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards", 
+                        animationDelay: `${0.35 + index * 0.05}s`, 
+                        opacity: 0,
+                        transform: "translateX(-20px)"
+                      }}
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-r ${gradients[(courses.indexOf(selectedCourse) + index) % gradients.length]} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                      <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${gradients[(courses.indexOf(selectedCourse) + index) % gradients.length]} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                      
+                      <div className="relative p-4 sm:p-5 flex items-center gap-4">
+                        <div className={`relative w-12 h-12 rounded-xl bg-gradient-to-br ${gradients[(courses.indexOf(selectedCourse) + index) % gradients.length]} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
+                          <Zap className="w-6 h-6 text-white" />
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-white group-hover:text-violet-300 transition-colors duration-300 truncate">
+                            {subject.name}
+                          </h4>
+                          <p className="text-sm text-gray-400 truncate">{subject.description}</p>
+                        </div>
+                        
+                        <div className="flex items-center gap-3">
+                          <div className="hidden sm:flex items-center gap-2 text-sm text-gray-400">
+                            <span className="px-2 py-1 rounded-lg bg-white/5">
+                              {subject.questions.length} Q's
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                              <span className="text-amber-400">{(4 + Math.random()).toFixed(1)}</span>
+                            </div>
+                          </div>
+                          
+                          <div className="p-2 rounded-xl bg-white/5 group-hover:bg-gradient-to-r group-hover:from-violet-500 group-hover:to-purple-600 text-gray-400 group-hover:text-white transition-all duration-300 group-hover:scale-110">
+                            <Play className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              
+              <div 
+                className="p-6 sm:p-8 border-t border-white/10 bg-white/[0.02]"
+                style={{ animation: "slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards", animationDelay: "0.5s", opacity: 0 }}
+              >
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link to="/services" onClick={closeCourseModal} className="flex-1">
+                    <Button 
+                      variant="outline" 
+                      className="w-full h-12 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all duration-300"
+                    >
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      View All Courses
+                    </Button>
+                  </Link>
+                  <Link 
+                    to={`/quiz/${selectedCourse.subjects[0]?.id}`} 
+                    onClick={closeCourseModal}
+                    className="flex-1"
+                  >
+                    <Button 
+                      className={`w-full h-12 rounded-xl bg-gradient-to-r ${gradients[courses.indexOf(selectedCourse) % gradients.length]} text-white font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300`}
+                    >
+                      Start First Subject
+                      <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        
+        @keyframes modalSlideUp {
+          from { 
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+          }
+          to { 
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        
+        @keyframes scaleIn {
+          from { 
+            opacity: 0;
+            transform: scale(0.5);
+          }
+          to { 
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        
+        @keyframes slideUp {
+          from { 
+            opacity: 0;
+            transform: translateY(15px);
+          }
+          to { 
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes slideRight {
+          from { 
+            opacity: 0;
+            transform: translateX(-15px);
+          }
+          to { 
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes subjectSlideIn {
+          from { 
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to { 
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @keyframes pulse {
+          0%, 100% { opacity: 0.2; transform: scale(1); }
+          50% { opacity: 0.35; transform: scale(1.05); }
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.15);
+          border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255, 255, 255, 0.25);
+        }
+      `}</style>
     </div>
   );
 };
