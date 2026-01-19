@@ -25,7 +25,7 @@ const Navbar = () => {
   const navItems = user
     ? [
         { name: "Home", to: "/home" },
-        { name: "Services", to: "/services" },
+        { name: user.role === 'Student' ? "Results" : "Services", to: "/services" },
         { name: "Pricing", to: "/pricing" },
         { name: "About", to: "/about" },
         { name: "Contact", to: "/contact" },

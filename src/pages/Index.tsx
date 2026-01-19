@@ -535,26 +535,26 @@ const StudentHome = () => {
                 </div>
               </div>
               
-              <div className="space-y-3">
-                <Link to={`/quiz/${quizCategories[0]?.id}`} className="block">
-                  <Button className="w-full justify-between h-12 rounded-xl btn-liquid gradient-aurora text-white font-semibold shadow-lg glow-violet">
-                    <span className="flex items-center gap-2">
-                      <Flame className="w-4 h-4" />
-                      Start a Random Quiz
-                    </span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </Link>
-                <Link to="/services" className="block">
-                  <Button variant="outline" className="w-full justify-between h-12 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all duration-300">
-                    <span className="flex items-center gap-2">
-                      <BookOpen className="w-4 h-4" />
-                      Browse All Subjects
-                    </span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </Link>
-              </div>
+                <div className="space-y-3">
+                  <Link to={`/quiz/${quizCategories[0]?.id}`} className="block">
+                    <Button className="w-full justify-between h-12 rounded-xl btn-liquid gradient-aurora text-white font-semibold shadow-lg glow-violet">
+                      <span className="flex items-center gap-2">
+                        <Flame className="w-4 h-4" />
+                        Start a Random Quiz
+                      </span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Button>
+                  </Link>
+                  <Link to="/services" className="block">
+                    <Button variant="outline" className="w-full justify-between h-12 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition-all duration-300">
+                      <span className="flex items-center gap-2">
+                        <Award className="w-4 h-4" />
+                        View My Results
+                      </span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Button>
+                  </Link>
+                </div>
 
               <div className="mt-6 pt-6 border-t border-white/10">
                 <div className="flex items-center justify-between text-sm">

@@ -768,7 +768,337 @@ const FacultyServices = () => {
             </div>
           </div>
         </div>
-      )}
+        )}
+      </div>
+    );
+  };
+
+interface StudentResult {
+  reportId: string;
+  facultyName: string;
+  facultyEmail: string;
+  message: string;
+  publishedAt: string;
+  studentData: RawStudent;
+}
+
+interface StudentResultsData {
+  results: StudentResult[];
+  student: {
+    id: string;
+    fullName: string;
+    rollNumber: string;
+    email: string;
+    department: string;
+    course: string;
+    semester: number;
+  };
+}
+
+const StudentResults = () => {
+  const { user, token } = useAuth();
+  const [data, setData] = useState<StudentResultsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [expandedResult, setExpandedResult] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchResults();
+  }, []);
+
+  const fetchResults = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/student/results', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const result = await response.json();
+      if (response.ok) {
+        setData(result);
+      }
+    } catch (error) {
+      console.error('Failed to fetch results:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getSubjectName = (subjectId: string) => {
+    const subject = quizCategories.find(cat => cat.id === subjectId);
+    return subject?.name || subjectId;
+  };
+
+  const getGradeColor = (percentage: number) => {
+    if (percentage >= 90) return 'text-emerald-400';
+    if (percentage >= 75) return 'text-teal-400';
+    if (percentage >= 60) return 'text-amber-400';
+    if (percentage >= 40) return 'text-orange-400';
+    return 'text-rose-400';
+  };
+
+  const getGradeBg = (percentage: number) => {
+    if (percentage >= 90) return 'from-emerald-500 to-teal-600';
+    if (percentage >= 75) return 'from-teal-500 to-cyan-600';
+    if (percentage >= 60) return 'from-amber-500 to-yellow-600';
+    if (percentage >= 40) return 'from-orange-500 to-red-600';
+    return 'from-rose-500 to-pink-600';
+  };
+
+  const getGradeLabel = (percentage: number) => {
+    if (percentage >= 90) return 'Excellent';
+    if (percentage >= 75) return 'Good';
+    if (percentage >= 60) return 'Average';
+    if (percentage >= 40) return 'Below Average';
+    return 'Needs Improvement';
+  };
+
+  const getGradeIcon = (percentage: number) => {
+    if (percentage >= 90) return '🏆';
+    if (percentage >= 75) return '⭐';
+    if (percentage >= 60) return '📊';
+    if (percentage >= 40) return '📈';
+    return '📉';
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-mesh noise-overlay">
+        <div className="text-center">
+          <div className="relative">
+            <div className="w-20 h-20 border-4 border-violet-500/30 border-t-violet-500 rounded-full animate-spin mx-auto" />
+            <Award className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-violet-400" />
+          </div>
+          <p className="text-gray-400 mt-4 font-medium">Loading your results...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen pt-20 pb-12 bg-mesh noise-overlay">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-20 -left-32 w-96 h-96 bg-violet-500/20 rounded-full blur-[120px] morph-blob float-slow" />
+        <div className="absolute top-40 -right-32 w-[500px] h-[500px] bg-pink-500/15 rounded-full blur-[150px] morph-blob float-medium" style={{ animationDelay: "-2s" }} />
+        <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-emerald-500/10 rounded-full blur-[100px] morph-blob float-fast" style={{ animationDelay: "-4s" }} />
+      </div>
+
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center mb-12 slide-up">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full liquid-glass text-sm font-medium mb-6">
+            <Award className="w-4 h-4 text-violet-400" />
+            <span className="text-gray-300">Academic Results</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+            Your <span className="gradient-text-aurora">Published Results</span>
+          </h1>
+          <p className="text-gray-400 max-w-xl mx-auto">
+            View your academic performance reports published by faculty and verified by administration.
+          </p>
+        </div>
+
+        {data?.student && (
+          <div className="liquid-glass-strong rounded-3xl p-6 mb-8 slide-up" style={{ animationDelay: "0.1s" }}>
+            <div className="flex flex-col sm:flex-row items-center gap-6">
+              <div className="w-20 h-20 rounded-2xl gradient-aurora flex items-center justify-center text-3xl font-bold text-white shadow-xl">
+                {data.student.fullName.charAt(0)}
+              </div>
+              <div className="text-center sm:text-left flex-1">
+                <h2 className="text-2xl font-bold text-white mb-1">{data.student.fullName}</h2>
+                <p className="text-gray-400">{data.student.rollNumber} • {data.student.department}</p>
+                <div className="flex flex-wrap justify-center sm:justify-start gap-3 mt-3">
+                  <span className="px-3 py-1 rounded-lg bg-violet-500/20 text-violet-300 text-sm font-medium">
+                    {data.student.course || 'Course N/A'}
+                  </span>
+                  <span className="px-3 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 text-sm font-medium">
+                    Semester {data.student.semester}
+                  </span>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-black gradient-text-aurora">{data.results.length}</div>
+                <p className="text-sm text-gray-500">Published Results</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {data?.results.length === 0 ? (
+          <div className="liquid-glass-strong rounded-3xl p-16 text-center slide-up" style={{ animationDelay: "0.2s" }}>
+            <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 flex items-center justify-center mx-auto mb-6 border border-white/10">
+              <FileText className="w-12 h-12 text-violet-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-3">No Results Yet</h3>
+            <p className="text-gray-400 max-w-md mx-auto mb-8">
+              Your academic results will appear here once they are published by the administration. Keep working hard on your quizzes!
+            </p>
+            <Link to="/home">
+              <Button className="h-12 px-8 rounded-xl gradient-aurora text-white font-semibold shadow-lg">
+                <BookOpen className="w-4 h-4 mr-2" />
+                Continue Learning
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {data?.results.map((result, index) => {
+              const studentData = processStudent(result.studentData);
+              const isExpanded = expandedResult === result.reportId;
+
+              return (
+                <div 
+                  key={result.reportId} 
+                  className="liquid-glass-card rounded-3xl overflow-hidden hover-lift slide-up"
+                  style={{ animationDelay: `${0.2 + index * 0.1}s` }}
+                >
+                  <div className={`h-1.5 bg-gradient-to-r ${getGradeBg(studentData.overallPercentage)}`} />
+                  
+                  <div className="p-6">
+                    <div className="flex flex-col lg:flex-row gap-6">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${getGradeBg(studentData.overallPercentage)} flex items-center justify-center shadow-lg`}>
+                            <span className="text-2xl">{getGradeIcon(studentData.overallPercentage)}</span>
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className="text-xl font-bold text-white">Performance Report</h3>
+                              <span className={`px-3 py-1 rounded-full text-xs font-bold ${getGradeColor(studentData.overallPercentage)} bg-white/5`}>
+                                {getGradeLabel(studentData.overallPercentage)}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-400">
+                              Published on {new Date(result.publishedAt).toLocaleDateString('en-US', { 
+                                year: 'numeric', month: 'long', day: 'numeric' 
+                              })}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
+                          <GraduationCap className="w-4 h-4 text-violet-400" />
+                          <span>Submitted by <span className="text-white font-medium">{result.facultyName}</span></span>
+                        </div>
+
+                        {result.message && (
+                          <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-4">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Mail className="w-4 h-4 text-pink-400" />
+                              <span className="text-xs font-bold text-pink-300 uppercase tracking-wider">Faculty Remarks</span>
+                            </div>
+                            <p className="text-gray-300 italic">"{result.message}"</p>
+                          </div>
+                        )}
+
+                        <div className="grid grid-cols-3 gap-4">
+                          <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                            <p className="text-2xl font-bold text-white">{studentData.totalScore}</p>
+                            <p className="text-xs text-gray-500 uppercase tracking-wider">Total Score</p>
+                          </div>
+                          <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                            <p className="text-2xl font-bold text-white">{studentData.totalQuizzes}</p>
+                            <p className="text-xs text-gray-500 uppercase tracking-wider">Quizzes</p>
+                          </div>
+                          <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                            <p className={`text-2xl font-bold ${getGradeColor(studentData.overallPercentage)}`}>{studentData.overallPercentage}%</p>
+                            <p className="text-xs text-gray-500 uppercase tracking-wider">Overall</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="lg:w-48 flex flex-col items-center justify-center">
+                        <div className="relative w-32 h-32 mb-4">
+                          <svg className="w-32 h-32 transform -rotate-90">
+                            <circle cx="64" cy="64" r="56" stroke="currentColor" strokeWidth="8" fill="none" className="text-white/10" />
+                            <circle 
+                              cx="64" cy="64" r="56" 
+                              stroke="url(#gradient)" 
+                              strokeWidth="8" 
+                              fill="none"
+                              strokeLinecap="round"
+                              strokeDasharray={`${studentData.overallPercentage * 3.52} 352`}
+                              className="transition-all duration-1000"
+                            />
+                            <defs>
+                              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stopColor="#8B5CF6" />
+                                <stop offset="100%" stopColor="#EC4899" />
+                              </linearGradient>
+                            </defs>
+                          </svg>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="text-center">
+                              <span className={`text-3xl font-black ${getGradeColor(studentData.overallPercentage)}`}>{studentData.overallPercentage}%</span>
+                            </div>
+                          </div>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setExpandedResult(isExpanded ? null : result.reportId)}
+                          className="rounded-xl border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white"
+                        >
+                          {isExpanded ? 'Hide Details' : 'View Details'}
+                          <ChevronDown className={`w-4 h-4 ml-2 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {isExpanded && (
+                      <div className="mt-6 pt-6 border-t border-white/10 animate-in slide-in-from-top-2">
+                        <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-violet-400" />
+                          Subject-wise Performance
+                        </h4>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                          {Object.entries(studentData.subjectScores).map(([subjectId, score]) => (
+                            <div 
+                              key={subjectId} 
+                              className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+                            >
+                              <div className="flex items-center justify-between mb-3">
+                                <h5 className="font-semibold text-white truncate">{getSubjectName(subjectId)}</h5>
+                                <span className={`text-lg font-bold ${getGradeColor(score.percentage)}`}>{score.percentage}%</span>
+                              </div>
+                              <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+                                <span>{score.score}/{score.totalQuestions} correct</span>
+                                <span>{new Date(score.completedAt).toLocaleDateString()}</span>
+                              </div>
+                              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                                <div 
+                                  className={`h-full bg-gradient-to-r ${getGradeBg(score.percentage)} rounded-full transition-all duration-500`}
+                                  style={{ width: `${score.percentage}%` }}
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="mt-12 liquid-glass-strong rounded-3xl p-8 text-center slide-up glow-mixed" style={{ animationDelay: "0.5s" }}>
+          <div className="flex justify-center mb-6">
+            <div className="p-4 rounded-2xl gradient-aurora pulse-glow">
+              <TrendingUp className="w-8 h-8 text-white" />
+            </div>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-3">
+            Keep Improving Your Scores!
+          </h2>
+          <p className="text-gray-400 max-w-xl mx-auto mb-6">
+            Practice more quizzes to improve your academic performance and see better results.
+          </p>
+          <Link to="/home">
+            <Button size="lg" className="h-12 px-8 rounded-xl gradient-sunset text-white font-semibold shadow-lg">
+              <Sparkles className="w-4 h-4 mr-2" />
+              Take More Quizzes
+            </Button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
@@ -784,16 +1114,7 @@ const Services = () => {
     return <FacultyServices />;
   }
 
-  return (
-    <div className="min-h-screen pt-20 pb-12 bg-[#050505] flex items-center justify-center">
-      <div className="text-center p-12 liquid-glass-strong rounded-3xl border border-white/5">
-        <AlertCircle className="w-16 h-16 text-amber-500 mx-auto mb-4" />
-        <h1 className="text-2xl font-bold text-white mb-2">Access Restricted</h1>
-        <p className="text-gray-400 mb-8">This page is for Faculty and Admin only.</p>
-        <Link to="/home"><Button className="gradient-aurora text-white rounded-xl h-12 px-8">Back to Home</Button></Link>
-      </div>
-    </div>
-  );
+  return <StudentResults />;
 };
 
 export default Services;

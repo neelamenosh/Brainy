@@ -355,6 +355,70 @@ app.put('/api/auth/profile', authMiddleware, async (req, res) => {
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/admin', adminRoutes);
 
+const ADMIN_REPORTS_FILE = path.join(__dirname, 'data', 'admin_reports.json');
+
+app.get('/api/student/results', authMiddleware, (req, res) => {
+  try {
+    if (req.user.role !== 'Student') {
+      return res.status(403).json({ message: 'Access denied. Students only.' });
+    }
+
+    let reports = [];
+    try {
+      if (fs.existsSync(ADMIN_REPORTS_FILE)) {
+        reports = JSON.parse(fs.readFileSync(ADMIN_REPORTS_FILE, 'utf8'));
+      }
+    } catch (error) {
+      reports = [];
+    }
+
+    const publishedReports = reports.filter(r => r.status === 'published');
+
+    const studentResults = [];
+    const users = readUsers();
+    const currentUser = users.find(u => u.id === req.user.userId);
+
+    if (!currentUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    publishedReports.forEach(report => {
+      const studentInReport = report.students.find(s => 
+        s.email?.toLowerCase() === currentUser.email.toLowerCase() ||
+        s.rollNumber === currentUser.rollNumber ||
+        s.id === currentUser.id
+      );
+
+      if (studentInReport) {
+        studentResults.push({
+          reportId: report.id,
+          facultyName: report.facultyName,
+          facultyEmail: report.facultyEmail,
+          message: report.message,
+          publishedAt: report.publishedAt,
+          studentData: studentInReport
+        });
+      }
+    });
+
+    res.json({
+      results: studentResults,
+      student: {
+        id: currentUser.id,
+        fullName: currentUser.fullName,
+        rollNumber: currentUser.rollNumber,
+        email: currentUser.email,
+        department: currentUser.department,
+        course: currentUser.course,
+        semester: currentUser.semester
+      }
+    });
+  } catch (error) {
+    console.error('Student results error:', error);
+    res.status(500).json({ message: 'Failed to fetch results' });
+  }
+});
+
 console.log('Registered /api/faculty and /api/admin routes');
 
 app.get('/', (req, res) => {
