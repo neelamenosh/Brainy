@@ -25,37 +25,37 @@ const Landing = () => {
       icon: Brain,
       title: "Adaptive Learning",
       description: "AI-powered quizzes that adapt to your knowledge level and learning pace.",
-      gradient: "from-violet-500 to-purple-600"
+      gradient: "from-muted-teal to-deep-teal"
     },
     {
       icon: Target,
       title: "Targeted Practice",
       description: "Focus on weak areas with personalized question recommendations.",
-      gradient: "from-pink-500 to-rose-600"
+      gradient: "from-deep-teal to-dark-slate-grey"
     },
     {
       icon: BarChart3,
       title: "Progress Tracking",
       description: "Detailed analytics and insights to monitor your improvement over time.",
-      gradient: "from-orange-500 to-amber-600"
+      gradient: "from-ash-grey to-muted-teal"
     },
     {
       icon: Award,
       title: "Achievements",
       description: "Earn badges and certificates as you master different subjects.",
-      gradient: "from-cyan-500 to-teal-600"
+      gradient: "from-dark-slate-grey to-charcoal-blue"
     },
     {
       icon: BookOpen,
       title: "Comprehensive Content",
       description: "Extensive question bank covering all major engineering disciplines.",
-      gradient: "from-fuchsia-500 to-pink-600"
+      gradient: "from-muted-teal to-ash-grey"
     },
     {
       icon: Users,
       title: "Community Learning",
       description: "Connect with peers, share insights, and learn together.",
-      gradient: "from-indigo-500 to-violet-600"
+      gradient: "from-deep-teal to-muted-teal"
     }
   ];
 
@@ -88,27 +88,27 @@ const Landing = () => {
   ];
 
   const gradients = [
-    "from-violet-500 to-purple-600",
-    "from-pink-500 to-rose-600",
-    "from-orange-500 to-amber-600",
-    "from-cyan-500 to-teal-600",
-    "from-fuchsia-500 to-pink-600",
-    "from-indigo-500 to-violet-600",
+    "from-muted-teal to-deep-teal",
+    "from-deep-teal to-dark-slate-grey",
+    "from-ash-grey to-muted-teal",
+    "from-dark-slate-grey to-charcoal-blue",
+    "from-muted-teal to-ash-grey",
+    "from-deep-teal to-muted-teal",
   ];
 
   return (
     <div className="min-h-screen bg-mesh noise-overlay">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 -left-32 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl opacity-50" />
-        <div className="absolute top-40 -right-32 w-96 h-96 bg-pink-500/8 rounded-full blur-3xl opacity-50" />
-        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-orange-500/8 rounded-full blur-3xl opacity-50" />
+        <div className="absolute top-20 -left-32 w-80 h-80 bg-muted-teal/10 rounded-full blur-3xl opacity-50" />
+        <div className="absolute top-40 -right-32 w-96 h-96 bg-deep-teal/8 rounded-full blur-3xl opacity-50" />
+        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-ash-grey/8 rounded-full blur-3xl opacity-50" />
       </div>
 
       <section className="relative pt-28 pb-20 overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full liquid-glass text-sm font-medium mb-8 slide-up stagger-1">
-              <Sparkles className="w-4 h-4 text-violet-400" />
+              <Sparkles className="w-4 h-4 text-muted-teal" />
               <span className="gradient-text-static">Master Statistics & Engineering Concepts</span>
             </div>
 
@@ -125,7 +125,7 @@ const Landing = () => {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 slide-up stagger-4">
               <Link to="/register">
-                <Button size="lg" className="h-14 px-8 rounded-2xl btn-liquid gradient-aurora text-white font-semibold text-lg shadow-xl glow-violet">
+                <Button size="lg" className="h-14 px-8 rounded-2xl btn-liquid gradient-aurora text-white font-semibold text-lg shadow-xl glow-mixed">
                   <Rocket className="w-5 h-5 mr-2" />
                   Get Started Free
                   <ArrowRight className="ml-2 w-5 h-5" />
@@ -220,7 +220,7 @@ const Landing = () => {
                       </span>
                     ))}
                     {course.subjects.length > 3 && (
-                      <span className="px-2.5 py-1 rounded-lg bg-violet-500/20 text-violet-300 text-xs font-medium">
+                      <span className="px-2.5 py-1 rounded-lg bg-muted-teal/20 text-muted-teal text-xs font-medium">
                         +{course.subjects.length - 3} more
                       </span>
                     )}
@@ -232,7 +232,7 @@ const Landing = () => {
 
           <div className="text-center mt-12 slide-up stagger-6">
             <Link to="/register">
-              <Button size="lg" className="h-14 px-8 rounded-2xl btn-liquid gradient-aurora text-white font-semibold shadow-xl glow-violet">
+              <Button size="lg" className="h-14 px-8 rounded-2xl btn-liquid gradient-aurora text-white font-semibold shadow-xl glow-mixed">
                 Start Learning Now
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>

@@ -117,14 +117,14 @@ const Register = () => {
     }
   };
 
-  const inputClass = "pl-12 h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-violet-500 focus:ring-violet-500/20 transition-all duration-300";
+  const inputClass = "pl-12 h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-muted-teal focus:ring-muted-teal/20 transition-all duration-300";
 
   return (
     <div className="min-h-screen bg-mesh noise-overlay pt-20 pb-12 flex items-center justify-center">
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ willChange: 'auto' }}>
-        <div className="absolute top-20 -left-32 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-32 w-96 h-96 bg-pink-500/8 rounded-full blur-3xl" />
-        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-orange-500/8 rounded-full blur-3xl" />
+        <div className="absolute top-20 -left-32 w-80 h-80 bg-muted-teal/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-32 w-96 h-96 bg-deep-teal/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-ash-grey/8 rounded-full blur-3xl" />
       </div>
 
       {showSuccess ? (
@@ -247,7 +247,7 @@ const Register = () => {
                     onValueChange={(value) => handleSelectChange("department", value)}
                     disabled={loading}
                   >
-                    <SelectTrigger className="h-12 rounded-xl bg-white/5 border-white/10 text-gray-300 focus:border-violet-500 focus:ring-violet-500/20">
+                    <SelectTrigger className="h-12 rounded-xl bg-white/5 border-white/10 text-gray-300 focus:border-muted-teal focus:ring-muted-teal/20">
                       <div className="flex items-center gap-3">
                         <Building className="w-5 h-5 text-gray-500" />
                         <SelectValue placeholder="Select department" />
@@ -267,7 +267,7 @@ const Register = () => {
                     onValueChange={(value) => handleSelectChange("course", value)}
                     disabled={loading}
                   >
-                    <SelectTrigger className="h-12 rounded-xl bg-white/5 border-white/10 text-gray-300 focus:border-violet-500 focus:ring-violet-500/20">
+                    <SelectTrigger className="h-12 rounded-xl bg-white/5 border-white/10 text-gray-300 focus:border-muted-teal focus:ring-muted-teal/20">
                       <div className="flex items-center gap-3">
                         <BookOpen className="w-5 h-5 text-gray-500" />
                         <SelectValue placeholder="Select course" />
@@ -289,7 +289,7 @@ const Register = () => {
                   onValueChange={(value) => handleSelectChange("semester", value)}
                   disabled={loading}
                 >
-                  <SelectTrigger className="h-12 rounded-xl bg-white/5 border-white/10 text-gray-300 focus:border-violet-500 focus:ring-violet-500/20">
+                  <SelectTrigger className="h-12 rounded-xl bg-white/5 border-white/10 text-gray-300 focus:border-muted-teal focus:ring-muted-teal/20">
                     <SelectValue placeholder="Select semester" />
                   </SelectTrigger>
                   <SelectContent className="liquid-glass-strong border-white/10 rounded-xl">
@@ -383,7 +383,7 @@ const Register = () => {
                   variant="outline"
                   className="w-full h-12 rounded-xl border-white/10 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white font-semibold transition-all duration-300"
                 >
-                  <Sparkles className="w-5 h-5 mr-2 text-violet-400" />
+                  <Sparkles className="w-5 h-5 mr-2 text-muted-teal" />
                   Sign In Instead
                 </Button>
               </Link>

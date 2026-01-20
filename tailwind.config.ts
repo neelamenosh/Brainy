@@ -56,6 +56,11 @@ export default {
         },
         teal: "hsl(var(--teal))",
         cyan: "hsl(var(--cyan))",
+        "ash-grey": "#cad2c5",
+        "muted-teal": "#84a98c",
+        "deep-teal": "#52796f",
+        "dark-slate-grey": "#354f52",
+        "charcoal-blue": "#2f3e46",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

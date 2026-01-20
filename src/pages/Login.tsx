@@ -26,28 +26,28 @@ const Login = () => {
       id: "student" as LoginRole, 
       label: "Student", 
       icon: GraduationCap, 
-      gradient: "from-violet-500 via-purple-500 to-fuchsia-600",
-      glow: "rgba(139, 92, 246, 0.4)",
-      border: "border-violet-500/30",
-      text: "text-violet-400"
+      gradient: "from-muted-teal via-deep-teal to-dark-slate-grey",
+      glow: "rgba(132, 169, 140, 0.4)",
+      border: "border-muted-teal/30",
+      text: "text-muted-teal"
     },
     { 
       id: "faculty" as LoginRole, 
       label: "Faculty", 
       icon: Users, 
-      gradient: "from-cyan-500 via-teal-500 to-emerald-600",
-      glow: "rgba(6, 182, 212, 0.4)",
-      border: "border-cyan-500/30",
-      text: "text-cyan-400"
+      gradient: "from-deep-teal via-dark-slate-grey to-charcoal-blue",
+      glow: "rgba(82, 121, 111, 0.4)",
+      border: "border-deep-teal/30",
+      text: "text-deep-teal"
     },
     { 
       id: "admin" as LoginRole, 
       label: "Admin", 
       icon: Shield, 
-      gradient: "from-pink-500 via-rose-500 to-red-600",
-      glow: "rgba(236, 72, 153, 0.4)",
-      border: "border-pink-500/30",
-      text: "text-pink-400"
+      gradient: "from-ash-grey via-muted-teal to-deep-teal",
+      glow: "rgba(202, 210, 197, 0.4)",
+      border: "border-ash-grey/30",
+      text: "text-ash-grey"
     },
   ];
 
