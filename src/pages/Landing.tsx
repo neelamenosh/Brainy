@@ -98,32 +98,32 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-mesh noise-overlay">
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ willChange: 'auto' }}>
-        <div className="absolute top-20 -left-32 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-32 w-96 h-96 bg-pink-500/8 rounded-full blur-3xl" />
-        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-orange-500/8 rounded-full blur-3xl" />
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-20 -left-32 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl opacity-50" />
+        <div className="absolute top-40 -right-32 w-96 h-96 bg-pink-500/8 rounded-full blur-3xl opacity-50" />
+        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-orange-500/8 rounded-full blur-3xl opacity-50" />
       </div>
 
       <section className="relative pt-28 pb-20 overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full liquid-glass text-sm font-medium mb-8 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full liquid-glass text-sm font-medium mb-8 slide-up stagger-1">
               <Sparkles className="w-4 h-4 text-violet-400" />
               <span className="gradient-text-static">Master Statistics & Engineering Concepts</span>
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight slide-up" style={{ opacity: 0, animationDelay: "0.2s" }}>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight slide-up stagger-2">
               <span className="text-white">Learn Smarter with</span>
               <br />
               <span className="gradient-text-aurora text-glow">Brainy</span>
             </h1>
 
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 slide-up" style={{ opacity: 0, animationDelay: "0.3s" }}>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 slide-up stagger-3">
               Interactive quizzes, adaptive learning, and comprehensive coverage of engineering subjects. 
               Your path to academic excellence starts here.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 slide-up" style={{ opacity: 0, animationDelay: "0.4s" }}>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 slide-up stagger-4">
               <Link to="/register">
                 <Button size="lg" className="h-14 px-8 rounded-2xl btn-liquid gradient-aurora text-white font-semibold text-lg shadow-xl glow-violet">
                   <Rocket className="w-5 h-5 mr-2" />
@@ -138,7 +138,7 @@ const Landing = () => {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 slide-up" style={{ opacity: 0, animationDelay: "0.5s" }}>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 slide-up stagger-5">
               {stats.map((stat, index) => (
                 <div key={index} className="liquid-glass-card rounded-2xl p-5 hover-lift">
                   <div className="text-3xl sm:text-4xl font-bold gradient-text-static mb-1">
