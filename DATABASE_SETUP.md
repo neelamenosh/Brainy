@@ -16,7 +16,8 @@ Copy the connection string and set it as `DATABASE_URL`.
 
 ## 2) Configure env vars locally
 
-1. Create `.env.local` in the project root.
+1. Create `.env` (for Prisma/Node) in the project root.
+	- Vite also supports `.env.local` for frontend-only overrides.
 2. Add:
 
 ```bash
