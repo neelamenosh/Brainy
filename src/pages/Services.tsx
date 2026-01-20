@@ -213,12 +213,11 @@ const AdminServices = () => {
 
   return (
     <div className="min-h-screen pt-20 pb-12 bg-[#030306] noise-overlay overflow-hidden">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(251,191,36,0.08),transparent_50%)]" />
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,rgba(236,72,153,0.08),transparent_50%)]" />
-        <div className="absolute top-[10%] right-[10%] w-[500px] h-[500px] bg-gradient-to-br from-amber-500/10 via-rose-500/5 to-transparent rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '4s' }} />
-        <div className="absolute bottom-[10%] left-[5%] w-[400px] h-[400px] bg-gradient-to-tr from-violet-600/10 via-fuchsia-500/5 to-transparent rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
-        <div className="absolute top-[50%] left-[50%] w-[300px] h-[300px] bg-gradient-to-br from-cyan-500/5 to-transparent rounded-full blur-[80px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'auto' }}>
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(251,191,36,0.06),transparent_50%)]" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,rgba(236,72,153,0.06),transparent_50%)]" />
+        <div className="absolute top-[10%] right-[10%] w-72 h-72 bg-gradient-to-br from-amber-500/8 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-[10%] left-[5%] w-64 h-64 bg-gradient-to-tr from-violet-600/8 to-transparent rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -362,10 +361,10 @@ const AdminServices = () => {
 
       {selectedReport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/95 backdrop-blur-2xl" onClick={() => setSelectedReport(null)} />
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={() => setSelectedReport(null)} />
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-[20%] right-[20%] w-96 h-96 bg-gradient-to-br from-amber-500/10 to-transparent rounded-full blur-[100px]" />
-            <div className="absolute bottom-[20%] left-[20%] w-96 h-96 bg-gradient-to-tr from-violet-500/10 to-transparent rounded-full blur-[100px]" />
+            <div className="absolute top-[20%] right-[20%] w-64 h-64 bg-gradient-to-br from-amber-500/8 to-transparent rounded-full blur-3xl" />
+            <div className="absolute bottom-[20%] left-[20%] w-64 h-64 bg-gradient-to-tr from-violet-500/8 to-transparent rounded-full blur-3xl" />
           </div>
           
           <div className="relative w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-[2rem] border border-white/20 flex flex-col animate-in fade-in zoom-in duration-300 bg-gradient-to-br from-[#0a0a0f] via-[#080810] to-[#0a0a0f]">
@@ -633,9 +632,9 @@ const FacultyServices = () => {
 
   return (
     <div className="min-h-screen pt-20 pb-12 bg-mesh noise-overlay">
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 -left-32 w-96 h-96 bg-violet-500/20 rounded-full blur-[120px] morph-blob float-slow" />
-        <div className="absolute top-40 -right-32 w-[500px] h-[500px] bg-pink-500/15 rounded-full blur-[150px] morph-blob float-medium" style={{ animationDelay: "-2s" }} />
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ willChange: 'auto' }}>
+        <div className="absolute top-20 -left-32 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-32 w-80 h-80 bg-pink-500/8 rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -874,10 +873,10 @@ const StudentResults = () => {
 
   return (
     <div className="min-h-screen pt-20 pb-12 bg-mesh noise-overlay">
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 -left-32 w-96 h-96 bg-violet-500/20 rounded-full blur-[120px] morph-blob float-slow" />
-        <div className="absolute top-40 -right-32 w-[500px] h-[500px] bg-pink-500/15 rounded-full blur-[150px] morph-blob float-medium" style={{ animationDelay: "-2s" }} />
-        <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-emerald-500/10 rounded-full blur-[100px] morph-blob float-fast" style={{ animationDelay: "-4s" }} />
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ willChange: 'auto' }}>
+        <div className="absolute top-20 -left-32 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-32 w-80 h-80 bg-pink-500/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-1/4 w-64 h-64 bg-emerald-500/8 rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

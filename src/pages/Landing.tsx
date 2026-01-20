@@ -98,11 +98,10 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-mesh noise-overlay">
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 -left-32 w-[500px] h-[500px] bg-violet-500/20 rounded-full blur-[150px] morph-blob float-slow" />
-        <div className="absolute top-40 -right-32 w-[600px] h-[600px] bg-pink-500/15 rounded-full blur-[180px] morph-blob float-medium" style={{ animationDelay: "-2s" }} />
-        <div className="absolute bottom-40 left-1/4 w-[400px] h-[400px] bg-orange-500/10 rounded-full blur-[120px] morph-blob float-fast" style={{ animationDelay: "-4s" }} />
-        <div className="absolute -bottom-32 right-1/4 w-[500px] h-[500px] bg-fuchsia-500/15 rounded-full blur-[150px] morph-blob float-slow" style={{ animationDelay: "-3s" }} />
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ willChange: 'auto' }}>
+        <div className="absolute top-20 -left-32 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-32 w-96 h-96 bg-pink-500/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-orange-500/8 rounded-full blur-3xl" />
       </div>
 
       <section className="relative pt-28 pb-20 overflow-hidden">

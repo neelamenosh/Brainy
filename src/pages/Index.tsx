@@ -153,10 +153,10 @@ const FacultyHome = () => {
 
   return (
     <div className="min-h-screen pt-20 pb-12 bg-mesh noise-overlay">
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 -left-32 w-96 h-96 bg-violet-500/20 rounded-full blur-[120px] morph-blob float-slow" />
-        <div className="absolute top-40 -right-32 w-[500px] h-[500px] bg-pink-500/15 rounded-full blur-[150px] morph-blob float-medium" style={{ animationDelay: "-2s" }} />
-        <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-cyan-500/10 rounded-full blur-[100px] morph-blob float-fast" style={{ animationDelay: "-4s" }} />
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ willChange: 'auto' }}>
+        <div className="absolute top-20 -left-32 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-32 w-[400px] h-[400px] bg-pink-500/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-1/4 w-72 h-72 bg-cyan-500/8 rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -477,11 +477,10 @@ const StudentHome = () => {
 
   return (
     <div className="min-h-screen pt-20 pb-12 bg-mesh noise-overlay">
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 -left-32 w-96 h-96 bg-violet-500/20 rounded-full blur-[120px] morph-blob float-slow" />
-        <div className="absolute top-40 -right-32 w-[500px] h-[500px] bg-pink-500/15 rounded-full blur-[150px] morph-blob float-medium" style={{ animationDelay: "-2s" }} />
-        <div className="absolute bottom-20 left-1/4 w-80 h-80 bg-orange-500/10 rounded-full blur-[100px] morph-blob float-fast" style={{ animationDelay: "-4s" }} />
-        <div className="absolute -bottom-32 right-1/3 w-96 h-96 bg-fuchsia-500/15 rounded-full blur-[120px] morph-blob float-slow" style={{ animationDelay: "-3s" }} />
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ willChange: 'auto' }}>
+        <div className="absolute top-20 -left-32 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-32 w-96 h-96 bg-pink-500/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-1/4 w-72 h-72 bg-orange-500/8 rounded-full blur-3xl" />
       </div>
 
       <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -719,24 +718,20 @@ const StudentHome = () => {
             className="absolute inset-0 bg-black/60 backdrop-blur-md"
             style={{ animation: "fadeIn 0.3s ease-out forwards" }}
           />
-          
-          <div 
-            className="absolute inset-0 pointer-events-none overflow-hidden"
-          >
-            <div className={`absolute top-1/4 -left-20 w-80 h-80 bg-gradient-to-br ${gradients[courses.indexOf(selectedCourse) % gradients.length]} rounded-full blur-[150px] opacity-30`} 
-              style={{ animation: "pulse 3s ease-in-out infinite" }} 
-            />
-            <div className={`absolute bottom-1/4 -right-20 w-96 h-96 bg-gradient-to-br ${gradients[(courses.indexOf(selectedCourse) + 2) % gradients.length]} rounded-full blur-[180px] opacity-20`} 
-              style={{ animation: "pulse 4s ease-in-out infinite", animationDelay: "1s" }} 
-            />
-          </div>
+            
+            <div 
+              className="absolute inset-0 pointer-events-none overflow-hidden"
+            >
+              <div className={`absolute top-1/4 -left-20 w-64 h-64 bg-gradient-to-br ${gradients[courses.indexOf(selectedCourse) % gradients.length]} rounded-full blur-3xl opacity-20`} />
+              <div className={`absolute bottom-1/4 -right-20 w-72 h-72 bg-gradient-to-br ${gradients[(courses.indexOf(selectedCourse) + 2) % gradients.length]} rounded-full blur-3xl opacity-15`} />
+            </div>
 
-          <div 
-            className="relative w-full max-w-3xl max-h-[85vh] overflow-hidden rounded-3xl"
-            onClick={(e) => e.stopPropagation()}
-            style={{ animation: "modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-2xl border border-white/20 rounded-3xl" />
+            <div 
+              className="relative w-full max-w-3xl max-h-[85vh] overflow-hidden rounded-3xl"
+              onClick={(e) => e.stopPropagation()}
+              style={{ animation: "modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards" }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border border-white/20 rounded-3xl" />
             
             <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${gradients[courses.indexOf(selectedCourse) % gradients.length]}`} />
             
@@ -1029,13 +1024,12 @@ const AdminHome = () => {
 
   return (
     <div className="min-h-screen pt-20 pb-12 bg-[#030306] noise-overlay overflow-hidden">
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,rgba(251,191,36,0.08),transparent_50%)]" />
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,rgba(236,72,153,0.08),transparent_50%)]" />
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.05),transparent_60%)]" />
-        <div className="absolute top-[5%] right-[10%] w-[600px] h-[600px] bg-gradient-to-br from-amber-500/10 via-rose-500/5 to-transparent rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
-        <div className="absolute bottom-[10%] left-[5%] w-[500px] h-[500px] bg-gradient-to-tr from-violet-600/10 via-fuchsia-500/5 to-transparent rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
-        <div className="absolute top-[40%] left-[40%] w-[400px] h-[400px] bg-gradient-to-br from-cyan-500/5 to-transparent rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
+      <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'auto' }}>
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,rgba(251,191,36,0.06),transparent_50%)]" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,rgba(236,72,153,0.06),transparent_50%)]" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.04),transparent_60%)]" />
+        <div className="absolute top-[5%] right-[10%] w-80 h-80 bg-gradient-to-br from-amber-500/8 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-[10%] left-[5%] w-72 h-72 bg-gradient-to-tr from-violet-600/8 to-transparent rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
