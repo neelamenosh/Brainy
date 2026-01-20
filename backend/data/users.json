@@ -27,7 +27,7 @@
     "role": "Student",
     "isVerified": true,
     "createdAt": "2026-01-19T16:09:53.058Z",
-    "lastLogin": "2026-01-20T15:33:43.453Z"
+    "lastLogin": "2026-01-20T18:21:50.972Z"
   },
   {
     "id": "1768840379634",
@@ -42,7 +42,7 @@
     "role": "Faculty",
     "isVerified": true,
     "createdAt": "2026-01-19T16:32:59.634Z",
-    "lastLogin": "2026-01-19T16:53:54.266Z"
+    "lastLogin": "2026-01-20T17:58:54.715Z"
   },
   {
     "id": "1768842000000",
@@ -57,6 +57,6 @@
     "role": "Admin",
     "isVerified": true,
     "createdAt": "2026-01-19T17:00:00.000Z",
-    "lastLogin": "2026-01-19T17:28:58.552Z"
+    "lastLogin": "2026-01-20T17:59:33.254Z"
   }
 ]

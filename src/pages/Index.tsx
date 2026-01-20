@@ -996,7 +996,7 @@ const AdminHome = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center bg-[#030306]">
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-mesh noise-overlay">
         <div className="relative">
           <div className="w-24 h-24 border-2 border-transparent border-t-amber-500 border-r-rose-500 rounded-full animate-spin" />
           <div className="absolute inset-3 border-2 border-transparent border-b-violet-500 border-l-fuchsia-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }} />
@@ -1023,13 +1023,11 @@ const AdminHome = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-20 pb-12 bg-[#030306] noise-overlay overflow-hidden">
+    <div className="min-h-screen pt-20 pb-12 bg-mesh noise-overlay overflow-hidden">
       <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'auto' }}>
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,rgba(251,191,36,0.06),transparent_50%)]" />
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,rgba(236,72,153,0.06),transparent_50%)]" />
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.04),transparent_60%)]" />
-        <div className="absolute top-[5%] right-[10%] w-80 h-80 bg-gradient-to-br from-amber-500/8 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-[10%] left-[5%] w-72 h-72 bg-gradient-to-tr from-violet-600/8 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-20 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-32 w-[420px] h-[420px] bg-primary/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-1/4 w-72 h-72 bg-secondary/20 rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -42,15 +42,10 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to={user ? "/home" : "/"} className="flex items-center gap-3 group">
-            <div className="relative">
-              <div className="absolute inset-0 gradient-aurora rounded-xl blur-md opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative p-2.5 rounded-xl gradient-aurora shadow-lg">
-                <Brain className="w-6 h-6 text-white" />
-              </div>
+            <div className="w-10 h-10 rounded-2xl bg-secondary/80 border border-border flex items-center justify-center">
+              <Brain className="w-5 h-5 text-foreground" />
             </div>
-            <span className="font-bold text-xl gradient-text-aurora">
-              Brainy
-            </span>
+            <span className="font-semibold text-lg tracking-tight text-foreground">Brainy</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
@@ -58,14 +53,14 @@ const Navbar = () => {
               <Link
                 key={tab.to}
                 to={tab.to}
-                className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                className={`relative px-3 py-2 rounded-xl text-sm font-medium transition-colors duration-200 ${
                   location.pathname === tab.to
-                    ? "text-white"
-                    : "text-gray-400 hover:text-white"
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {location.pathname === tab.to && (
-                  <span className="absolute inset-0 rounded-xl liquid-glass glow-violet opacity-50" />
+                  <span className="absolute inset-0 rounded-xl bg-secondary/70" />
                 )}
                 <span className="relative">{tab.name}</span>
               </Link>
@@ -74,47 +69,44 @@ const Navbar = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="ml-4 gap-2 hover:bg-white/5 rounded-xl transition-all duration-300">
-                    <div className="relative">
-                      <div className="absolute inset-0 gradient-aurora rounded-full blur-sm opacity-60" />
-                      <div className="relative w-8 h-8 rounded-full gradient-aurora flex items-center justify-center text-white font-semibold text-sm">
-                        {user.fullName?.charAt(0).toUpperCase() || "U"}
-                      </div>
+                  <Button variant="ghost" className="ml-3 gap-2 rounded-xl">
+                    <div className="w-8 h-8 rounded-full bg-secondary/80 border border-border flex items-center justify-center text-foreground font-semibold text-sm">
+                      {user.fullName?.charAt(0).toUpperCase() || "U"}
                     </div>
-                    <span className="hidden lg:inline text-gray-300">{user.fullName?.split(" ")[0]}</span>
+                    <span className="hidden lg:inline text-foreground/80">{user.fullName?.split(" ")[0]}</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 liquid-glass-strong border-white/10 rounded-2xl p-2">
-                  <div className="px-3 py-3 border-b border-white/10 mb-2">
-                    <p className="font-semibold text-white">{user.fullName}</p>
-                    <p className="text-sm text-gray-400">{user.email}</p>
-                    <p className="text-xs gradient-text-static mt-1 font-medium">{user.department}</p>
+                <DropdownMenuContent align="end" className="w-56 liquid-glass-strong border-border rounded-2xl p-2">
+                  <div className="px-3 py-3 border-b border-border mb-2">
+                    <p className="font-semibold text-foreground">{user.fullName}</p>
+                    <p className="text-sm text-muted-foreground">{user.email}</p>
+                    <p className="text-xs text-muted-foreground mt-1 font-medium">{user.department}</p>
                   </div>
-                  <DropdownMenuItem className="gap-2 cursor-pointer rounded-xl hover:bg-white/5 transition-colors">
-                    <User className="w-4 h-4 text-violet-400" />
-                    <span className="text-gray-300">Profile</span>
+                  <DropdownMenuItem className="gap-2 cursor-pointer rounded-xl hover:bg-secondary/60 transition-colors">
+                    <User className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-foreground/80">Profile</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2 cursor-pointer rounded-xl hover:bg-white/5 transition-colors">
-                    <GraduationCap className="w-4 h-4 text-pink-400" />
-                    <span className="text-gray-300">My Progress</span>
+                  <DropdownMenuItem className="gap-2 cursor-pointer rounded-xl hover:bg-secondary/60 transition-colors">
+                    <GraduationCap className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-foreground/80">My Progress</span>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-white/10 my-2" />
-                  <DropdownMenuItem onClick={handleLogout} className="gap-2 cursor-pointer rounded-xl hover:bg-red-500/10 transition-colors">
-                    <LogOut className="w-4 h-4 text-red-400" />
-                    <span className="text-red-400">Sign Out</span>
+                  <DropdownMenuSeparator className="bg-border my-2" />
+                  <DropdownMenuItem onClick={handleLogout} className="gap-2 cursor-pointer rounded-xl hover:bg-destructive/10 transition-colors">
+                    <LogOut className="w-4 h-4 text-destructive" />
+                    <span className="text-destructive">Sign Out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <div className="flex items-center gap-3 ml-4">
                 <Link to="/login">
-                  <Button variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/5 rounded-xl transition-all duration-300">
+                  <Button variant="ghost" className="rounded-xl">
                     Sign In
                   </Button>
                 </Link>
                 <Link to="/register">
-                  <Button className="relative overflow-hidden rounded-xl btn-liquid gradient-aurora text-white font-semibold px-6 shadow-lg glow-violet">
-                    <Sparkles className="w-4 h-4 mr-2" />
+                  <Button className="rounded-xl">
+                    <Sparkles className="w-4 h-4" />
                     Get Started
                   </Button>
                 </Link>
@@ -124,7 +116,7 @@ const Navbar = () => {
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-xl hover:bg-white/5 transition-all duration-300 text-white"
+            className="md:hidden p-2 rounded-xl hover:bg-secondary/60 transition-colors text-foreground"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -132,7 +124,7 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden liquid-glass-strong border-t border-white/10 fade-in">
+        <div className="md:hidden liquid-glass-strong border-t border-border fade-in">
           <div className="px-4 py-4 space-y-2">
             {navItems.map((tab, index) => (
               <Link
@@ -141,8 +133,8 @@ const Navbar = () => {
                 onClick={() => setIsOpen(false)}
                 className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 slide-up stagger-${index + 1} ${
                   location.pathname === tab.to
-                    ? "liquid-glass text-white glow-violet"
-                    : "text-gray-400 hover:text-white hover:bg-white/5"
+                    ? "bg-secondary/70 text-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
                 }`}
                 style={{ opacity: 0 }}
               >
@@ -151,35 +143,35 @@ const Navbar = () => {
             ))}
 
             {user ? (
-              <div className="border-t border-white/10 pt-4 mt-4">
+              <div className="border-t border-border pt-4 mt-4">
                 <div className="px-4 py-2 mb-2">
-                  <p className="font-semibold text-white">{user.fullName}</p>
-                  <p className="text-sm text-gray-400">{user.email}</p>
+                  <p className="font-semibold text-foreground">{user.fullName}</p>
+                  <p className="text-sm text-muted-foreground">{user.email}</p>
                 </div>
                 <button
                   onClick={() => {
                     handleLogout();
                     setIsOpen(false);
                   }}
-                  className="w-full flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all duration-300"
+                  className="w-full flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-all duration-300"
                 >
                   <LogOut className="w-4 h-4" />
                   Sign Out
                 </button>
               </div>
             ) : (
-              <div className="border-t border-white/10 pt-4 mt-4 space-y-2">
+              <div className="border-t border-border pt-4 mt-4 space-y-2">
                 <Link
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300"
+                  className="block px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all duration-300"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setIsOpen(false)}
-                  className="block px-4 py-3 rounded-xl text-sm font-medium gradient-aurora text-white text-center glow-violet"
+                  className="block px-4 py-3 rounded-xl text-sm font-medium bg-primary text-primary-foreground text-center"
                 >
                   Get Started
                 </Link>

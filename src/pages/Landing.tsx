@@ -99,9 +99,9 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-mesh noise-overlay">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-20 -left-32 w-80 h-80 bg-muted-teal/10 rounded-full blur-3xl opacity-50" />
-        <div className="absolute top-40 -right-32 w-96 h-96 bg-deep-teal/8 rounded-full blur-3xl opacity-50" />
-        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-ash-grey/8 rounded-full blur-3xl opacity-50" />
+        <div className="absolute top-20 -left-32 w-80 h-80 bg-primary/10 rounded-full blur-3xl opacity-50" />
+        <div className="absolute top-40 -right-32 w-96 h-96 bg-primary/8 rounded-full blur-3xl opacity-40" />
+        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-secondary/20 rounded-full blur-3xl opacity-40" />
       </div>
 
       <section className="relative pt-28 pb-20 overflow-hidden">
@@ -113,26 +113,26 @@ const Landing = () => {
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight slide-up stagger-2">
-              <span className="text-white">Learn Smarter with</span>
+              <span className="text-foreground">Learn Smarter with</span>
               <br />
               <span className="gradient-text-aurora text-glow">Brainy</span>
             </h1>
 
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10 slide-up stagger-3">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10 slide-up stagger-3">
               Interactive quizzes, adaptive learning, and comprehensive coverage of engineering subjects. 
               Your path to academic excellence starts here.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 slide-up stagger-4">
               <Link to="/register">
-                <Button size="lg" className="h-14 px-8 rounded-2xl btn-liquid gradient-aurora text-white font-semibold text-lg shadow-xl glow-mixed">
+                <Button size="xl" className="h-14 px-8 rounded-2xl font-semibold text-lg">
                   <Rocket className="w-5 h-5 mr-2" />
                   Get Started Free
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
               <Link to="/login">
-                <Button size="lg" variant="outline" className="h-14 px-8 rounded-2xl border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold text-lg transition-all duration-300">
+                <Button size="xl" variant="outline" className="h-14 px-8 rounded-2xl font-semibold text-lg">
                   Sign In
                 </Button>
               </Link>
@@ -144,7 +144,7 @@ const Landing = () => {
                   <div className="text-3xl sm:text-4xl font-bold gradient-text-static mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-gray-400 text-sm">{stat.label}</div>
+                  <div className="text-muted-foreground text-sm">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -156,10 +156,10 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up stagger-1">
-              <span className="text-white">Everything You Need to </span>
+              <span className="text-foreground">Everything You Need to </span>
               <span className="gradient-text-static">Excel</span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up stagger-2">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto slide-up stagger-2">
               Powerful features designed to enhance your learning experience and help you achieve your academic goals.
             </p>
           </div>
@@ -174,8 +174,8 @@ const Landing = () => {
                   <feature.icon className="w-7 h-7 text-white" />
                   <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} blur-xl opacity-50`} />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                <p className="text-gray-400">{feature.description}</p>
+                <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
+                <p className="text-muted-foreground">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -186,10 +186,10 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up stagger-1">
-              <span className="text-white">Explore </span>
+              <span className="text-foreground">Explore </span>
               <span className="gradient-text-static">Courses</span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up stagger-2">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto slide-up stagger-2">
               Comprehensive coverage across all major engineering disciplines.
             </p>
           </div>
@@ -211,11 +211,11 @@ const Landing = () => {
                       {course.subjects.length} Subjects
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{course.name}</h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">{course.description}</p>
+                  <h3 className="text-lg font-bold text-foreground mb-2">{course.name}</h3>
+                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{course.description}</p>
                   <div className="flex flex-wrap gap-2">
                     {course.subjects.slice(0, 3).map((subject) => (
-                      <span key={subject.id} className="px-2.5 py-1 rounded-lg liquid-glass text-gray-300 text-xs font-medium">
+                      <span key={subject.id} className="px-2.5 py-1 rounded-lg liquid-glass text-foreground/80 text-xs font-medium">
                         {subject.name}
                       </span>
                     ))}
@@ -232,7 +232,7 @@ const Landing = () => {
 
           <div className="text-center mt-12 slide-up stagger-6">
             <Link to="/register">
-              <Button size="lg" className="h-14 px-8 rounded-2xl btn-liquid gradient-aurora text-white font-semibold shadow-xl glow-mixed">
+              <Button size="xl" className="h-14 px-8 rounded-2xl font-semibold">
                 Start Learning Now
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
@@ -245,10 +245,10 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up stagger-1">
-              <span className="text-white">Loved by </span>
+              <span className="text-foreground">Loved by </span>
               <span className="gradient-text-static">Students</span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up stagger-2">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto slide-up stagger-2">
               See what engineering students are saying about Brainy.
             </p>
           </div>

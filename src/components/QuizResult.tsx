@@ -24,7 +24,7 @@ const QuizResult = ({ score, total, categoryName, onRestart }: QuizResultProps) 
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center animate-scale-in">
-      <div className="glass rounded-3xl p-8 sm:p-12 max-w-lg w-full text-center relative overflow-hidden">
+      <div className="liquid-glass-strong rounded-3xl p-8 sm:p-12 max-w-lg w-full text-center relative overflow-hidden">
         {/* Background decorations */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/20 rounded-full blur-3xl" />

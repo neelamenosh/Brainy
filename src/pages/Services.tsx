@@ -201,7 +201,7 @@ const AdminServices = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center bg-[#030306]">
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-mesh noise-overlay">
         <div className="relative">
           <div className="w-20 h-20 border-2 border-transparent border-t-rose-500 border-r-amber-500 rounded-full animate-spin" />
           <div className="absolute inset-2 border-2 border-transparent border-b-violet-500 border-l-cyan-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }} />
@@ -212,12 +212,11 @@ const AdminServices = () => {
   }
 
   return (
-    <div className="min-h-screen pt-20 pb-12 bg-[#030306] noise-overlay overflow-hidden">
+    <div className="min-h-screen pt-20 pb-12 bg-mesh noise-overlay overflow-hidden">
       <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'auto' }}>
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(251,191,36,0.06),transparent_50%)]" />
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,rgba(236,72,153,0.06),transparent_50%)]" />
-        <div className="absolute top-[10%] right-[10%] w-72 h-72 bg-gradient-to-br from-amber-500/8 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-[10%] left-[5%] w-64 h-64 bg-gradient-to-tr from-violet-600/8 to-transparent rounded-full blur-3xl" />
+        <div className="absolute top-20 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-32 w-[420px] h-[420px] bg-primary/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-1/4 w-72 h-72 bg-secondary/20 rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -624,7 +623,7 @@ const FacultyServices = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center bg-[#050505]">
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-mesh noise-overlay">
         <div className="w-12 h-12 border-4 border-violet-500/30 border-t-violet-500 rounded-full animate-spin" />
       </div>
     );
@@ -758,7 +757,7 @@ const FacultyServices = () => {
       {showSendModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setShowSendModal(false)}>
           <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
-          <div className="relative w-full max-w-lg rounded-3xl overflow-hidden bg-[#111] border border-white/10 p-8" onClick={(e) => e.stopPropagation()}>
+          <div className="relative w-full max-w-lg rounded-3xl overflow-hidden liquid-glass-strong border border-border p-8" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-2xl font-bold text-white mb-6">Send Report to Admin</h2>
             <textarea value={sendMessage} onChange={(e) => setSendMessage(e.target.value)} placeholder="Add a note for the admin..." rows={4} className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white mb-6 focus:outline-none" />
             <div className="flex gap-4">

@@ -117,7 +117,7 @@ const Quiz = () => {
 
   if (quizComplete) {
     return (
-      <div className="min-h-screen pt-20 px-4">
+      <div className="min-h-screen pt-20 px-4 bg-mesh noise-overlay">
         <QuizResult
           score={score}
           total={category.questions.length}
@@ -129,7 +129,7 @@ const Quiz = () => {
   }
 
   return (
-    <div className="min-h-screen pt-20 pb-12">
+    <div className="min-h-screen pt-20 pb-12 bg-mesh noise-overlay">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -147,7 +147,7 @@ const Quiz = () => {
         </div>
 
         {/* Question Card */}
-        <div className="glass rounded-2xl p-6 sm:p-8 mb-6 animate-scale-in" key={currentQuestion}>
+        <div className="liquid-glass-strong rounded-2xl p-6 sm:p-8 mb-6 animate-scale-in" key={currentQuestion}>
           <h2 className="text-xl sm:text-2xl font-bold mb-8">
             {question.question}
           </h2>

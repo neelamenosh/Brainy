@@ -22,33 +22,9 @@ const Login = () => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const tabs = [
-    { 
-      id: "student" as LoginRole, 
-      label: "Student", 
-      icon: GraduationCap, 
-      gradient: "from-muted-teal via-deep-teal to-dark-slate-grey",
-      glow: "rgba(132, 169, 140, 0.4)",
-      border: "border-muted-teal/30",
-      text: "text-muted-teal"
-    },
-    { 
-      id: "faculty" as LoginRole, 
-      label: "Faculty", 
-      icon: Users, 
-      gradient: "from-deep-teal via-dark-slate-grey to-charcoal-blue",
-      glow: "rgba(82, 121, 111, 0.4)",
-      border: "border-deep-teal/30",
-      text: "text-deep-teal"
-    },
-    { 
-      id: "admin" as LoginRole, 
-      label: "Admin", 
-      icon: Shield, 
-      gradient: "from-ash-grey via-muted-teal to-deep-teal",
-      glow: "rgba(202, 210, 197, 0.4)",
-      border: "border-ash-grey/30",
-      text: "text-ash-grey"
-    },
+    { id: "student" as LoginRole, label: "Student", icon: GraduationCap },
+    { id: "faculty" as LoginRole, label: "Faculty", icon: Users },
+    { id: "admin" as LoginRole, label: "Admin", icon: Shield },
   ];
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -76,10 +52,6 @@ const Login = () => {
     setError("");
   };
 
-  const activeTabData = tabs.find(t => t.id === activeTab)!;
-  const activeGradient = activeTabData.gradient;
-  const activeGlow = activeTabData.glow;
-
   const getPlaceholderText = () => {
     switch (activeTab) {
       case "admin": return { email: "admin@brainy.com", password: "Admin password" };
@@ -99,76 +71,59 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-mesh noise-overlay pt-20 pb-12 flex items-center justify-center">
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ willChange: 'auto' }}>
-        <div className="absolute top-20 -left-32 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-32 w-96 h-96 bg-pink-500/8 rounded-full blur-3xl" />
-        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-cyan-500/8 rounded-full blur-3xl" />
+        <div className="absolute top-20 -left-32 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-32 w-96 h-96 bg-primary/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-secondary/20 rounded-full blur-3xl" />
       </div>
 
       {showSuccess ? (
         <div 
           className="w-full max-w-md mx-4 liquid-glass-strong rounded-3xl p-8 text-center scale-in"
-          style={{ boxShadow: `0 0 50px ${activeGlow}, 0 20px 50px rgba(0,0,0,0.5)` }}
         >
           <div className="flex justify-center mb-6">
             <div className="p-4 rounded-full bg-green-500/20 pulse-glow">
               <CheckCircle className="w-12 h-12 text-green-400" />
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-green-400 mb-2">Welcome Back!</h2>
-          <p className="text-gray-400">{getSuccessMessage()}</p>
+          <h2 className="text-2xl font-bold text-foreground mb-2">Welcome Back!</h2>
+          <p className="text-muted-foreground">{getSuccessMessage()}</p>
         </div>
       ) : (
         <div className="w-full max-w-md mx-4 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
           <div 
-            className="liquid-glass-strong rounded-3xl p-8 transition-all duration-700 relative group overflow-hidden"
-            style={{ boxShadow: `0 0 40px ${activeGlow.replace('0.4', '0.2')}, 0 25px 50px -12px rgba(0,0,0,0.6)` }}
+            className="liquid-glass-strong rounded-3xl p-8 relative overflow-hidden"
           >
-            {/* Animated background glow */}
-            <div className={`absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br ${activeGradient} blur-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-700`} />
-            
             <div className="text-center mb-8 relative">
               <div className="flex justify-center mb-4">
-                <div className="relative group/logo">
-                  {/* Rotating ring */}
-                  <div className={`absolute -inset-4 bg-gradient-to-r ${activeGradient} rounded-full blur-md opacity-40 animate-spin-slow group-hover/logo:opacity-60 transition-opacity`} />
-                  
-                  <div className={`relative p-5 rounded-2xl bg-gradient-to-br ${activeGradient} shadow-2xl transition-all duration-500 transform group-hover/logo:scale-110 group-hover/logo:rotate-3`}>
-                    <Brain className="w-10 h-10 text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
-                  </div>
+                <div className="w-16 h-16 rounded-3xl bg-secondary/70 border border-border flex items-center justify-center">
+                  <Brain className="w-8 h-8 text-foreground" />
                 </div>
               </div>
-              <h1 className="text-4xl font-black gradient-text-aurora mb-2 tracking-tight">
-                Brainy
-              </h1>
-              <p className="text-gray-400 font-medium tracking-wide uppercase text-[10px]">
+              <h1 className="text-3xl font-bold tracking-tight mb-2">Sign in</h1>
+              <p className="text-muted-foreground font-medium tracking-wide uppercase text-[10px]">
                 Sign in to continue
               </p>
             </div>
 
-            <div className="flex gap-2 p-1.5 rounded-2xl liquid-glass mb-6">
+            <div className="flex gap-1 p-1.5 rounded-2xl bg-secondary/60 border border-border mb-6">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => handleTabChange(tab.id)}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold transition-all duration-500 relative overflow-hidden group/tab ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-sm font-semibold transition-colors duration-200 ${
                     activeTab === tab.id
-                      ? `text-white`
-                      : "text-gray-400 hover:text-white"
+                      ? "bg-background/60 text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {activeTab === tab.id && (
-                    <div className={`absolute inset-0 bg-gradient-to-br ${tab.gradient} scale-in shadow-[0_0_20px_rgba(0,0,0,0.2)]`} />
-                  )}
-                  <div className="relative z-10 flex items-center gap-2">
-                    <tab.icon className={`w-4 h-4 transition-transform duration-500 ${activeTab === tab.id ? 'scale-110' : 'group-hover/tab:scale-110'}`} />
-                    <span className="hidden sm:inline">{tab.label}</span>
-                  </div>
+                  <tab.icon className="w-4 h-4" />
+                  <span className="hidden sm:inline">{tab.label}</span>
                 </button>
               ))}
             </div>
 
-            <div className={`mb-6 p-4 rounded-xl liquid-glass border transition-all duration-500 backdrop-blur-md ${activeTabData.border}`}>
-              <p className={`text-[11px] font-bold text-center uppercase tracking-widest ${activeTabData.text}`}>
+            <div className="mb-6 p-4 rounded-xl liquid-glass border border-border">
+              <p className="text-[11px] font-semibold text-center uppercase tracking-widest text-muted-foreground">
                 {activeTab === "admin" && "Administrator Access • System Control"}
                 {activeTab === "faculty" && "Faculty Access • Academic Management"}
                 {activeTab === "student" && "Student Access • Learning Portal"}
@@ -176,19 +131,19 @@ const Login = () => {
             </div>
 
             {error && (
-              <div className="mb-6 p-4 rounded-2xl liquid-glass border border-red-500/30 flex items-start gap-3 fade-in shadow-[0_0_20px_rgba(239,68,68,0.1)]">
-                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-400 font-semibold">{error}</p>
+              <div className="mb-6 p-4 rounded-2xl liquid-glass border border-destructive/30 flex items-start gap-3 fade-in">
+                <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-destructive font-semibold">{error}</p>
               </div>
             )}
 
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">
+                <Label htmlFor="email" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider ml-1">
                   {activeTab === "student" ? "Email Address" : `${tabs.find(t => t.id === activeTab)?.label} Email`}
                 </Label>
                 <div className="relative group/input">
-                  <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${activeTabData.text.replace('text-', 'text-gray-500 group-focus-within/input:')}`} />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within/input:text-primary transition-colors" />
                   <Input
                     id="email"
                     type="email"
@@ -200,17 +155,17 @@ const Login = () => {
                     }}
                     required
                     disabled={loading}
-                    className={`pl-12 h-14 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:bg-white/[0.08] transition-all duration-500 focus:ring-4 ${activeTabData.border.replace('border-', 'focus:border-')} ${activeTabData.text.replace('text-', 'focus:ring-')}/10`}
+                    className="pl-12 h-14 rounded-xl bg-background/60 border-border text-foreground placeholder:text-muted-foreground focus:bg-background/70 transition-all duration-200 focus:ring-4 focus:ring-ring/15"
                   />
                 </div>
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">
+                <Label htmlFor="password" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider ml-1">
                   Password
                 </Label>
                 <div className="relative group/input">
-                  <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-300 ${activeTabData.text.replace('text-', 'text-gray-500 group-focus-within/input:')}`} />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within/input:text-primary transition-colors" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -222,11 +177,11 @@ const Login = () => {
                     }}
                     required
                     disabled={loading}
-                    className={`pl-12 pr-12 h-14 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:bg-white/[0.08] transition-all duration-500 focus:ring-4 ${activeTabData.border.replace('border-', 'focus:border-')} ${activeTabData.text.replace('text-', 'focus:ring-')}/10`}
+                    className="pl-12 pr-12 h-14 rounded-xl bg-background/60 border-border text-foreground placeholder:text-muted-foreground focus:bg-background/70 transition-all duration-200 focus:ring-4 focus:ring-ring/15"
                   />
                   <button
                     type="button"
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -237,18 +192,17 @@ const Login = () => {
               <Button
                 type="submit"
                 disabled={loading || !email || !password}
-                className={`w-full h-14 rounded-xl btn-liquid bg-gradient-to-r ${activeGradient} text-white font-bold text-lg shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-500 transform hover:scale-[1.02] active:scale-[0.98]`}
-                style={{ boxShadow: `0 10px 30px -5px ${activeGlow}` }}
+                className="w-full h-14 rounded-xl text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <span className="flex items-center gap-3">
-                    <span className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
                     Authenticating...
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
                     Sign In as {tabs.find(t => t.id === activeTab)?.label}
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-5 h-5" />
                   </span>
                 )}
               </Button>

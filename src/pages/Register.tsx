@@ -117,61 +117,56 @@ const Register = () => {
     }
   };
 
-  const inputClass = "pl-12 h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-muted-teal focus:ring-muted-teal/20 transition-all duration-300";
+  const inputClass = "pl-12 h-12 rounded-xl bg-background/60 border-border text-foreground placeholder:text-muted-foreground focus:ring-4 focus:ring-ring/15 transition-all duration-200";
 
   return (
     <div className="min-h-screen bg-mesh noise-overlay pt-20 pb-12 flex items-center justify-center">
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ willChange: 'auto' }}>
-        <div className="absolute top-20 -left-32 w-80 h-80 bg-muted-teal/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-32 w-96 h-96 bg-deep-teal/8 rounded-full blur-3xl" />
-        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-ash-grey/8 rounded-full blur-3xl" />
+        <div className="absolute top-20 -left-32 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-32 w-96 h-96 bg-primary/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-secondary/20 rounded-full blur-3xl" />
       </div>
 
       {showSuccess ? (
-        <div className="w-full max-w-md mx-4 liquid-glass-strong rounded-3xl p-8 text-center scale-in glow-mixed">
+        <div className="w-full max-w-md mx-4 liquid-glass-strong rounded-3xl p-8 text-center scale-in">
           <div className="flex justify-center mb-6">
             <div className="p-4 rounded-full bg-green-500/20 pulse-glow">
               <CheckCircle className="w-12 h-12 text-green-400" />
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-green-400 mb-2">Account Created!</h2>
-          <p className="text-gray-400">
+          <h2 className="text-2xl font-bold text-foreground mb-2">Account Created!</h2>
+          <p className="text-muted-foreground">
             Welcome to Brainy, {formData.fullName.split(" ")[0]}! Redirecting to your dashboard...
           </p>
         </div>
       ) : (
         <div className="w-full max-w-2xl mx-4 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
-          <div className="liquid-glass-strong rounded-3xl p-8 glow-mixed">
+          <div className="liquid-glass-strong rounded-3xl p-8">
             <div className="text-center mb-8">
               <div className="flex justify-center mb-4">
-                <div className="relative">
-                  <div className="absolute inset-0 gradient-aurora rounded-2xl blur-lg opacity-60" />
-                  <div className="relative p-4 rounded-2xl gradient-aurora shadow-lg">
-                    <Brain className="w-8 h-8 text-white" />
-                  </div>
+                <div className="w-14 h-14 rounded-3xl bg-secondary/70 border border-border flex items-center justify-center">
+                  <Brain className="w-7 h-7 text-foreground" />
                 </div>
               </div>
-              <h1 className="text-3xl font-bold gradient-text-aurora mb-2">
-                Create Your Account
-              </h1>
-              <p className="text-gray-400">
+              <h1 className="text-3xl font-bold tracking-tight mb-2">Create your account</h1>
+              <p className="text-muted-foreground">
                 Join Brainy and start mastering statistics
               </p>
             </div>
 
             {error && (
-              <div className="mb-6 p-4 rounded-2xl liquid-glass border border-red-500/30 flex items-start gap-3 fade-in">
+              <div className="mb-6 p-4 rounded-2xl liquid-glass border border-destructive/30 flex items-start gap-3 fade-in">
                 <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-400 font-medium">{error}</p>
+                <p className="text-sm text-destructive font-medium">{error}</p>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="rollNumber" className="text-sm font-semibold text-gray-300">Roll Number</Label>
+                  <Label htmlFor="rollNumber" className="text-sm font-semibold text-foreground/80">Roll Number</Label>
                   <div className="relative">
-                    <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <GraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="rollNumber"
                       name="rollNumber"
@@ -184,9 +179,9 @@ const Register = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-sm font-semibold text-gray-300">Full Name</Label>
+                  <Label htmlFor="fullName" className="text-sm font-semibold text-foreground/80">Full Name</Label>
                   <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="fullName"
                       name="fullName"
@@ -202,9 +197,9 @@ const Register = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-semibold text-gray-300">Email</Label>
+                  <Label htmlFor="email" className="text-sm font-semibold text-foreground/80">Email</Label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="email"
                       name="email"
@@ -218,9 +213,9 @@ const Register = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-sm font-semibold text-gray-300">Phone Number</Label>
+                  <Label htmlFor="phone" className="text-sm font-semibold text-foreground/80">Phone Number</Label>
                   <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="phone"
                       name="phone"
@@ -241,21 +236,21 @@ const Register = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-300">Department</Label>
+                  <Label className="text-sm font-semibold text-foreground/80">Department</Label>
                   <Select
                     value={formData.department}
                     onValueChange={(value) => handleSelectChange("department", value)}
                     disabled={loading}
                   >
-                    <SelectTrigger className="h-12 rounded-xl bg-white/5 border-white/10 text-gray-300 focus:border-muted-teal focus:ring-muted-teal/20">
+                    <SelectTrigger className="h-12 rounded-xl bg-background/60 border-border text-foreground focus:ring-4 focus:ring-ring/15">
                       <div className="flex items-center gap-3">
-                        <Building className="w-5 h-5 text-gray-500" />
+                        <Building className="w-5 h-5 text-muted-foreground" />
                         <SelectValue placeholder="Select department" />
                       </div>
                     </SelectTrigger>
-                    <SelectContent className="liquid-glass-strong border-white/10 rounded-xl">
+                    <SelectContent className="liquid-glass-strong border-border rounded-xl">
                       {departments.map((dept) => (
-                        <SelectItem key={dept} value={dept} className="text-gray-300 focus:bg-white/10 focus:text-white rounded-lg">{dept}</SelectItem>
+                        <SelectItem key={dept} value={dept} className="text-foreground/80 focus:bg-secondary/60 focus:text-foreground rounded-lg">{dept}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -273,7 +268,7 @@ const Register = () => {
                         <SelectValue placeholder="Select course" />
                       </div>
                     </SelectTrigger>
-                    <SelectContent className="liquid-glass-strong border-white/10 rounded-xl">
+                    <SelectContent className="liquid-glass-strong border-border rounded-xl">
                       {courses.map((course) => (
                         <SelectItem key={course} value={course} className="text-gray-300 focus:bg-white/10 focus:text-white rounded-lg">{course}</SelectItem>
                       ))}
@@ -292,7 +287,7 @@ const Register = () => {
                   <SelectTrigger className="h-12 rounded-xl bg-white/5 border-white/10 text-gray-300 focus:border-muted-teal focus:ring-muted-teal/20">
                     <SelectValue placeholder="Select semester" />
                   </SelectTrigger>
-                  <SelectContent className="liquid-glass-strong border-white/10 rounded-xl">
+                  <SelectContent className="liquid-glass-strong border-border rounded-xl">
                     {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
                       <SelectItem key={sem} value={sem.toString()} className="text-gray-300 focus:bg-white/10 focus:text-white rounded-lg">Semester {sem}</SelectItem>
                     ))}
