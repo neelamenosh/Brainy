@@ -155,11 +155,11 @@ const Landing = () => {
       <section id="features" className="relative py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up stagger-1">
               <span className="text-white">Everything You Need to </span>
               <span className="gradient-text-static">Excel</span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up" style={{ opacity: 0, animationDelay: "0.2s" }}>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up stagger-2">
               Powerful features designed to enhance your learning experience and help you achieve your academic goals.
             </p>
           </div>
@@ -168,8 +168,7 @@ const Landing = () => {
             {features.map((feature, index) => (
               <div 
                 key={index} 
-                className="liquid-glass-card rounded-3xl p-8 card-3d hover-glow slide-up"
-                style={{ opacity: 0, animationDelay: `${0.3 + index * 0.1}s` }}
+                className={`liquid-glass-card rounded-3xl p-8 card-3d hover-glow fade-in stagger-${Math.min(index + 3, 6)}`}
               >
                 <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg`}>
                   <feature.icon className="w-7 h-7 text-white" />
@@ -186,11 +185,11 @@ const Landing = () => {
       <section className="relative py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up stagger-1">
               <span className="text-white">Explore </span>
               <span className="gradient-text-static">Courses</span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up" style={{ opacity: 0, animationDelay: "0.2s" }}>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up stagger-2">
               Comprehensive coverage across all major engineering disciplines.
             </p>
           </div>
@@ -199,8 +198,7 @@ const Landing = () => {
             {courses.slice(0, 6).map((course, index) => (
               <div 
                 key={`${course.id}-${index}`} 
-                className="liquid-glass-card rounded-3xl overflow-hidden card-3d hover-glow slide-up"
-                style={{ opacity: 0, animationDelay: `${0.3 + index * 0.1}s` }}
+                className={`liquid-glass-card rounded-3xl overflow-hidden card-3d hover-glow fade-in stagger-${Math.min(index + 3, 6)}`}
               >
                 <div className={`h-1.5 bg-gradient-to-r ${gradients[index % gradients.length]}`} />
                 <div className="p-6">
@@ -232,7 +230,7 @@ const Landing = () => {
             ))}
           </div>
 
-          <div className="text-center mt-12 slide-up" style={{ opacity: 0, animationDelay: "0.9s" }}>
+          <div className="text-center mt-12 slide-up stagger-6">
             <Link to="/register">
               <Button size="lg" className="h-14 px-8 rounded-2xl btn-liquid gradient-aurora text-white font-semibold shadow-xl glow-violet">
                 Start Learning Now
@@ -246,11 +244,11 @@ const Landing = () => {
       <section className="relative py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up stagger-1">
               <span className="text-white">Loved by </span>
               <span className="gradient-text-static">Students</span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up" style={{ opacity: 0, animationDelay: "0.2s" }}>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto slide-up stagger-2">
               See what engineering students are saying about Brainy.
             </p>
           </div>
@@ -259,8 +257,7 @@ const Landing = () => {
             {testimonials.map((testimonial, index) => (
               <div 
                 key={index} 
-                className="liquid-glass-strong rounded-3xl p-8 card-3d hover-glow slide-up"
-                style={{ opacity: 0, animationDelay: `${0.3 + index * 0.1}s` }}
+                className={`liquid-glass-strong rounded-3xl p-8 card-3d hover-glow fade-in stagger-${Math.min(index + 3, 6)}`}
               >
                 <div className="flex gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
@@ -285,7 +282,7 @@ const Landing = () => {
 
       <section className="relative py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="liquid-glass-strong rounded-3xl p-10 md:p-16 text-center glow-mixed slide-up" style={{ opacity: 0, animationDelay: "0.1s" }}>
+          <div className="liquid-glass-strong rounded-3xl p-10 md:p-16 text-center glow-mixed slide-up stagger-1">
             <div className="flex justify-center mb-6">
               <div className="p-4 rounded-2xl gradient-aurora pulse-glow">
                 <Trophy className="w-10 h-10 text-white" />
