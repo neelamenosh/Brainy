@@ -1,82 +1,96 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+const { PrismaClient } = require('@prisma/client');
 const fs = require('fs');
 const path = require('path');
-const jwt = require('jsonwebtoken');
 
-const ADMIN_REPORTS_FILE = path.join(__dirname, '..', 'data', 'admin_reports.json');
-const USERS_FILE = path.join(__dirname, '..', 'data', 'users.json');
-const PROGRESS_FILE = path.join(__dirname, '..', 'data', 'progress.json');
+const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || 'brainy-secret-key-2024';
+const ADMIN_REPORTS_FILE = path.join(__dirname, '..', 'data', 'admin_reports.json');
 
-const adminMiddleware = (req, res, next) => {
+const adminMiddleware = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) return res.status(401).json({ message: 'No token provided' });
     const decoded = jwt.verify(token, JWT_SECRET);
-    if (decoded.role !== 'Admin') return res.status(403).json({ message: 'Access denied. Admin only.' });
-    req.user = decoded;
+    
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId }
+    });
+
+    if (!user || user.role !== 'Admin') {
+      return res.status(403).json({ message: 'Access denied. Admin only.' });
+    }
+    
+    req.user = user;
     next();
   } catch (error) {
     res.status(401).json({ message: 'Invalid token' });
   }
 };
 
-const readData = (file) => {
+const readReports = () => {
   try {
-    if (!fs.existsSync(file)) return [];
-    return JSON.parse(fs.readFileSync(file, 'utf8'));
+    if (!fs.existsSync(ADMIN_REPORTS_FILE)) return [];
+    return JSON.parse(fs.readFileSync(ADMIN_REPORTS_FILE, 'utf8'));
   } catch (error) {
     return [];
   }
 };
 
-const writeData = (file, data) => {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2));
+const writeReports = (data) => {
+  if (!fs.existsSync(path.dirname(ADMIN_REPORTS_FILE))) {
+    fs.mkdirSync(path.dirname(ADMIN_REPORTS_FILE), { recursive: true });
+  }
+  fs.writeFileSync(ADMIN_REPORTS_FILE, JSON.stringify(data, null, 2));
 };
 
-router.get('/test', (req, res) => {
-  res.json({ message: 'Admin routes are working' });
-});
-
 router.get('/reports', adminMiddleware, (req, res) => {
-  const reports = readData(ADMIN_REPORTS_FILE);
+  const reports = readReports();
   res.json(reports);
 });
 
 router.post('/publish-results', adminMiddleware, (req, res) => {
   const { reportId } = req.body;
-  const reports = readData(ADMIN_REPORTS_FILE);
+  const reports = readReports();
   const reportIndex = reports.findIndex(r => r.id === reportId);
 
   if (reportIndex === -1) return res.status(404).json({ message: 'Report not found' });
 
   reports[reportIndex].status = 'published';
   reports[reportIndex].publishedAt = new Date().toISOString();
-  writeData(ADMIN_REPORTS_FILE, reports);
+  writeReports(reports);
 
   res.json({ message: 'Results published successfully', report: reports[reportIndex] });
 });
 
-router.get('/stats', adminMiddleware, (req, res) => {
-  const users = readData(USERS_FILE);
-  const progress = readData(PROGRESS_FILE);
-  const reports = readData(ADMIN_REPORTS_FILE);
+router.get('/stats', adminMiddleware, async (req, res) => {
+  try {
+    const totalStudents = await prisma.user.count({ where: { role: 'Student' } });
+    const totalFaculty = await prisma.user.count({ where: { role: 'Faculty' } });
+    const totalQuizzesTaken = await prisma.quizAttempt.count();
+    
+    const reports = readReports();
 
-  const stats = {
-    totalStudents: users.filter(u => u.role === 'Student').length,
-    totalFaculty: users.filter(u => u.role === 'Faculty').length,
-    totalQuizzesTaken: Object.keys(progress).length,
-    pendingReports: reports.filter(r => r.status === 'pending').length,
-    publishedReports: reports.filter(r => r.status === 'published').length,
-    systemUpdates: [
-      { id: 1, type: 'System', message: 'Admin dashboard refined with high authority look', time: 'Just now' },
-      { id: 2, type: 'Faculty', message: 'New progress reports received from Faculty', time: '10 mins ago' },
-      { id: 3, type: 'System', message: 'Automatic database backup completed', time: '1 hour ago' }
-    ]
-  };
+    const stats = {
+      totalStudents,
+      totalFaculty,
+      totalQuizzesTaken,
+      pendingReports: reports.filter(r => r.status === 'pending').length,
+      publishedReports: reports.filter(r => r.status === 'published').length,
+      systemUpdates: [
+        { id: 1, type: 'System', message: 'Admin dashboard refined with high authority look', time: 'Just now' },
+        { id: 2, type: 'Faculty', message: 'New progress reports received from Faculty', time: '10 mins ago' },
+        { id: 3, type: 'System', message: 'Automatic database backup completed', time: '1 hour ago' }
+      ]
+    };
 
-  res.json(stats);
+    res.json(stats);
+  } catch (error) {
+    console.error('Admin stats error:', error);
+    res.status(500).json({ message: 'Failed to fetch admin stats' });
+  }
 });
 
 module.exports = router;

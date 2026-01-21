@@ -1,43 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
 const jwt = require('jsonwebtoken');
+const { PrismaClient } = require('@prisma/client');
 
+const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || 'brainy-secret-key-2024';
-const USERS_FILE = path.join(__dirname, '..', 'data', 'users.json');
-const PROGRESS_FILE = path.join(__dirname, '..', 'data', 'progress.json');
-const ADMIN_REPORTS_FILE = path.join(__dirname, '..', 'data', 'admin_reports.json');
 
-const loadUsers = () => {
-  try {
-    return JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
-  } catch {
-    return [];
-  }
-};
-
-const loadProgress = () => {
-  try {
-    return JSON.parse(fs.readFileSync(PROGRESS_FILE, 'utf8'));
-  } catch {
-    return {};
-  }
-};
-
-const loadAdminReports = () => {
-  try {
-    return JSON.parse(fs.readFileSync(ADMIN_REPORTS_FILE, 'utf8'));
-  } catch {
-    return [];
-  }
-};
-
-const saveAdminReports = (reports) => {
-  fs.writeFileSync(ADMIN_REPORTS_FILE, JSON.stringify(reports, null, 2));
-};
-
-const authenticateFaculty = (req, res, next) => {
+const authenticateFaculty = async (req, res, next) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
   if (!token) {
     return res.status(401).json({ error: 'No token provided' });
@@ -45,8 +14,9 @@ const authenticateFaculty = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    const users = loadUsers();
-    const user = users.find(u => u.id === decoded.userId);
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId }
+    });
     
     if (!user || user.role !== 'Faculty') {
       return res.status(403).json({ error: 'Access denied. Faculty only.' });
@@ -59,73 +29,81 @@ const authenticateFaculty = (req, res, next) => {
   }
 };
 
-router.get('/students', authenticateFaculty, (req, res) => {
+router.get('/students', authenticateFaculty, async (req, res) => {
   try {
-    const users = loadUsers();
-    const progress = loadProgress();
-    
-    const students = users
-      .filter(u => u.role === 'Student')
-      .map(student => {
-        const studentProgress = progress[student.id] || {};
-        
-        let totalQuizzes = 0;
-        let totalScore = 0;
-        let totalQuestions = 0;
-        let subjectScores = {};
-        
-        Object.entries(studentProgress).forEach(([subjectId, data]) => {
-          if (data.completed) {
-            totalQuizzes++;
-            totalScore += data.score || 0;
-            totalQuestions += data.totalQuestions || 0;
-            subjectScores[subjectId] = {
-              score: data.score,
-              totalQuestions: data.totalQuestions,
-              percentage: data.totalQuestions > 0 ? Math.round((data.score / data.totalQuestions) * 100) : 0,
-              completedAt: data.completedAt
-            };
+    const students = await prisma.user.findMany({
+      where: { role: 'Student' },
+      include: {
+        quizAttempts: {
+          include: {
+            category: true
           }
-        });
-        
-        const overallPercentage = totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
-        
-        return {
-          id: student.id,
-          rollNumber: student.rollNumber,
-          fullName: student.fullName,
-          email: student.email,
-          department: student.department,
-          course: student.course,
-          semester: student.semester,
-          totalQuizzes,
-          totalScore,
-          totalQuestions,
-          overallPercentage,
-          subjectScores,
-          lastActive: student.lastLogin
+        }
+      }
+    });
+    
+    const studentsWithStats = students.map(student => {
+      let totalQuizzes = student.quizAttempts.length;
+      let totalScore = student.quizAttempts.reduce((acc, curr) => acc + curr.score, 0);
+      let totalQuestions = student.quizAttempts.reduce((acc, curr) => acc + curr.total, 0);
+      
+      let subjectScores = {};
+      student.quizAttempts.forEach(attempt => {
+        subjectScores[attempt.categoryId] = {
+          score: attempt.score,
+          totalQuestions: attempt.total,
+          percentage: attempt.percentage,
+          completedAt: attempt.createdAt
         };
       });
+      
+      const overallPercentage = totalQuestions > 0 ? Math.round((totalScore / totalQuestions) * 100) : 0;
+      
+      return {
+        id: student.id,
+        rollNumber: student.rollNumber,
+        fullName: student.fullName,
+        email: student.email,
+        department: student.department,
+        course: student.course,
+        semester: student.semester,
+        totalQuizzes,
+        totalScore,
+        totalQuestions,
+        overallPercentage,
+        subjectScores,
+        lastActive: student.lastLogin
+      };
+    });
     
-    res.json({ students });
+    res.json({ students: studentsWithStats });
   } catch (error) {
     console.error('Error fetching students:', error);
     res.status(500).json({ error: 'Failed to fetch students' });
   }
 });
 
-router.get('/students/:studentId', authenticateFaculty, (req, res) => {
+router.get('/students/:studentId', authenticateFaculty, async (req, res) => {
   try {
     const { studentId } = req.params;
-    const users = loadUsers();
-    const progress = loadProgress();
     
-    const student = users.find(u => u.id === studentId && u.role === 'Student');
-    if (!student) {
+    const student = await prisma.user.findUnique({
+      where: { id: studentId },
+      include: {
+        quizAttempts: {
+          include: {
+            category: true
+          },
+          orderBy: {
+            createdAt: 'desc'
+          }
+        }
+      }
+    });
+
+    if (!student || student.role !== 'Student') {
       return res.status(404).json({ error: 'Student not found' });
     }
-    
-    const studentProgress = progress[studentId] || {};
     
     res.json({
       student: {
@@ -137,7 +115,7 @@ router.get('/students/:studentId', authenticateFaculty, (req, res) => {
         course: student.course,
         semester: student.semester
       },
-      progress: studentProgress
+      progress: student.quizAttempts
     });
   } catch (error) {
     console.error('Error fetching student details:', error);
@@ -145,22 +123,31 @@ router.get('/students/:studentId', authenticateFaculty, (req, res) => {
   }
 });
 
-router.post('/send-to-admin', authenticateFaculty, (req, res) => {
+router.post('/send-to-admin', authenticateFaculty, async (req, res) => {
   try {
+    // Note: Reports are currently not in Prisma schema, so we'll still use JSON for now 
+    // or we could add a Report model. For now let's stick to the request and use JSON for reports
+    // if it's required, but usually everything should be in the DB.
+    // However, I'll keep the report logic for now.
+    const fs = require('fs');
+    const path = require('path');
+    const ADMIN_REPORTS_FILE = path.join(__dirname, '..', 'data', 'admin_reports.json');
+
     const { studentIds, message, reportType } = req.body;
-    const users = loadUsers();
-    const progress = loadProgress();
     
-    const reports = loadAdminReports();
-    
-    const studentsData = studentIds.map(id => {
-      const student = users.find(u => u.id === id);
-      const studentProgress = progress[id] || {};
-      return {
-        ...student,
-        progress: studentProgress
-      };
+    const students = await prisma.user.findMany({
+      where: { id: { in: studentIds } },
+      include: {
+        quizAttempts: true
+      }
     });
+    
+    let reports = [];
+    try {
+      if (fs.existsSync(ADMIN_REPORTS_FILE)) {
+        reports = JSON.parse(fs.readFileSync(ADMIN_REPORTS_FILE, 'utf8'));
+      }
+    } catch (e) {}
     
     const report = {
       id: Date.now().toString(),
@@ -169,13 +156,13 @@ router.post('/send-to-admin', authenticateFaculty, (req, res) => {
       facultyEmail: req.user.email,
       reportType: reportType || 'progress_report',
       message: message || '',
-      students: studentsData,
+      students: students,
       createdAt: new Date().toISOString(),
       status: 'pending'
     };
     
     reports.push(report);
-    saveAdminReports(reports);
+    fs.writeFileSync(ADMIN_REPORTS_FILE, JSON.stringify(reports, null, 2));
     
     res.json({ success: true, message: 'Report sent to admin successfully', reportId: report.id });
   } catch (error) {
@@ -184,15 +171,7 @@ router.post('/send-to-admin', authenticateFaculty, (req, res) => {
   }
 });
 
-router.get('/admin-reports', authenticateFaculty, (req, res) => {
-  try {
-    const reports = loadAdminReports();
-    const facultyReports = reports.filter(r => r.facultyId === req.user.id);
-    res.json({ reports: facultyReports });
-  } catch (error) {
-    console.error('Error fetching admin reports:', error);
-    res.status(500).json({ error: 'Failed to fetch admin reports' });
-  }
-});
+module.exports = router;
+
 
 module.exports = router;
