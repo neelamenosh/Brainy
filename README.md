@@ -1,5 +1,7 @@
 # Welcome to your Brainy project
 
+> ⚠️ **SECURITY NOTICE**: This repository is now public. Please see [SECURITY.md](SECURITY.md) for important information about credential rotation.
+
 ## Project info
 
 **URL**: https://brainy.dev/projects/REPLACE_WITH_PROJECT_ID
@@ -39,6 +41,20 @@ npm run dev
 ## Development Setup
 
 This project uses a proxy configuration to avoid CORS issues during development.
+
+### Environment Configuration
+
+1. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Fill in your own credentials in `.env`:
+   - Get a Supabase account and project at https://supabase.com
+   - Add your database URL and Supabase keys
+   - Generate secure random strings for JWT secrets
+   
+3. **Never commit the `.env` file** - it's already in `.gitignore`
 
 ### Quick Start (Recommended)
 ```bash
