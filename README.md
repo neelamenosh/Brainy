@@ -50,9 +50,11 @@ This project uses a proxy configuration to avoid CORS issues during development.
    ```
 
 2. Fill in your own credentials in `.env`:
-   - Get a Supabase account and project at https://supabase.com
-   - Add your database URL and Supabase keys
-   - Generate secure random strings for JWT secrets
+   - **Frontend**: Get a Supabase account and project at https://supabase.com
+     - Add your database URL and Supabase keys to the root `.env`
+     - Generate secure random strings for JWT secrets
+   - **Backend**: The backend uses MongoDB (see `backend/.env.example`)
+     - Configure MongoDB URI if you're running the backend separately
    
 3. **Never commit the `.env` file** - it's already in `.gitignore`
 
