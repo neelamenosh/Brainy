@@ -105,6 +105,27 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Register error:', error);
-    return sendJson(res, 500, { message: 'Server error. Please try again later.' });
+
+    // Handle invalid JSON in request body
+    if (error instanceof SyntaxError) {
+      return sendJson(res, 400, {
+        message: 'Invalid JSON in request body.',
+      });
+    }
+
+    // Handle known database uniqueness errors (e.g., Prisma P2002)
+    if (error && typeof error === 'object' && 'code' in error) {
+      const errCode = error.code;
+      if (errCode === 'P2002') {
+        return sendJson(res, 409, {
+          message: 'An account with the provided unique details already exists.',
+        });
+      }
+    }
+
+    // Fallback for unexpected errors
+    return sendJson(res, 500, {
+      message: 'An unexpected error occurred while processing your registration.',
+    });
   }
 }
