@@ -58,12 +58,11 @@ router.post('/register', async (req, res) => {
         fullName,
         email,
         phone,
-        password: hashedPassword,
+        passwordHash: hashedPassword,
         role: 'Student',
         department,
         course: course || null,
-        semester: semester ? parseInt(semester) : null,
-        isVerified: true
+        semester: semester ? parseInt(semester) : null
       }
     });
 
@@ -119,7 +118,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, user.passwordHash);
     if (!isValidPassword) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
