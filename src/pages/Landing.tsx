@@ -3,14 +3,7 @@ import { Button } from "@/components/ui/button";
 import { 
   Brain, 
   Sparkles, 
-  Users, 
-  Zap, 
-  CheckCircle, 
   ArrowRight,
-  BookOpen,
-  Target,
-  Award,
-  BarChart3,
   GraduationCap,
   Star,
   Flame,
@@ -20,45 +13,6 @@ import {
 import { courses } from "@/data/quizData";
 
 const Landing = () => {
-  const features = [
-    {
-      icon: Brain,
-      title: "Adaptive Learning",
-      description: "AI-powered quizzes that adapt to your knowledge level and learning pace.",
-      gradient: "from-muted-teal to-deep-teal"
-    },
-    {
-      icon: Target,
-      title: "Targeted Practice",
-      description: "Focus on weak areas with personalized question recommendations.",
-      gradient: "from-deep-teal to-dark-slate-grey"
-    },
-    {
-      icon: BarChart3,
-      title: "Progress Tracking",
-      description: "Detailed analytics and insights to monitor your improvement over time.",
-      gradient: "from-ash-grey to-muted-teal"
-    },
-    {
-      icon: Award,
-      title: "Achievements",
-      description: "Earn badges and certificates as you master different subjects.",
-      gradient: "from-dark-slate-grey to-charcoal-blue"
-    },
-    {
-      icon: BookOpen,
-      title: "Comprehensive Content",
-      description: "Extensive question bank covering all major engineering disciplines.",
-      gradient: "from-muted-teal to-ash-grey"
-    },
-    {
-      icon: Users,
-      title: "Community Learning",
-      description: "Connect with peers, share insights, and learn together.",
-      gradient: "from-deep-teal to-muted-teal"
-    }
-  ];
-
   const stats = [
     { value: "5+", label: "Engineering Courses" },
     { value: "500+", label: "Practice Questions" },
@@ -104,7 +58,7 @@ const Landing = () => {
         <div className="absolute bottom-40 left-1/4 w-72 h-72 bg-secondary/20 rounded-full blur-3xl opacity-40" />
       </div>
 
-      <section className="relative pt-28 pb-20 overflow-hidden">
+      <section className="relative pt-28 pb-16 overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full liquid-glass text-sm font-medium mb-8 slide-up stagger-1">
@@ -152,39 +106,9 @@ const Landing = () => {
         </div>
       </section>
 
-      <section id="features" className="relative py-20">
+      <section className="relative pt-12 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up stagger-1">
-              <span className="text-foreground">Everything You Need to </span>
-              <span className="gradient-text-static">Excel</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto slide-up stagger-2">
-              Powerful features designed to enhance your learning experience and help you achieve your academic goals.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <div 
-                key={index} 
-                className={`liquid-glass-card rounded-3xl p-8 card-3d hover-glow fade-in stagger-${Math.min(index + 3, 6)}`}
-              >
-                <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 shadow-lg`}>
-                  <feature.icon className="w-7 h-7 text-white" />
-                  <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} blur-xl opacity-50`} />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="relative py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4 slide-up stagger-1">
               <span className="text-foreground">Explore </span>
               <span className="gradient-text-static">Courses</span>
