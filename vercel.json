@@ -1,0 +1,18 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "copilot/vercel-deployment-branch": true
+    }
+  },
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "vite",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/backend/server.js"
+    }
+  ]
+}
