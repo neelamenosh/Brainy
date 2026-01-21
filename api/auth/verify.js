@@ -1,9 +1,8 @@
 import { prisma } from '../_lib/prisma.js';
 import { getBearerToken, methodNotAllowed, unauthorized, verifyAccessToken } from '../_lib/auth.js';
-import { sendJson, handleCors } from '../_lib/http.js';
+import { sendJson } from '../_lib/http.js';
 
 export default async function handler(req, res) {
-  if (handleCors(req, res)) return;
   if (req.method !== 'GET') return methodNotAllowed(res, ['GET']);
 
   try {

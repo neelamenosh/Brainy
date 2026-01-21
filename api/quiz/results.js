@@ -1,6 +1,6 @@
 import { prisma } from '../_lib/prisma.js';
 import { getBearerToken, methodNotAllowed, unauthorized, verifyAccessToken } from '../_lib/auth.js';
-import { sendJson, handleCors } from '../_lib/http.js';
+import { sendJson } from '../_lib/http.js';
 
 async function readJson(req) {
   if (req.body && typeof req.body === 'object') return req.body;
@@ -15,8 +15,6 @@ function badRequest(res, message) {
 }
 
 export default async function handler(req, res) {
-  if (handleCors(req, res)) return;
-  
   const token = getBearerToken(req);
   if (!token) return unauthorized(res, 'No token provided');
 

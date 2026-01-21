@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { sendJson, setCorsHeaders } from './http.js';
+import { sendJson } from './http.js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -25,12 +25,10 @@ export function verifyAccessToken(token) {
 }
 
 export function unauthorized(res, message = 'Unauthorized') {
-  setCorsHeaders(res);
   sendJson(res, 401, { message });
 }
 
 export function methodNotAllowed(res, methods) {
-  setCorsHeaders(res);
   res.setHeader('Allow', methods.join(', '));
   sendJson(res, 405, { message: 'Method not allowed' });
 }
