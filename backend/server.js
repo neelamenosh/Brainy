@@ -36,13 +36,31 @@ app.use((req, res, next) => {
 const JWT_SECRET = process.env.JWT_SECRET || 'brainy-secret-key-2024';
 const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || 'brainy-refresh-secret-2024';
 
+const authMiddleware = async (req, res, next) => {
+  const token = req.cookies?.authToken || req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ message: 'Authentication required' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid or expired token' });
+  }
+};
+
 const facultyRoutes = require('./routes/faculty');
 const adminRoutes = require('./routes/admin');
 const quizRoutes = require('./routes/quiz');
+const authRoutes = require('./routes/auth');
 
 app.use('/api/faculty', facultyRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/quiz', quizRoutes);
+app.use('/api/auth', authRoutes);
 
 
 app.get('/api/student/results', authMiddleware, async (req, res) => {

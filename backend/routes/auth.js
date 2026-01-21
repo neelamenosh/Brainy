@@ -1,203 +1,95 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const { PrismaClient } = require('@prisma/client');
 
 const router = express.Router();
+const prisma = new PrismaClient();
 
-// Register
+const JWT_SECRET = process.env.JWT_SECRET || 'brainy-secret-key-2024';
+const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET || 'brainy-refresh-secret-2024';
+
+const authMiddleware = async (req, res, next) => {
+  const token = req.cookies?.authToken || req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ message: 'Authentication required' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid or expired token' });
+  }
+};
+
 router.post('/register', async (req, res) => {
   try {
-    const { rollNumber, phone } = req.body;
-
-    if (!rollNumber || !phone) {
-      return res.status(400).json({ message: 'Roll number and phone are required' });
-    }
-
-    // Check if user exists with this roll number
-    const user = await User.findOne({ rollNumber });
-    
-    // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    // Set expiry to 3 minutes
-    const expiresAt = new Date(Date.now() + 3 * 60 * 1000);
-
-    // Save or update OTP in database
-    await OTP.updateOne(
-      { rollNumber },
-      {
-        rollNumber,
-        otp,
-        phone,
-        email: user?.email,
-        attempts: 0,
-        expiresAt
-      },
-      { upsert: true }
-    );
-
-    // In production, send OTP via SMS/Email
-    console.log(`OTP for ${rollNumber}: ${otp}`);
-    // TODO: Integrate Twilio or SendGrid for actual SMS/Email
-
-    res.json({
-      message: 'OTP sent successfully',
-      rollNumber,
-      // For demo purposes only - remove in production
-      demo_otp: process.env.NODE_ENV === 'development' ? otp : undefined
-    });
-  } catch (error) {
-    console.error('Send OTP error:', error);
-    res.status(500).json({ message: 'Failed to send OTP' });
-  }
-});
-
-// Verify OTP
-router.post('/verify-otp', async (req, res) => {
-  try {
-    const { rollNumber, otp } = req.body;
-
-    if (!rollNumber || !otp) {
-      return res.status(400).json({ message: 'Roll number and OTP are required' });
-    }
-
-    // Find OTP record
-    const otpRecord = await OTP.findOne({ rollNumber });
-
-    if (!otpRecord) {
-      return res.status(400).json({ message: 'OTP not found or expired' });
-    }
-
-    // Check if OTP is expired
-    if (new Date() > otpRecord.expiresAt) {
-      return res.status(400).json({ message: 'OTP has expired' });
-    }
-
-    // Check max attempts
-    if (otpRecord.attempts >= 3) {
-      return res.status(400).json({ message: 'Maximum OTP attempts exceeded' });
-    }
-
-    // Verify OTP
-    if (otpRecord.otp !== otp) {
-      otpRecord.attempts += 1;
-      await otpRecord.save();
-      return res.status(400).json({ message: 'Invalid OTP' });
-    }
-
-    // Find user
-    const user = await User.findOne({ rollNumber });
-
-    if (!user) {
-      // New user - return registration needed
-      await OTP.deleteOne({ rollNumber });
-      return res.json({
-        message: 'OTP verified. Please complete registration.',
-        status: 'new_user',
-        rollNumber
-      });
-    }
-
-    // Existing user - generate JWT
-    const token = jwt.sign(
-      {
-        userId: user._id,
-        rollNumber: user.rollNumber,
-        role: user.role,
-        email: user.email
-      },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '24h' }
-    );
-
-    const refreshToken = jwt.sign(
-      { userId: user._id },
-      process.env.REFRESH_TOKEN_SECRET || 'refresh-secret-key',
-      { expiresIn: '7d' }
-    );
-
-    // Update last login
-    user.lastLogin = new Date();
-    await user.save();
-
-    // Delete OTP
-    await OTP.deleteOne({ rollNumber });
-
-    // Log audit
-    // TODO: Add audit log
-
-    res.json({
-      message: 'Login successful',
-      status: 'existing_user',
-      token,
-      refreshToken,
-      user: {
-        id: user._id,
-        rollNumber: user.rollNumber,
-        fullName: user.fullName,
-        email: user.email,
-        role: user.role,
-        department: user.department
-      }
-    });
-  } catch (error) {
-    console.error('Verify OTP error:', error);
-    res.status(500).json({ message: 'Failed to verify OTP' });
-  }
-});
-
-// Register new user (after OTP verification)
-router.post('/register', async (req, res) => {
-  try {
-    const { rollNumber, fullName, email, phone, password, role = 'Student', department, course, semester } = req.body;
+    const { rollNumber, fullName, email, phone, password, department, course, semester } = req.body;
 
     if (!rollNumber || !fullName || !email || !phone || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ rollNumber });
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: email },
+          { rollNumber: rollNumber }
+        ]
+      }
+    });
+
     if (existingUser) {
+      if (existingUser.email === email) {
+        return res.status(400).json({ message: 'User with this email already exists' });
+      }
       return res.status(400).json({ message: 'User with this roll number already exists' });
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create new user
-    const user = new User({
-      rollNumber,
-      fullName,
-      email,
-      phone,
-      password: hashedPassword,
-      role,
-      department,
-      course,
-      semester,
-      isVerified: true // Verified through OTP
+    const user = await prisma.user.create({
+      data: {
+        rollNumber,
+        fullName,
+        email,
+        phone,
+        password: hashedPassword,
+        role: 'Student',
+        department,
+        course: course || null,
+        semester: semester ? parseInt(semester) : null,
+        isVerified: true
+      }
     });
 
-    await user.save();
-
-    // Generate JWT
     const token = jwt.sign(
       {
-        userId: user._id,
+        userId: user.id,
         rollNumber: user.rollNumber,
         role: user.role,
         email: user.email
       },
-      process.env.JWT_SECRET || 'your-secret-key',
+      JWT_SECRET,
       { expiresIn: '24h' }
+    );
+
+    const refreshToken = jwt.sign(
+      { userId: user.id },
+      REFRESH_SECRET,
+      { expiresIn: '7d' }
     );
 
     res.status(201).json({
       message: 'Registration successful',
       token,
+      refreshToken,
       user: {
-        id: user._id,
+        id: user.id,
         rollNumber: user.rollNumber,
         fullName: user.fullName,
         email: user.email,
@@ -211,7 +103,75 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Refresh token
+router.post('/login', async (req, res) => {
+  try {
+    const { email, password, role } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    if (role) {
+      const requestedRole = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+      if (user.role !== requestedRole) {
+        return res.status(403).json({ message: `This account is not registered as ${role}` });
+      }
+    }
+
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        rollNumber: user.rollNumber,
+        role: user.role,
+        email: user.email
+      },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    const refreshToken = jwt.sign(
+      { userId: user.id },
+      REFRESH_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { lastLogin: new Date() }
+    });
+
+    res.json({
+      message: 'Login successful',
+      token,
+      refreshToken,
+      user: {
+        id: user.id,
+        rollNumber: user.rollNumber,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+        department: user.department
+      }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'Login failed' });
+  }
+});
+
 router.post('/refresh-token', async (req, res) => {
   try {
     const { refreshToken } = req.body;
@@ -220,12 +180,10 @@ router.post('/refresh-token', async (req, res) => {
       return res.status(401).json({ message: 'Refresh token required' });
     }
 
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.REFRESH_TOKEN_SECRET || 'refresh-secret-key'
-    );
-
-    const user = await User.findById(decoded.userId);
+    const decoded = jwt.verify(refreshToken, REFRESH_SECRET);
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId }
+    });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -233,12 +191,12 @@ router.post('/refresh-token', async (req, res) => {
 
     const newToken = jwt.sign(
       {
-        userId: user._id,
+        userId: user.id,
         rollNumber: user.rollNumber,
         role: user.role,
         email: user.email
       },
-      process.env.JWT_SECRET || 'your-secret-key',
+      JWT_SECRET,
       { expiresIn: '24h' }
     );
 
@@ -249,11 +207,8 @@ router.post('/refresh-token', async (req, res) => {
   }
 });
 
-// Logout
 router.post('/logout', authMiddleware, async (req, res) => {
   try {
-    // TODO: Add token to blacklist if needed
-
     res.json({ message: 'Logged out successfully' });
   } catch (error) {
     console.error('Logout error:', error);
@@ -261,14 +216,56 @@ router.post('/logout', authMiddleware, async (req, res) => {
   }
 });
 
-// Verify token (for frontend)
 router.get('/verify', authMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select('-password');
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: {
+        id: true,
+        rollNumber: true,
+        fullName: true,
+        email: true,
+        role: true,
+        department: true
+      }
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     res.json({ user });
   } catch (error) {
     console.error('Verify error:', error);
     res.status(500).json({ message: 'Verification failed' });
+  }
+});
+
+router.get('/me', authMiddleware, async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: {
+        id: true,
+        rollNumber: true,
+        fullName: true,
+        email: true,
+        role: true,
+        department: true,
+        course: true,
+        semester: true,
+        phone: true
+      }
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ user });
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(500).json({ message: 'Failed to get profile' });
   }
 });
 
