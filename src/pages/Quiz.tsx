@@ -6,6 +6,7 @@ import QuizProgress from "@/components/QuizProgress";
 import QuizOption from "@/components/QuizOption";
 import QuizResult from "@/components/QuizResult";
 import { quizCategories } from "@/data/quizData";
+import { quizResultsApi } from "@/api/quizResultsApi";
 
 const Quiz = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
@@ -29,6 +30,26 @@ const Quiz = () => {
       navigate("/");
     }
   }, [category, navigate]);
+
+  useEffect(() => {
+    if (!quizComplete || !category) return;
+
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    quizResultsApi
+      .saveResult({
+        categoryId: category.id,
+        categoryName: category.name,
+        courseId: (category as any).courseId,
+        courseName: (category as any).courseName,
+        score,
+        total: category.questions.length,
+      })
+      .catch((err) => {
+        console.warn('Failed to save quiz result:', err);
+      });
+  }, [quizComplete, category, score]);
 
   // Reset timer when question changes
   useEffect(() => {
