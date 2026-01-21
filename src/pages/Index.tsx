@@ -5,6 +5,16 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { courses, quizCategories, Course } from "@/data/quizData";
 
+const API_SERVER_BASE_URL =
+  import.meta.env.VITE_SERVER_BASE_URL ||
+  (import.meta.env.DEV ? 'http://localhost:3001' : '');
+
+const apiUrl = (path: string) => {
+  const base = API_SERVER_BASE_URL.replace(/\/+$/, '');
+  const suffix = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${suffix}`;
+};
+
 interface SubjectScore {
   score: number;
   totalQuestions: number;
@@ -52,7 +62,7 @@ const FacultyHome = () => {
 
   const fetchFacultyData = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/faculty/students', {
+      const response = await fetch(apiUrl('/api/faculty/students'), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -982,7 +992,7 @@ const AdminHome = () => {
 
   const fetchAdminData = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/admin/stats', {
+      const response = await fetch(apiUrl('/api/admin/stats'), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();

@@ -28,6 +28,16 @@ import {
 } from "lucide-react";
 import { quizCategories } from "@/data/quizData";
 
+const API_SERVER_BASE_URL =
+  import.meta.env.VITE_SERVER_BASE_URL ||
+  (import.meta.env.DEV ? 'http://localhost:3001' : '');
+
+const apiUrl = (path: string) => {
+  const base = API_SERVER_BASE_URL.replace(/\/+$/, '');
+  const suffix = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${suffix}`;
+};
+
 interface ProgressItem {
   completed: boolean;
   score: number;
@@ -159,7 +169,7 @@ const AdminServices = () => {
 
   const fetchReports = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/admin/reports', {
+      const response = await fetch(apiUrl('/api/admin/reports'), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -178,7 +188,7 @@ const AdminServices = () => {
   const handlePublish = async (reportId: string) => {
     setPublishing(reportId);
     try {
-      const response = await fetch('http://localhost:3001/api/admin/publish-results', {
+      const response = await fetch(apiUrl('/api/admin/publish-results'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -527,7 +537,7 @@ const FacultyServices = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/faculty/students', {
+      const response = await fetch(apiUrl('/api/faculty/students'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -575,7 +585,7 @@ const FacultyServices = () => {
     
     setSending(true);
     try {
-      const response = await fetch('http://localhost:3001/api/faculty/send-to-admin', {
+      const response = await fetch(apiUrl('/api/faculty/send-to-admin'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -805,7 +815,7 @@ const StudentResults = () => {
 
   const fetchResults = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/student/results', {
+      const response = await fetch(apiUrl('/api/student/results'), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const result = await response.json();

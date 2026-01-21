@@ -1,4 +1,31 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/auth';
+const DEFAULT_API_BASE_URL = '/api/auth';
+
+function normalizeBaseUrl(value: string): string {
+  return value.trim().replace(/\/+$/, '');
+}
+
+function isLocalhostBaseUrl(value: string): boolean {
+  return /(^|\/\/)(localhost|127\.0\.0\.1)(:\d+)?\//.test(value);
+}
+
+const API_BASE_URL = (() => {
+  const raw = import.meta.env.VITE_API_BASE_URL;
+  if (!raw) return DEFAULT_API_BASE_URL;
+
+  const normalized = normalizeBaseUrl(raw);
+
+  // Prevent production builds (e.g. Vercel) from trying to call localhost.
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    const isRunningOnLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+
+    if (!isRunningOnLocalhost && isLocalhostBaseUrl(normalized)) {
+      return DEFAULT_API_BASE_URL;
+    }
+  }
+
+  return normalized;
+})();
 
 interface RegisterPayload {
   rollNumber: string;

@@ -10,20 +10,47 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 const prisma = new PrismaClient();
 const app = express();
 
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://localhost:8080',
-    'http://localhost:8081',
-    'http://localhost:8082',
-    'http://localhost:9000',
-    'http://192.168.0.4:3000',
-    'http://192.168.0.5:8080'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true
-}));
+const splitCsv = (value) =>
+  String(value || '')
+    .split(',')
+    .map((v) => v.trim())
+    .filter(Boolean);
+
+const staticAllowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://localhost:8080',
+  'http://localhost:8081',
+  'http://localhost:8082',
+  'http://localhost:9000',
+  'http://192.168.0.4:3000',
+  'http://192.168.0.5:8080',
+];
+
+const envAllowedOrigins = [
+  ...splitCsv(process.env.CORS_ALLOW_ORIGINS || process.env.CORS_ALLOWED_ORIGINS),
+  ...splitCsv(process.env.FRONTEND_ORIGIN || process.env.FRONTEND_URL),
+  ...splitCsv(process.env.VERCEL_URL).map((host) => (host.startsWith('http') ? host : `https://${host}`)),
+];
+
+const allowedOrigins = new Set([...staticAllowedOrigins, ...envAllowedOrigins]);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow same-origin / server-to-server requests (no Origin header)
+      if (!origin) return callback(null, true);
+      if (process.env.CORS_ALLOW_ALL === 'true') return callback(null, true);
+
+      if (allowedOrigins.has(origin)) return callback(null, true);
+      if (/^https?:\/\/.*\.vercel\.app$/.test(origin)) return callback(null, true);
+
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());

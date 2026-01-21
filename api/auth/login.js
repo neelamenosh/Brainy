@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { prisma } from '../_lib/prisma.js';
 import { methodNotAllowed, requireEnv } from '../_lib/auth.js';
-import { sendJson } from '../_lib/http.js';
+import { handleCors, sendJson } from '../_lib/http.js';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -15,6 +15,7 @@ async function readJson(req) {
 }
 
 export default async function handler(req, res) {
+  if (handleCors(req, res, { methods: ['POST'] })) return;
   if (req.method !== 'POST') return methodNotAllowed(res, ['POST']);
 
   try {
