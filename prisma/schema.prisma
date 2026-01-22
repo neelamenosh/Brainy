@@ -8,73 +8,74 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(dbgenerated("(gen_random_uuid())::text"))
-  rollNumber   String      @unique
+  id           String    @id @default(dbgenerated("(gen_random_uuid())::text"))
+  rollNumber   String    @unique
   fullName     String
-  email        String      @unique
+  email        String    @unique
   phone        String
   passwordHash String
   department   String
   course       String?
   semester     Int?
-  role         String?       @default("Student")
-  createdAt    DateTime?     @default(now()) @db.Timestamptz(6)
-  lastLogin    DateTime?     @db.Timestamptz(6)
+  role         String?   @default("Student")
+  createdAt    DateTime? @default(now()) @db.Timestamptz(6)
+  lastLogin    DateTime? @db.Timestamptz(6)
 
-  quizAttempts QuizAttempt[]
+  quizAttempts   QuizAttempt[]
+  facultyReports FacultyReport[]
 }
 
 model QuizCategory {
-  id          String        @id
+  id          String  @id
   name        String
   description String?
   courseId    String?
   courseName  String?
 
-  questions   QuizQuestion[]
-  attempts    QuizAttempt[]
+  questions QuizQuestion[]
+  attempts  QuizAttempt[]
 }
 
 model QuizQuestion {
-  id           String       @id @default(dbgenerated("(gen_random_uuid())::text"))
+  id           String @id @default(dbgenerated("(gen_random_uuid())::text"))
   categoryId   String
   questionText String
   options      Json
   correctIndex Int
   order        Int
 
-  category     QuizCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  category QuizCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([categoryId, order])
 }
 
 model QuizAttempt {
-  id          String      @id @default(dbgenerated("(gen_random_uuid())::text"))
-  userId      String
-  categoryId  String
-  score       Int
-  total       Int
-  percentage  Int
-  createdAt   DateTime?   @default(now()) @db.Timestamptz(6)
+  id         String    @id @default(dbgenerated("(gen_random_uuid())::text"))
+  userId     String
+  categoryId String
+  score      Int
+  total      Int
+  percentage Int
+  createdAt  DateTime? @default(now()) @db.Timestamptz(6)
 
-  category    QuizCategory @relation(fields: [categoryId], references: [id], onUpdate: NoAction)
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  category QuizCategory @relation(fields: [categoryId], references: [id], onUpdate: NoAction)
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([categoryId, createdAt], map: "idx_quiz_attempt_category_created")
   @@index([userId, createdAt], map: "idx_quiz_attempt_user_created")
 }
 
 model FacultyReport {
-  id         String    @id @default(dbgenerated("(gen_random_uuid())::text"))
-  facultyId  String
-  reportType String    @default("progress_report")
-  message    String?
-  status     String    @default("pending")
-  studentIds String[]
-  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+  id          String    @id @default(dbgenerated("(gen_random_uuid())::text"))
+  facultyId   String
+  reportType  String    @default("progress_report")
+  message     String?
+  status      String    @default("pending")
+  studentIds  String[]
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
   publishedAt DateTime? @db.Timestamptz(6)
 
-  faculty    User      @relation(fields: [facultyId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  faculty User @relation(fields: [facultyId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([status, createdAt], map: "idx_faculty_report_status_created")
   @@index([facultyId, createdAt], map: "idx_faculty_report_faculty_created")
