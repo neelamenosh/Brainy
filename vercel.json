@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "prisma generate && prisma migrate deploy && vite build",
+  "buildCommand": "node scripts/vercel-check.mjs && prisma generate && prisma migrate deploy && vite build",
   "rewrites": [
     {
       "source": "/api/(.*)",
