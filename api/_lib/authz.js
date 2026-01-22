@@ -48,9 +48,10 @@ export async function requireUser(req, res) {
 }
 
 export function requireRole(res, user, allowedRoles) {
-  const role = user?.role || '';
-  if (!allowedRoles.includes(role)) {
-    sendJson(res, 403, { message: 'Access denied' });
+  const role = String(user?.role || '').toLowerCase();
+  const allowed = (allowedRoles || []).map((r) => String(r).toLowerCase());
+  if (!allowed.includes(role)) {
+    sendJson(res, 403, { message: 'Access denied', error: 'Access denied' });
     return false;
   }
   return true;

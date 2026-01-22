@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "prisma generate && vite build",
+  "buildCommand": "prisma generate && prisma migrate deploy && vite build",
   "rewrites": [
     {
       "source": "/api/(.*)",
