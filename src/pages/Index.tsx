@@ -5,9 +5,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { courses, quizCategories, Course } from "@/data/quizData";
 
-const API_SERVER_BASE_URL =
-  import.meta.env.VITE_SERVER_BASE_URL ||
-  (import.meta.env.DEV ? 'http://localhost:3001' : '');
+const API_SERVER_BASE_URL = import.meta.env.DEV
+  ? (import.meta.env.VITE_SERVER_BASE_URL || 'http://localhost:3001')
+  : '';
 
 const apiUrl = (path: string) => {
   const base = API_SERVER_BASE_URL.replace(/\/+$/, '');
