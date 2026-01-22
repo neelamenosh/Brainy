@@ -1,6 +1,7 @@
 import { prisma } from '../_lib/prisma.js';
 import { methodNotAllowed } from '../_lib/auth.js';
 import { requireRole, requireUser } from '../_lib/authz.js';
+import { sendServerError } from '../_lib/errors.js';
 import { handleCors, sendJson } from '../_lib/http.js';
 
 export default async function handler(req, res) {
@@ -39,7 +40,6 @@ export default async function handler(req, res) {
       },
     });
   } catch (error) {
-    console.error('Student results error:', error);
-    return sendJson(res, 500, { message: 'Failed to fetch results' });
+    return sendServerError(res, 'Student results error', error);
   }
 }

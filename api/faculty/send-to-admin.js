@@ -1,6 +1,7 @@
 import { prisma } from '../_lib/prisma.js';
 import { methodNotAllowed } from '../_lib/auth.js';
 import { requireRole, requireUser } from '../_lib/authz.js';
+import { sendServerError } from '../_lib/errors.js';
 import { handleCors, sendJson } from '../_lib/http.js';
 
 async function readJson(req) {
@@ -48,7 +49,6 @@ export default async function handler(req, res) {
       reportId: report.id,
     });
   } catch (error) {
-    console.error('Send to admin error:', error);
-    return sendJson(res, 500, { error: 'Failed to send report to admin' });
+    return sendServerError(res, 'Send to admin error', error);
   }
 }

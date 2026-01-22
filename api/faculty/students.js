@@ -1,6 +1,7 @@
 import { prisma } from '../_lib/prisma.js';
 import { methodNotAllowed } from '../_lib/auth.js';
 import { requireRole, requireUser } from '../_lib/authz.js';
+import { sendServerError } from '../_lib/errors.js';
 import { handleCors, sendJson } from '../_lib/http.js';
 
 function toIso(value) {
@@ -100,7 +101,6 @@ export default async function handler(req, res) {
 
     return sendJson(res, 200, { students: studentsWithStats });
   } catch (error) {
-    console.error('Faculty students error:', error);
-    return sendJson(res, 500, { error: 'Failed to fetch students' });
+    return sendServerError(res, 'Faculty students error', error);
   }
 }

@@ -1,6 +1,7 @@
 import { prisma } from '../_lib/prisma.js';
 import { methodNotAllowed } from '../_lib/auth.js';
 import { requireRole, requireUser } from '../_lib/authz.js';
+import { sendServerError } from '../_lib/errors.js';
 import { handleCors, sendJson } from '../_lib/http.js';
 
 function toIso(value) {
@@ -120,7 +121,6 @@ export default async function handler(req, res) {
 
     return sendJson(res, 200, payload);
   } catch (error) {
-    console.error('Admin reports error:', error);
-    return sendJson(res, 500, { message: 'Failed to fetch reports' });
+    return sendServerError(res, 'Admin reports error', error);
   }
 }
